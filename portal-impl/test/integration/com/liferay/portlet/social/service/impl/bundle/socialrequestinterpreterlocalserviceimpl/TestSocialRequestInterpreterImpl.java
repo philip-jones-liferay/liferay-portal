@@ -31,11 +31,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * @author Phil Jones
+ * @author Philip Jones
  */
 @Component(
 	immediate = true,
-	property = {"service.ranking:Integer=" + Integer.MAX_VALUE}
+	property = {
+            "layout.type=testSocialRequestInterpreterImpl",
+            "service.ranking:Integer=" + Integer.MAX_VALUE}
 )
 public class TestSocialRequestInterpreterImpl
 	implements SocialRequestInterpreter {

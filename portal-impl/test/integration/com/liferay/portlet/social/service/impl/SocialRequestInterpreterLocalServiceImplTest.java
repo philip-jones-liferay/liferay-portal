@@ -30,6 +30,7 @@ public class SocialRequestInterpreterLocalServiceImplTest {
 
 	@Test
 	public void testInterpret() {
+		
 		System.out.println("testInterpret");
 
 		ThemeDisplay themeDisplay = new ThemeDisplay();
