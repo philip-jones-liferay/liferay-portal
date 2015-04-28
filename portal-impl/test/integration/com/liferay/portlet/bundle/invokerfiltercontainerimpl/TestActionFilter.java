@@ -41,13 +41,13 @@ import org.osgi.service.component.annotations.Reference;
 	},
 	service = PortletFilter.class
 )
-public class TestActionFilter implements ActionFilter, PortletFilter {
+public class TestActionFilter implements ActionFilter {
 
 	@Override
 	public void destroy() {
 		return;
 	}
-
+	
 	@Override
 	public void doFilter(
 		ActionRequest actionRequest, ActionResponse actionResponse,

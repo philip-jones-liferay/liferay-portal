@@ -35,8 +35,8 @@ import org.osgi.service.component.annotations.Component;
 		"service.ranking:Integer=" + Integer.MAX_VALUE
 	},
 	service = PortletFilter.class
-)
-public class TestEventFilter implements EventFilter, PortletFilter {
+) 
+public class TestEventFilter implements EventFilter {
 
 	@Override
 	public void destroy() {

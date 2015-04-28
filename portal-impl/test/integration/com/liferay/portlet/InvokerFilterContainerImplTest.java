@@ -77,6 +77,7 @@ public class InvokerFilterContainerImplTest {
 		Portlet portlet = new PortletImpl();
 
 		portlet.setPortletApp(portletAppImpl);
+
 		portlet.setPortletClass("com.liferay.portlet.StrutsPortlet");
 		portlet.setPortletId("InvokerFilterContainerImplTest");
 
