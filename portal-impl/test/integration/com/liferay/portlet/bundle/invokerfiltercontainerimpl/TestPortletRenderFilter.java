@@ -13,13 +13,21 @@
  */
 package com.liferay.portlet.bundle.invokerfiltercontainerimpl;
 
-import com.liferay.portal.model.PortletApp;
-import com.liferay.portal.model.PortletFilter;
-
+import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
+import javax.portlet.PortletException;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
+import javax.portlet.filter.FilterChain;
+import javax.portlet.filter.FilterConfig;
+import javax.portlet.filter.RenderFilter;
+
 import org.osgi.service.component.annotations.Component;
+
+import com.liferay.portal.model.PortletApp;
+import com.liferay.portal.model.PortletFilter;
 
 /**
  * @author Philip Jones
@@ -27,12 +35,12 @@ import org.osgi.service.component.annotations.Component;
 @Component(
 		immediate = true,
 		property = {
-			"javax.portlet.name=testPortletFilter",
-			"layout.type=testPortletFilter",
+			"javax.portlet.name=testPortletRenderFilter",
+			"layout.type=testPortletRenderFilter",
 			"service.ranking:Integer=" + Integer.MAX_VALUE
 		}
 )
-public class TestPortletFilter implements PortletFilter {
+public class TestPortletRenderFilter implements PortletFilter, RenderFilter {
 
 	@Override
 	public String getFilterClass() {
@@ -81,6 +89,22 @@ public class TestPortletFilter implements PortletFilter {
 
 	@Override
 	public void setPortletApp(PortletApp portletApp) {
+		return;
+	}
+
+	@Override
+	public void destroy() {
+		return;		
+	}
+
+	@Override
+	public void init(FilterConfig arg0) throws PortletException {
+		return;		
+	}
+
+	@Override
+	public void doFilter(RenderRequest arg0, RenderResponse arg1,
+			FilterChain arg2) throws IOException, PortletException {
 		return;
 	}
 
