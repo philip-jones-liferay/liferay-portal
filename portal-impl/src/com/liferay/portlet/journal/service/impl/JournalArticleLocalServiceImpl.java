@@ -6298,8 +6298,9 @@ public class JournalArticleLocalServiceImpl
 			for (Element dynamicContentEl : dynamicContentEls) {
 				long imageId = GetterUtil.getLong(
 					dynamicContentEl.attributeValue("id"));
-				String languageId = dynamicContentEl.attributeValue(
-					"language-id");
+				String languageId =
+					StringPool.UNDERLINE +
+						dynamicContentEl.attributeValue("language-id");
 
 				Image oldImage = imageLocalService.fetchImage(imageId);
 
@@ -7624,7 +7625,7 @@ public class JournalArticleLocalServiceImpl
 			ddmStructureKey, true);
 
 		List<DDMStructure> folderDDMStructures =
-			ddmStructureLocalService.getJournalFolderStructures(
+			journalFolderLocalService.getDDMStructures(
 				PortalUtil.getCurrentAndAncestorSiteGroupIds(groupId), folderId,
 				restrictionType);
 

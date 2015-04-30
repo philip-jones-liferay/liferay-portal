@@ -105,7 +105,6 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.dom4j.Node;
 import org.dom4j.XPath;
 import org.dom4j.io.SAXReader;
 
@@ -2033,13 +2032,12 @@ public class ServiceBuilder {
 					new String[] {resourceElement.attributeValue("file")}));
 		}
 
-		XPath xPath = document.createXPath(
-			"//model-resource/model-name/text()");
+		XPath xPath = document.createXPath("//model-resource/model-name");
 
-		List<Node> nodes = xPath.selectNodes(rootElement);
+		List<Element> elements = xPath.selectNodes(rootElement);
 
-		for (Node node : nodes) {
-			resourceActionModels.add(node.getText().trim());
+		for (Element element : elements) {
+			resourceActionModels.add(element.getText().trim());
 		}
 	}
 
@@ -4440,21 +4438,22 @@ public class ServiceBuilder {
 	}
 
 	private JavaClass _getJavaClass(String fileName) throws IOException {
-		fileName = StringUtil.replace(
-			fileName, CharPool.BACK_SLASH, CharPool.SLASH);
-
 		int pos = 0;
 
-		if (fileName.contains(_implDir)) {
+		if (fileName.startsWith(_implDir)) {
 			pos = _implDir.length() + 1;
 		}
-		else {
+		else if (fileName.startsWith(_apiDir)) {
 			pos = _apiDir.length() + 1;
+		}
+		else {
+			return null;
 		}
 
 		String fullyQualifiedClassName = StringUtil.replace(
-			fileName.substring(pos, fileName.length() - 5), CharPool.SLASH,
-			CharPool.PERIOD);
+			fileName.substring(pos, fileName.length() - 5),
+			new String[] {StringPool.BACK_SLASH, StringPool.SLASH},
+			new String[] {StringPool.PERIOD, StringPool.PERIOD});
 
 		JavaClass javaClass = _javaClasses.get(fullyQualifiedClassName);
 

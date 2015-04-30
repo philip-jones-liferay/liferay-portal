@@ -254,7 +254,7 @@
 			<var name="pageName" value="Asset Publisher Page" />
 		</execute>
 
-		<execute macro="AssetPublisherPortlet#goToConfigurationPG" />
+		<execute macro="AssetPublisherPortlet#gotoConfigurationPG" />
 
 		<execute function="Click" locator1="PGAssetpublisherConfiguration#ASSET_SELECTION_MANUAL" />
 
@@ -1539,6 +1539,10 @@
 		<execute macro="Page#gotoContentCP">
 			<var name="nonAdminUser" value="true" />
 			<var name="portletName" value="Web Content" />
+		</execute>
+
+		<execute macro="WebContent#gotoEditCP">
+			<var name="webContentTitle" value="WC WebContent Title" />
 		</execute>
 
 		<execute macro="WebContent#editCP">

@@ -14,6 +14,8 @@
 
 package com.liferay.poshi.runner.logger;
 
+import com.liferay.poshi.runner.util.Validator;
+
 import java.util.List;
 
 import org.dom4j.Attribute;
@@ -68,16 +70,36 @@ public final class XMLLoggerHandler {
 		btnContainerLoggerElement.setClassName("btn-container");
 		btnContainerLoggerElement.setName("div");
 
-		LoggerElement lineNumberLoggerElement = new LoggerElement();
+		StringBuilder sb = new StringBuilder();
 
-		lineNumberLoggerElement.setClassName("line-number");
-		lineNumberLoggerElement.setName("div");
-		lineNumberLoggerElement.setText(element.attributeValue("line-number"));
+		sb.append(
+			_getLineNumberItemText(element.attributeValue("line-number")));
 
-		btnContainerLoggerElement.addChildLoggerElement(
-			lineNumberLoggerElement);
+		List<Element> childElements = element.elements();
+
+		boolean executingMacro = _isExecutingMacro(element);
+
+		if (!childElements.isEmpty() || executingMacro) {
+			sb.append(_getBtnItemText("btn-collapse"));
+		}
+
+		if (!childElements.isEmpty() && executingMacro) {
+			sb.append(_getBtnItemText("btn-var"));
+		}
+
+		btnContainerLoggerElement.setText(sb.toString());
 
 		return btnContainerLoggerElement;
+	}
+
+	private static String _getBtnItemText(String className) {
+		LoggerElement loggerElement = new LoggerElement();
+
+		loggerElement.setClassName("btn " + className);
+		loggerElement.setID(null);
+		loggerElement.setName("button");
+
+		return loggerElement.toString();
 	}
 
 	private static LoggerElement _getChildContainerLoggerElement() {
@@ -107,6 +129,14 @@ public final class XMLLoggerHandler {
 		closingLineContainerLoggerElement.setText(sb.toString());
 
 		return closingLineContainerLoggerElement;
+	}
+
+	private static LoggerElement _getEchoLoggerElement(Element element) {
+		return _getLineGroupLoggerElement("echo", element);
+	}
+
+	private static LoggerElement _getFailLoggerElement(Element element) {
+		return _getLineGroupLoggerElement(element);
 	}
 
 	private static LoggerElement _getLineContainerLoggerElement(
@@ -152,6 +182,30 @@ public final class XMLLoggerHandler {
 		return lineContainerLoggerElement;
 	}
 
+	private static LoggerElement _getLineGroupLoggerElement(Element element) {
+		return _getLineGroupLoggerElement(null, element);
+	}
+
+	private static LoggerElement _getLineGroupLoggerElement(
+		String className, Element element) {
+
+		LoggerElement loggerElement = new LoggerElement();
+
+		loggerElement.setClassName("line-group");
+		loggerElement.setName("li");
+
+		if (Validator.isNotNull(className)) {
+			loggerElement.addClassName(className);
+		}
+
+		loggerElement.addChildLoggerElement(
+			_getBtnContainerLoggerElement(element));
+		loggerElement.addChildLoggerElement(
+			_getLineContainerLoggerElement(element));
+
+		return loggerElement;
+	}
+
 	private static String _getLineItemText(String className, String text) {
 		LoggerElement loggerElement = new LoggerElement();
 
@@ -161,6 +215,43 @@ public final class XMLLoggerHandler {
 		loggerElement.setText(text);
 
 		return loggerElement.toString();
+	}
+
+	private static String _getLineNumberItemText(String lineNumber) {
+		LoggerElement loggerElement = new LoggerElement();
+
+		loggerElement.setClassName("line-number");
+		loggerElement.setID(null);
+		loggerElement.setName("div");
+		loggerElement.setText(lineNumber);
+
+		return loggerElement.toString();
+	}
+
+	private static LoggerElement _getLoggerElementFromElement(Element element) {
+		String elementName = element.getName();
+
+		LoggerElement loggerElement = new LoggerElement();
+
+		if (elementName.equals("description") || elementName.equals("echo")) {
+			loggerElement = _getEchoLoggerElement(element);
+		}
+		else if (elementName.equals("fail")) {
+			loggerElement = _getFailLoggerElement(element);
+		}
+
+		return loggerElement;
+	}
+
+	private static boolean _isExecutingMacro(Element element) {
+		if ((element.attributeValue("macro") != null) ||
+			(element.attributeValue("macro-desktop") != null) ||
+			(element.attributeValue("macro-mobile") != null)) {
+
+			return true;
+		}
+
+		return false;
 	}
 
 }
