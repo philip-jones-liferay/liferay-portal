@@ -13,84 +13,29 @@
  */
 package com.liferay.portlet.bundle.invokerfiltercontainerimpl;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.Set;
-
 import javax.portlet.EventRequest;
 import javax.portlet.EventResponse;
 import javax.portlet.PortletException;
 import javax.portlet.filter.EventFilter;
 import javax.portlet.filter.FilterChain;
 import javax.portlet.filter.FilterConfig;
+import javax.portlet.filter.PortletFilter;
 
 import org.osgi.service.component.annotations.Component;
 
-import com.liferay.portal.model.PortletApp;
-import com.liferay.portal.model.PortletFilter;
-
 /**
  * @author Philip Jones
+ * @author Peter Fellwock
  */
 @Component(
 		immediate = true,
 		property = {
-			"javax.portlet.name=testPortletEventFilter",
-			"layout.type=testPortletEventFilter",
+			"javax.portlet.name=testPortletFilter",
 			"service.ranking:Integer=" + Integer.MAX_VALUE
-		}
+		},
+		service = PortletFilter.class
 )
 public class TestPortletEventFilter implements PortletFilter, EventFilter {
-
-	@Override
-	public String getFilterClass() {
-		return null;
-	}
-
-	@Override
-	public String getFilterName() {
-		return null;
-	}
-
-	@Override
-	public Map<String, String> getInitParams() {
-		return null;
-	}
-
-	@Override
-	public Set<String> getLifecycles() {
-		return null;
-	}
-
-	@Override
-	public PortletApp getPortletApp() {
-		return null;
-	}
-
-	@Override
-	public void setFilterClass(String filterClass) {
-		return;
-	}
-
-	@Override
-	public void setFilterName(String filterName) {
-		return;
-	}
-
-	@Override
-	public void setInitParams(Map<String, String> initParams) {
-		return;
-	}
-
-	@Override
-	public void setLifecycles(Set<String> lifecycles) {
-		return;
-	}
-
-	@Override
-	public void setPortletApp(PortletApp portletApp) {
-		return;
-	}
 
 	@Override
 	public void destroy() {
@@ -98,14 +43,15 @@ public class TestPortletEventFilter implements PortletFilter, EventFilter {
 	}
 
 	@Override
-	public void init(FilterConfig arg0) throws PortletException {
+	public void doFilter(
+		EventRequest arg0, EventResponse arg1, FilterChain arg2) {
+
 		return;
 	}
 
 	@Override
-	public void doFilter(EventRequest arg0, EventResponse arg1, FilterChain arg2)
-			throws IOException, PortletException {
-		return;		
+	public void init(FilterConfig arg0) throws PortletException {
+		return;
 	}
 
 }
