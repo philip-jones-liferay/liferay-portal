@@ -19,8 +19,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ResourceConstants;
@@ -30,21 +28,11 @@ import com.liferay.shopping.exception.CategoryNameException;
 import com.liferay.shopping.model.ShoppingCategory;
 import com.liferay.shopping.model.ShoppingCategoryConstants;
 import com.liferay.shopping.model.ShoppingItem;
-import com.liferay.shopping.service.ShoppingCategoryLocalService;
 import com.liferay.shopping.service.base.ShoppingCategoryLocalServiceBaseImpl;
 
 /**
  * @author Brian Wing Shun Chan
  */
-@Component(
-	immediate = true,
-	property = {
-		"model.class.name=com.liferay.shopping.model.ShoppingCategory"
-	},
-	service = {
-		ShoppingCategoryLocalService.class
-	}
-)
 public class ShoppingCategoryLocalServiceImpl
 	extends ShoppingCategoryLocalServiceBaseImpl {
 
