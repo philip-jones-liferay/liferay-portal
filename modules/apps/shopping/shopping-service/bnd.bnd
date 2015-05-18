@@ -10,6 +10,7 @@ Export-Package:\
 	com.liferay.shopping.service.impl,\
 	com.liferay.shopping.util,\
 	com.liferay.shopping.service.persistence,\
+	com.liferay.shopping.service.http,\
 	com.liferay.util.service,\
 	com.liferay.shopping.util,\
 	com.liferay.util,\
