@@ -14,19 +14,19 @@
  */
 --%>
 
-<%@ include file="/html/portlet/shopping/init.jsp" %>
+<%@ include file="init.jsp" %>
 
 <%
 ResultRow row = (ResultRow)request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 
-ShoppingCoupon coupon = (ShoppingCoupon)row.getObject();
+ShoppingOrder order = (ShoppingOrder)row.getObject();
 %>
 
 <liferay-ui:icon-menu icon="<%= StringPool.BLANK %>" message="<%= StringPool.BLANK %>">
 	<portlet:renderURL var="editURL">
-		<portlet:param name="struts_action" value="/shopping/edit_coupon" />
+		<portlet:param name="struts_action" value="/shopping/edit_order" />
 		<portlet:param name="redirect" value="<%= currentURL %>" />
-		<portlet:param name="couponId" value="<%= String.valueOf(coupon.getCouponId()) %>" />
+		<portlet:param name="orderId" value="<%= String.valueOf(order.getOrderId()) %>" />
 	</portlet:renderURL>
 
 	<liferay-ui:icon
@@ -35,12 +35,16 @@ ShoppingCoupon coupon = (ShoppingCoupon)row.getObject();
 		url="<%= editURL %>"
 	/>
 
-	<portlet:actionURL var="deleteURL">
-		<portlet:param name="struts_action" value="/shopping/edit_coupon" />
-		<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.DELETE %>" />
-		<portlet:param name="redirect" value="<%= currentURL %>" />
-		<portlet:param name="deleteCouponIds" value="<%= String.valueOf(coupon.getCouponId()) %>" />
-	</portlet:actionURL>
+	<c:if test="<%= ShoppingOrderPermission.contains(permissionChecker, scopeGroupId, order, ActionKeys.DELETE) %>">
+		<portlet:actionURL var="deleteURL">
+			<portlet:param name="struts_action" value="/shopping/edit_order" />
+			<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.DELETE %>" />
+			<portlet:param name="redirect" value="<%= currentURL %>" />
+			<portlet:param name="deleteOrderIds" value="<%= String.valueOf(order.getOrderId()) %>" />
+		</portlet:actionURL>
 
-	<liferay-ui:icon-delete url="<%= deleteURL %>" />
+		<liferay-ui:icon-delete
+			url="<%= deleteURL %>"
+		/>
+	</c:if>
 </liferay-ui:icon-menu>

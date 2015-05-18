@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/shopping/init.jsp" %>
+<%@ include file="init.jsp" %>
 
 <%
 ShoppingOrder order = ShoppingOrderLocalServiceUtil.getLatestOrder(user.getUserId(), themeDisplay.getScopeGroupId());
@@ -62,7 +62,7 @@ List addresses = AddressServiceUtil.getAddresses(Contact.class.getName(), contac
 <aui:form action="<%= checkoutURL %>" method="post" name="fm">
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
 
-	<liferay-util:include page="/html/portlet/shopping/tabs1.jsp">
+	<liferay-util:include page="tabs1.jsp">
 		<liferay-util:param name="tabs1" value="cart" />
 	</liferay-util:include>
 
@@ -104,7 +104,7 @@ List addresses = AddressServiceUtil.getAddresses(Contact.class.getName(), contac
 					</aui:select>
 				</c:if>
 
-				<%@ include file="/html/portlet/shopping/checkout_first_billing_address.jspf" %>
+				<%@ include file="checkout_first_billing_address.jspf" %>
 			</aui:fieldset>
 		</liferay-ui:panel>
 
@@ -143,7 +143,7 @@ List addresses = AddressServiceUtil.getAddresses(Contact.class.getName(), contac
 					</aui:select>
 				</c:if>
 
-				<%@ include file="/html/portlet/shopping/checkout_first_shipping_address.jspf" %>
+				<%@ include file="checkout_first_shipping_address.jspf" %>
 			</aui:fieldset>
 		</liferay-ui:panel>
 

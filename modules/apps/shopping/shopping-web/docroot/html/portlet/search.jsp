@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/shopping/init.jsp" %>
+<%@ include file="init.jsp" %>
 
 <%
 String redirect = ParamUtil.getString(request, "redirect");
@@ -163,7 +163,7 @@ String keywords = ParamUtil.getString(request, "keywords");
 
 		// Action
 
-		row.addJSP("/html/portlet/shopping/item_action.jsp", "entry-action");
+		row.addJSP("item_action.jsp", "entry-action");
 
 		// Add result row
 

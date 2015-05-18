@@ -14,22 +14,20 @@
  */
 --%>
 
-<%@ include file="/html/portlet/shopping/init.jsp" %>
+<%@ include file="init.jsp" %>
 
 <%
-String tabs1 = ParamUtil.getString(request, "tabs1", "categories");
+ShoppingCoupon coupon = (ShoppingCoupon)request.getAttribute(WebKeys.SHOPPING_COUPON);
+
+coupon = coupon.toEscapedModel();
 %>
 
-<liferay-util:include page="/html/portlet/shopping/tabs1.jsp" />
+<strong><%= coupon.getCouponId() %></strong>
 
-<c:choose>
-	<c:when test='<%= tabs1.equals("categories") %>'>
-		<%@ include file="/html/portlet/shopping/categories.jspf" %>
-	</c:when>
-	<c:when test='<%= tabs1.equals("orders") && !user.isDefaultUser() %>'>
-		<%@ include file="/html/portlet/shopping/orders.jspf" %>
-	</c:when>
-	<c:when test='<%= tabs1.equals("coupons") %>'>
-		<%@ include file="/html/portlet/shopping/coupons.jspf" %>
-	</c:when>
-</c:choose>
+<br /><br />
+
+<%= coupon.getName() %>
+
+<br /><br />
+
+<%= coupon.getDescription() %>

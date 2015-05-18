@@ -14,13 +14,22 @@
  */
 --%>
 
-<%@ include file="/html/portlet/shopping/init.jsp" %>
+<%@ include file="init.jsp" %>
 
 <%
-ResultRow row = (ResultRow)request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
-int start = GetterUtil.getInteger(request.getAttribute("start"));
-
-int rowNumber = start + row.getPos();
+String tabs1 = ParamUtil.getString(request, "tabs1", "categories");
 %>
 
-<aui:input label="" name='<%= "fieldsQuantity" + rowNumber %>' size="4" title="quantity" type="text" value="0" />
+<liferay-util:include page="tabs1.jsp" />
+
+<c:choose>
+	<c:when test='<%= tabs1.equals("categories") %>'>
+		<%@ include file="categories.jspf" %>
+	</c:when>
+	<c:when test='<%= tabs1.equals("orders") && !user.isDefaultUser() %>'>
+		<%@ include file="orders.jspf" %>
+	</c:when>
+	<c:when test='<%= tabs1.equals("coupons") %>'>
+		<%@ include file="coupons.jspf" %>
+	</c:when>
+</c:choose>

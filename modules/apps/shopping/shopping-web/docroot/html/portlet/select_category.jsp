@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/shopping/init.jsp" %>
+<%@ include file="init.jsp" %>
 
 <%
 ShoppingCategory category = (ShoppingCategory)request.getAttribute(WebKeys.SHOPPING_CATEGORY);
@@ -49,7 +49,7 @@ String eventName = ParamUtil.getString(request, "eventName", liferayPortletRespo
 		/>
 
 		<liferay-ui:search-container-row
-			className="com.liferay.portlet.shopping.model.ShoppingCategory"
+			className="com.liferay.shopping.model.ShoppingCategory"
 			escapedModel="<%= true %>"
 			keyProperty="categoryId"
 			modelVar="curCategory"

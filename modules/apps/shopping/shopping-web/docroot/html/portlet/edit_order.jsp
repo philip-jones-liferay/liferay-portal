@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/shopping/init.jsp" %>
+<%@ include file="init.jsp" %>
 
 <%
 String redirect = ParamUtil.getString(request, "redirect");
@@ -86,7 +86,7 @@ long orderId = BeanParamUtil.getLong(order, request, "orderId");
 			<div class="well">
 				<h4><liferay-ui:message key="billing-address" /></h4>
 
-				<%@ include file="/html/portlet/shopping/checkout_second_billing_address.jspf" %>
+				<%@ include file="checkout_second_billing_address.jspf" %>
 			</div>
 		</div>
 
@@ -94,7 +94,7 @@ long orderId = BeanParamUtil.getLong(order, request, "orderId");
 			<div class="well">
 				<h4><liferay-ui:message key="shipping-address" /></h4>
 
-				<%@ include file="/html/portlet/shopping/checkout_second_shipping_address.jspf" %>
+				<%@ include file="checkout_second_shipping_address.jspf" %>
 			</div>
 		</div>
 	</div>

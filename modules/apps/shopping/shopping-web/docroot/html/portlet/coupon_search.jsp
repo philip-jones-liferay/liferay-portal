@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/shopping/init.jsp" %>
+<%@ include file="init.jsp" %>
 
 <%
 CouponSearch searchContainer = (CouponSearch)request.getAttribute("liferay-ui:search:searchContainer");

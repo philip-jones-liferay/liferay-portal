@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/shopping/init.jsp" %>
+<%@ include file="init.jsp" %>
 
 <%
 ShoppingCart cart = ShoppingUtil.getCart(renderRequest);
@@ -64,7 +64,7 @@ ShoppingOrder order = ShoppingOrderLocalServiceUtil.getLatestOrder(user.getUserI
 	<aui:input name="ccVerNumber" type="hidden" value="<%= order.getCcVerNumber() %>" />
 	<aui:input name="comments" type="hidden" value="<%= order.getComments() %>" />
 
-	<liferay-util:include page="/html/portlet/shopping/tabs1.jsp">
+	<liferay-util:include page="tabs1.jsp">
 		<liferay-util:param name="tabs1" value="cart" />
 	</liferay-util:include>
 
@@ -73,7 +73,7 @@ ShoppingOrder order = ShoppingOrderLocalServiceUtil.getLatestOrder(user.getUserI
 			<div class="well">
 				<h4><liferay-ui:message key="billing-address" /></h4>
 
-				<%@ include file="/html/portlet/shopping/checkout_second_billing_address.jspf" %>
+				<%@ include file="checkout_second_billing_address.jspf" %>
 			</div>
 		</div>
 
@@ -81,7 +81,7 @@ ShoppingOrder order = ShoppingOrderLocalServiceUtil.getLatestOrder(user.getUserI
 			<div class="well">
 				<h4><liferay-ui:message key="shipping-address" /></h4>
 
-				<%@ include file="/html/portlet/shopping/checkout_second_shipping_address.jspf" %>
+				<%@ include file="checkout_second_shipping_address.jspf" %>
 			</div>
 		</div>
 	</div>

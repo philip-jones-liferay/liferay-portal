@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/shopping/init.jsp" %>
+<%@ include file="init.jsp" %>
 
 <%
 try {
@@ -26,7 +26,7 @@ catch (Exception e) {
 }
 %>
 
-<liferay-util:include page="/html/portlet/shopping/tabs1.jsp">
+<liferay-util:include page="tabs1.jsp">
 	<liferay-util:param name="tabs1" value="cart" />
 </liferay-util:include>
 

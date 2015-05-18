@@ -14,20 +14,13 @@
  */
 --%>
 
-<%@ include file="/html/portlet/shopping/init.jsp" %>
+<%@ include file="init.jsp" %>
 
 <%
-ShoppingCoupon coupon = (ShoppingCoupon)request.getAttribute(WebKeys.SHOPPING_COUPON);
+ResultRow row = (ResultRow)request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
+int start = GetterUtil.getInteger(request.getAttribute("start"));
 
-coupon = coupon.toEscapedModel();
+int rowNumber = start + row.getPos();
 %>
 
-<strong><%= coupon.getCouponId() %></strong>
-
-<br /><br />
-
-<%= coupon.getName() %>
-
-<br /><br />
-
-<%= coupon.getDescription() %>
+<aui:input label="" name='<%= "fieldsQuantity" + rowNumber %>' size="4" title="quantity" type="text" value="0" />
