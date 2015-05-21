@@ -3,7 +3,9 @@ Bundle-SymbolicName: com.liferay.shopping.web
 Bundle-Version: 1.0.0
 Import-Package:\
 	com.liferay.portal.kernel.bean,\
+	com.liferay.portal.kernel.configuration,\
 	com.liferay.portal.kernel.exception,\
+	com.liferay.portal.kernel.log,\
 	com.liferay.portal.kernel.servlet.*,\
 	com.liferay.portal.kernel.servlet.filters.invoker,\
 	com.liferay.portal.kernel.lar,\
@@ -23,11 +25,15 @@ Import-Package:\
 	org.apache.struts.config,\
 	org.apache.struts.config.*,\
 	org.apache.struts.util,\
+	com.liferay.shopping.lar,\
+	com.liferay.shopping.model,\
 	com.liferay.shopping.model.impl,\
+	com.liferay.shopping.model.exception,\	
 	com.liferay.shopping.service.permission,\
 	com.liferay.shopping.service,\
 	com.liferay.shopping.util,\
 	com.liferay.shopping.service.http,\
+	javax.portlet,\
 	*
 Include-Resource:\
 	WEB-INF/classes/META-INF/=../../../../portal-impl/src/META-INF/log4j.dtd,\
@@ -39,6 +45,3 @@ Web-ContextPath: /shopping-web
 
 -donotcopy: (docroot/WEB-INF/src|.*\.jar|.*\.java)
 -wab: docroot
--wablib:\
-	../../../../lib/portal/jcommon.jar,\
-	../../../../lib/portal/jfreechart.jar

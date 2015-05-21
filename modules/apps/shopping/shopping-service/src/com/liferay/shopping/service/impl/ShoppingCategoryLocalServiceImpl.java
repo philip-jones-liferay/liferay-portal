@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.User;
@@ -33,6 +34,11 @@ import com.liferay.shopping.service.base.ShoppingCategoryLocalServiceBaseImpl;
 /**
  * @author Brian Wing Shun Chan
  */
+@OSGiBeanProperties(
+		property = {
+			"model.class.name=com.liferay.shopping.model.ShoppingItem"
+		}
+	)
 public class ShoppingCategoryLocalServiceImpl
 	extends ShoppingCategoryLocalServiceBaseImpl {
 

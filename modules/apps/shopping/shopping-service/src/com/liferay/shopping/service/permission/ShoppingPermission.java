@@ -14,6 +14,8 @@
 
 package com.liferay.shopping.service.permission;
 
+import org.osgi.service.component.annotations.Component;
+
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
@@ -21,6 +23,7 @@ import com.liferay.portal.security.permission.PermissionChecker;
 /**
  * @author Jorge Ferrer
  */
+@Component(immediate = true, property = {"resource.name=com.liferay.shopping"})
 public class ShoppingPermission {
 
 	public static final String RESOURCE_NAME = "com.liferay.shopping";

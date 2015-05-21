@@ -14,6 +14,8 @@
 
 package com.liferay.shopping.service.permission;
 
+import org.osgi.service.component.annotations.Component;
+
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.ActionKeys;
@@ -24,6 +26,10 @@ import com.liferay.shopping.service.ShoppingOrderLocalServiceUtil;
 /**
  * @author Brian Wing Shun Chan
  */
+@Component(
+	immediate = true,
+	property = {"model.class.name=com.liferay.shopping.model.ShoppingOrder"}
+)
 public class ShoppingOrderPermission {
 
 	public static void check(

@@ -22,7 +22,7 @@
 		<icon>/html/icons/shopping.png</icon>
 		<struts-path>shopping_admin</struts-path>
 		<parent-struts-path>shopping</parent-struts-path>
-		<configuration-action-class>com.liferay.shopping.action.ConfigurationActionImpl</configuration-action-class>
+		<configuration-action-class>com.liferay.shopping.web.action.ConfigurationActionImpl</configuration-action-class>
 		<portlet-url-class>com.liferay.portal.struts.StrutsActionPortletURL</portlet-url-class>
 		<portlet-data-handler-class>com.liferay.shopping.lar.ShoppingPortletDataHandler</portlet-data-handler-class>
 		<control-panel-entry-category>site_administration.content</control-panel-entry-category>
@@ -36,4 +36,20 @@
 		<render-weight>50</render-weight>
 		<css-class-wrapper>portlet-shopping</css-class-wrapper>
 	</portlet>
+	<role-mapper>
+		<role-name>administrator</role-name>
+		<role-link>Administrator</role-link>
+	</role-mapper>
+	<role-mapper>
+		<role-name>guest</role-name>
+		<role-link>Guest</role-link>
+	</role-mapper>
+	<role-mapper>
+		<role-name>power-user</role-name>
+		<role-link>Power User</role-link>
+	</role-mapper>
+	<role-mapper>
+		<role-name>user</role-name>
+		<role-link>User</role-link>
+	</role-mapper>
 </liferay-portlet-app>
