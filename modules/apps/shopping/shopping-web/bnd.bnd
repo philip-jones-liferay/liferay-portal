@@ -14,6 +14,7 @@ Import-Package:\
 	com.liferay.portal.kernel.xml,\
 	com.liferay.portal.lar,\
 	com.liferay.portal.model,\
+	com.liferay.portal.security.auth,\
 	com.liferay.portal.security.permission,\
 	com.liferay.portal.service,\
 	com.liferay.portal.service.permission,\
@@ -25,10 +26,9 @@ Import-Package:\
 	org.apache.struts.config,\
 	org.apache.struts.config.*,\
 	org.apache.struts.util,\
-	com.liferay.shopping.lar,\
 	com.liferay.shopping.model,\
 	com.liferay.shopping.model.impl,\
-	com.liferay.shopping.model.exception,\	
+	com.liferay.shopping.exception,\	
 	com.liferay.shopping.service.permission,\
 	com.liferay.shopping.service,\
 	com.liferay.shopping.util,\

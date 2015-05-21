@@ -3,23 +3,9 @@ Bundle-SymbolicName: com.liferay.shopping.service
 Bundle-Version: 1.0.0
 Import-Package:\
 	com.liferay.shopping.model,\
-	com.liferay.shopping.model.exception
-Export-Package:\
-	com.liferay.shopping.lar,\
-	com.liferay.shopping.model,\
-	com.liferay.shopping.model.impl,\
-	com.liferay.shopping.service.permission,\
-	com.liferay.shopping.service,\
-	com.liferay.shopping.service.impl,\
-	com.liferay.shopping.util,\
-	com.liferay.shopping.service.persistence,\
-	com.liferay.shopping.service.http,\
-	com.liferay.util.service,\
-	com.liferay.shopping.util,\
-	com.liferay.util,\
-	com.liferay.util.dao.orm,\
-	com.liferay.shopping.util.comparator,\
-	*
+	com.liferay.shopping.exception,\
+	com.liferay.portal.security.auth
+Export-Package:	com.liferay.shopping.*
 Include-Resource:\
 	classes
 Liferay-Service: true
