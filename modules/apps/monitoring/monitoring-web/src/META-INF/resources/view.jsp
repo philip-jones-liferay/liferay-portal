@@ -14,12 +14,12 @@
  */
 --%>
 
-<%@ include file="/html/portlet/monitoring/init.jsp" %>
+<%@ include file="init.jsp" %>
 
 <%
 PortletURL portletURL = renderResponse.createRenderURL();
 
-portletURL.setParameter("mvcPath", "/html/portlet/monitoring/view.jsp");
+portletURL.setParameter("mvcPath", "view.jsp");
 %>
 
 <c:choose>
@@ -62,7 +62,7 @@ portletURL.setParameter("mvcPath", "/html/portlet/monitoring/view.jsp");
 				%>
 
 				<portlet:renderURL var="rowURL">
-					<portlet:param name="mvcPath" value="/html/portlet/monitoring/edit_session.jsp" />
+					<portlet:param name="mvcPath" value="/edit_session.jsp" />
 					<portlet:param name="redirect" value="<%= currentURL %>" />
 					<portlet:param name="sessionId" value="<%= userTracker.getSessionId() %>" />
 				</portlet:renderURL>

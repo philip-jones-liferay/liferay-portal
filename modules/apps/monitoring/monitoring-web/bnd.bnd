@@ -1,5 +1,5 @@
 Bundle-Name: Liferay Monitoring Web
-Bundle-SymbolicName: com.liferay.portlet.monitoring.web
+Bundle-SymbolicName: com.liferay.monitoring.web
 Bundle-Version: 1.0.0
 Include-Resource:\
 	classes,\
