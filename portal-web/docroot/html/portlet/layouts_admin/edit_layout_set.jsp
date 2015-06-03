@@ -24,10 +24,7 @@ Group liveGroup = layoutsAdminDisplayContext.getLiveGroup();
 long groupId = layoutsAdminDisplayContext.getGroupId();
 long liveGroupId = layoutsAdminDisplayContext.getLiveGroupId();
 boolean privateLayout = layoutsAdminDisplayContext.isPrivateLayout();
-UnicodeProperties liveGroupTypeSettings = liveGroup.getTypeSettingsProperties();
 LayoutSet selLayoutSet = layoutsAdminDisplayContext.getSelLayoutSet();
-
-String rootNodeName = layoutsAdminDisplayContext.getRootNodeName();
 
 PortletURL redirectURL = layoutsAdminDisplayContext.getRedirectURL();
 
@@ -47,20 +44,14 @@ else {
 		pagesCount = group.getPublicLayoutsPageCount();
 	}
 }
-
-boolean hasExportImportLayoutsPermission = GroupPermissionUtil.contains(permissionChecker, liveGroup, ActionKeys.EXPORT_IMPORT_LAYOUTS);
-
-boolean hasAddPageLayoutsPermission = GroupPermissionUtil.contains(permissionChecker, group, ActionKeys.ADD_LAYOUT);
-
-boolean hasViewPagesPermission = (pagesCount > 0) && (liveGroup.isStaged() || selGroup.isLayoutSetPrototype() || selGroup.isStagingGroup() || portletName.equals(PortletKeys.GROUP_PAGES) || portletName.equals(PortletKeys.USERS_ADMIN));
 %>
 
 <aui:nav-bar>
 	<aui:nav cssClass="navbar-nav">
-		<c:if test="<%= hasViewPagesPermission %>">
+		<c:if test="<%= (pagesCount > 0) && (liveGroup.isStaged() || selGroup.isLayoutSetPrototype() || selGroup.isStagingGroup() || portletName.equals(PortletKeys.GROUP_PAGES) || portletName.equals(PortletKeys.USERS_ADMIN)) %>">
 			<aui:nav-item href="<%= group.getDisplayURL(themeDisplay, privateLayout) %>" iconCssClass="icon-file" label="view-pages" target="_blank" />
 		</c:if>
-		<c:if test="<%= hasAddPageLayoutsPermission %>">
+		<c:if test="<%= GroupPermissionUtil.contains(permissionChecker, group, ActionKeys.ADD_LAYOUT) %>">
 			<portlet:renderURL var="addPagesURL">
 				<portlet:param name="struts_action" value="/layouts_admin/add_layout" />
 				<portlet:param name="tabs1" value="<%= layoutsAdminDisplayContext.getTabs1() %>" />
@@ -70,40 +61,8 @@ boolean hasViewPagesPermission = (pagesCount > 0) && (liveGroup.isStaged() || se
 
 			<aui:nav-item href="<%= addPagesURL %>" iconCssClass="icon-plus" label="add-page" />
 		</c:if>
-		<c:if test="<%= hasExportImportLayoutsPermission %>">
-			<portlet:renderURL var="exportPagesURL">
-				<portlet:param name="struts_action" value="/layouts_admin/export_layouts" />
-				<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.EXPORT %>" />
-				<portlet:param name="groupId" value="<%= String.valueOf(groupId) %>" />
-				<portlet:param name="liveGroupId" value="<%= String.valueOf(liveGroupId) %>" />
-				<portlet:param name="privateLayout" value="<%= String.valueOf(privateLayout) %>" />
-				<portlet:param name="rootNodeName" value="<%= rootNodeName %>" />
-			</portlet:renderURL>
-
-			<aui:nav-item href="<%= exportPagesURL %>" iconCssClass="icon-arrow-down" label="export" />
-
-			<portlet:renderURL var="importPagesURL">
-				<portlet:param name="struts_action" value="/layouts_admin/import_layouts" />
-				<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.VALIDATE %>" />
-				<portlet:param name="groupId" value="<%= String.valueOf(groupId) %>" />
-				<portlet:param name="privateLayout" value="<%= String.valueOf(privateLayout) %>" />
-				<portlet:param name="rootNodeName" value="<%= rootNodeName %>" />
-			</portlet:renderURL>
-
-			<aui:nav-item href="<%= importPagesURL %>" iconCssClass="icon-arrow-up" label="import" />
-		</c:if>
 	</aui:nav>
 </aui:nav-bar>
-
-<c:if test="<%= liveGroup.isStaged() %>">
-	<%@ include file="/html/portlet/layouts_admin/error_auth_exception.jspf" %>
-
-	<%@ include file="/html/portlet/layouts_admin/error_remote_export_exception.jspf" %>
-
-	<div class="alert alert-warning">
-		<liferay-ui:message key="the-staging-environment-is-activated-changes-have-to-be-published-to-make-them-available-to-end-users" />
-	</div>
-</c:if>
 
 <portlet:actionURL var="editLayoutSetURL">
 	<portlet:param name="struts_action" value="/layouts_admin/edit_layout_set" />

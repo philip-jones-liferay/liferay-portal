@@ -734,7 +734,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		Company company = companyPersistence.findByPrimaryKey(companyId);
 		screenName = getLogin(screenName);
 		openId = StringUtil.trim(openId);
-		Date now = new Date();
 
 		if (PrefsPropsUtil.getBoolean(
 				companyId, PropsKeys.USERS_SCREEN_NAME_ALWAYS_AUTOGENERATE)) {
@@ -811,8 +810,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		}
 
 		user.setCompanyId(companyId);
-		user.setCreateDate(now);
-		user.setModifiedDate(now);
 		user.setDefaultUser(false);
 		user.setContactId(counterLocalService.increment());
 
@@ -890,8 +887,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		contact.setCompanyId(user.getCompanyId());
 		contact.setUserId(creatorUserId);
 		contact.setUserName(creatorUserName);
-		contact.setCreateDate(now);
-		contact.setModifiedDate(now);
 		contact.setClassName(User.class.getName());
 		contact.setClassPK(user.getUserId());
 		contact.setAccountId(company.getAccountId());
@@ -1193,7 +1188,7 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 	 * @throws PortalException if a portal exception occurred
 	 */
 	@Override
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	@Transactional(propagation = Propagation.SUPPORTS)
 	public long authenticateForBasic(
 			long companyId, String authType, String login, String password)
 		throws PortalException {
@@ -1236,6 +1231,8 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			password, userPassword);
 
 		if (userPassword.equals(password) || userPassword.equals(encPassword)) {
+			resetFailedLoginAttempts(user);
+
 			return user.getUserId();
 		}
 
@@ -1264,7 +1261,7 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 	 * @throws PortalException if a portal exception occurred
 	 */
 	@Override
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	@Transactional(propagation = Propagation.SUPPORTS)
 	public long authenticateForDigest(
 			long companyId, String username, String realm, String nonce,
 			String method, String uri, String response)
@@ -1315,6 +1312,8 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 				Digester.MD5, ha1, nonce, ha2);
 
 			if (response.equals(curResponse)) {
+				resetFailedLoginAttempts(user);
+
 				return user.getUserId();
 			}
 		}
@@ -1474,11 +1473,9 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 	 */
 	@Override
 	public void checkLoginFailure(User user) {
-		Date now = new Date();
-
 		int failedLoginAttempts = user.getFailedLoginAttempts();
 
-		user.setLastFailedLoginDate(now);
+		user.setLastFailedLoginDate(new Date());
 		user.setFailedLoginAttempts(++failedLoginAttempts);
 
 		userPersistence.update(user);
@@ -4679,9 +4676,8 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		user.setLoginIP(loginIP);
 		user.setLastLoginDate(lastLoginDate);
 		user.setLastLoginIP(lastLoginIP);
-		user.setFailedLoginAttempts(0);
 
-		userPersistence.update(user);
+		resetFailedLoginAttempts(user);
 
 		return user;
 	}
@@ -4791,8 +4787,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		throws PortalException {
 
 		User user = userPersistence.findByPrimaryKey(userId);
-
-		user.setModifiedDate(modifiedDate);
 
 		userPersistence.update(user);
 
@@ -5253,7 +5247,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		skypeSn = StringUtil.toLowerCase(skypeSn.trim());
 		twitterSn = StringUtil.toLowerCase(twitterSn.trim());
 		ymSn = StringUtil.toLowerCase(ymSn.trim());
-		Date now = new Date();
 
 		EmailAddressGenerator emailAddressGenerator =
 			EmailAddressGeneratorFactory.getInstance();
@@ -5285,8 +5278,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 
 			user.setDigest(StringPool.BLANK);
 		}
-
-		user.setModifiedDate(now);
 
 		if (user.getContactId() <= 0) {
 			user.setContactId(counterLocalService.increment());
@@ -5373,7 +5364,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 
 			contact.setCompanyId(user.getCompanyId());
 			contact.setUserName(StringPool.BLANK);
-			contact.setCreateDate(now);
 			contact.setClassName(User.class.getName());
 			contact.setClassPK(user.getUserId());
 			contact.setAccountId(company.getAccountId());
@@ -5381,7 +5371,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 				ContactConstants.DEFAULT_PARENT_CONTACT_ID);
 		}
 
-		contact.setModifiedDate(now);
 		contact.setEmailAddress(user.getEmailAddress());
 		contact.setFirstName(firstName);
 		contact.setMiddleName(middleName);
@@ -5913,6 +5902,9 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			authResult = handleAuthenticationFailure(
 				login, authType, user, headerMap, parameterMap);
 		}
+		else {
+			resetFailedLoginAttempts(user);
+		}
 
 		// PLACEHOLDER 02
 
@@ -5981,9 +5973,7 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			birthdayMonth, birthdayDay, birthdayYear,
 			ContactBirthdayException.class);
 
-		Date now = new Date();
-
-		if (birthday.after(now)) {
+		if (birthday.after(new Date())) {
 			throw new ContactBirthdayException();
 		}
 
@@ -6212,6 +6202,12 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		};
 
 		TransactionCommitCallbackRegistryUtil.registerCallback(callable);
+	}
+
+	protected void resetFailedLoginAttempts(User user) {
+		user.setFailedLoginAttempts(0);
+
+		userPersistence.update(user);
 	}
 
 	protected BaseModelSearchResult<User> searchUsers(

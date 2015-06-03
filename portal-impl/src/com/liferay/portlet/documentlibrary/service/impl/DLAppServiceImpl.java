@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.InvalidRepositoryIdException;
 import com.liferay.portal.kernel.repository.Repository;
 import com.liferay.portal.kernel.repository.RepositoryException;
+import com.liferay.portal.kernel.repository.RepositoryProviderUtil;
 import com.liferay.portal.kernel.repository.capabilities.TrashCapability;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileShortcut;
@@ -62,7 +63,9 @@ import com.liferay.portlet.documentlibrary.service.permission.DLFolderPermission
 import com.liferay.portlet.documentlibrary.service.permission.DLPermission;
 import com.liferay.portlet.documentlibrary.util.DLAppUtil;
 import com.liferay.portlet.documentlibrary.util.DLProcessorRegistryUtil;
+import com.liferay.portlet.documentlibrary.util.comparator.FolderNameComparator;
 import com.liferay.portlet.documentlibrary.util.comparator.RepositoryModelModifiedDateComparator;
+import com.liferay.portlet.documentlibrary.util.comparator.RepositoryModelTitleComparator;
 
 import java.io.File;
 import java.io.IOException;
@@ -216,9 +219,6 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 			getUserId(), folderId, sourceFileName, mimeType, title, description,
 			changeLog, file, serviceContext);
 
-		dlAppHelperLocalService.addFileEntry(
-			getUserId(), fileEntry, null, serviceContext);
-
 		return fileEntry;
 	}
 
@@ -300,9 +300,6 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		FileEntry fileEntry = repository.addFileEntry(
 			getUserId(), folderId, sourceFileName, mimeType, title, description,
 			changeLog, is, size, serviceContext);
-
-		dlAppHelperLocalService.addFileEntry(
-			getUserId(), fileEntry, null, serviceContext);
 
 		return fileEntry;
 	}
@@ -860,7 +857,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	}
 
 	/**
-	 * Returns a range of all the file entries in the folder.
+	 * Returns a name-ordered range of all the file entries in the folder.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end -
@@ -876,7 +873,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	 * @param  folderId the primary key of the file entry's folder
 	 * @param  start the lower bound of the range of results
 	 * @param  end the upper bound of the range of results (not inclusive)
-	 * @return the range of file entries in the folder
+	 * @return the name-ordered range of file entries in the folder
 	 * @throws PortalException if the folder could not be found
 	 */
 	@Override
@@ -884,7 +881,9 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 			long repositoryId, long folderId, int start, int end)
 		throws PortalException {
 
-		return getFileEntries(repositoryId, folderId, start, end, null);
+		return getFileEntries(
+			repositoryId, folderId, start, end,
+			new RepositoryModelTitleComparator<FileEntry>(true));
 	}
 
 	/**
@@ -941,15 +940,15 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	}
 
 	/**
-	 * Returns a range of all the file entries with the file entry type in the
-	 * folder.
+	 * Returns a name-ordered range of all the file entries with the file entry
+	 * type in the folder.
 	 *
 	 * @param  repositoryId the primary key of the file entry's repository
 	 * @param  folderId the primary key of the file entry's folder
 	 * @param  fileEntryTypeId the primary key of the file entry type
 	 * @param  start the lower bound of the range of results
 	 * @param  end the upper bound of the range of results (not inclusive)
-	 * @return the file entries in the folder
+	 * @return the name-ordered range of the file entries in the folder
 	 * @throws PortalException if the folder could not be found
 	 */
 	@Override
@@ -959,7 +958,8 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		throws PortalException {
 
 		return getFileEntries(
-			repositoryId, folderId, fileEntryTypeId, start, end, null);
+			repositoryId, folderId, fileEntryTypeId, start, end,
+			new RepositoryModelTitleComparator<FileEntry>(true));
 	}
 
 	/**
@@ -996,7 +996,8 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		return getFileEntries(
 			repositoryId, folderId, mimeTypes, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, null);
+			QueryUtil.ALL_POS,
+			new RepositoryModelTitleComparator<FileEntry>(true));
 	}
 
 	@Override
@@ -1320,8 +1321,9 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	}
 
 	/**
-	 * Returns a range of all the immediate subfolders of the parent folder,
-	 * optionally including mount folders for third-party repositories.
+	 * Returns a name-ordered range of all the immediate subfolders of the
+	 * parent folder, optionally including mount folders for third-party
+	 * repositories.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end -
@@ -1339,7 +1341,8 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	 *         third-party repositories
 	 * @param  start the lower bound of the range of results
 	 * @param  end the upper bound of the range of results (not inclusive)
-	 * @return the range of immediate subfolders of the parent folder
+	 * @return the name-ordered range of immediate subfolders of the parent
+	 *         folder
 	 * @throws PortalException if the parent folder could not be found
 	 */
 	@Override
@@ -1350,7 +1353,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		return getFolders(
 			repositoryId, parentFolderId, includeMountFolders, start, end,
-			null);
+			new FolderNameComparator(true));
 	}
 
 	/**
@@ -1432,7 +1435,8 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	}
 
 	/**
-	 * Returns a range of all the immediate subfolders of the parent folder.
+	 * Returns a name-ordered range of all the immediate subfolders of the
+	 * parent folder.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end -
@@ -1448,7 +1452,8 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	 * @param  parentFolderId the primary key of the folder's parent folder
 	 * @param  start the lower bound of the range of results
 	 * @param  end the upper bound of the range of results (not inclusive)
-	 * @return the range of immediate subfolders of the parent folder
+	 * @return the name-ordered range of immediate subfolders of the parent
+	 *         folder
 	 * @throws PortalException if the parent folder could not be found
 	 */
 	@Override
@@ -1456,7 +1461,9 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 			long repositoryId, long parentFolderId, int start, int end)
 		throws PortalException {
 
-		return getFolders(repositoryId, parentFolderId, start, end, null);
+		return getFolders(
+			repositoryId, parentFolderId, start, end,
+			new FolderNameComparator(true));
 	}
 
 	/**
@@ -1495,8 +1502,8 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	}
 
 	/**
-	 * Returns a range of all the immediate subfolders, file entries, and file
-	 * shortcuts in the parent folder.
+	 * Returns a name-ordered range of all the immediate subfolders, file
+	 * entries, and file shortcuts in the parent folder.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end -
@@ -1515,9 +1522,8 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	 *         third-party repositories
 	 * @param  start the lower bound of the range of results
 	 * @param  end the upper bound of the range of results (not inclusive)
-	 * @return the range of immediate subfolders, file entries, and file
-	 *         shortcuts in the parent folder ordered by comparator
-	 *         <code>obc</code>
+	 * @return the name-ordered range of immediate subfolders, file entries, and
+	 *         file shortcuts in the parent folder
 	 * @throws PortalException if the parent folder could not be found
 	 */
 	@Override
@@ -1528,7 +1534,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		return getFoldersAndFileEntriesAndFileShortcuts(
 			repositoryId, folderId, status, includeMountFolders, start, end,
-			null);
+			new RepositoryModelTitleComparator<Object>(true));
 	}
 
 	/**
@@ -1941,9 +1947,9 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	}
 
 	/**
-	 * Returns a range of all the immediate subfolders of the parent folder that
-	 * are used for mounting third-party repositories. This method is only
-	 * supported by the Liferay repository.
+	 * Returns a name-ordered range of all the immediate subfolders of the
+	 * parent folder that are used for mounting third-party repositories. This
+	 * method is only supported by the Liferay repository.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end -
@@ -1959,8 +1965,8 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	 * @param  parentFolderId the primary key of the parent folder
 	 * @param  start the lower bound of the range of results
 	 * @param  end the upper bound of the range of results (not inclusive)
-	 * @return the range of immediate subfolders of the parent folder that are
-	 *         used for mounting third-party repositories
+	 * @return the name-ordered range of immediate subfolders of the parent
+	 *         folder that are used for mounting third-party repositories
 	 * @throws PortalException if the repository or parent folder could not be
 	 *         found
 	 */
@@ -1969,7 +1975,9 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 			long repositoryId, long parentFolderId, int start, int end)
 		throws PortalException {
 
-		return getMountFolders(repositoryId, parentFolderId, start, end, null);
+		return getMountFolders(
+			repositoryId, parentFolderId, start, end,
+			new FolderNameComparator(true));
 	}
 
 	/**
@@ -3199,9 +3207,6 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 			latestFileVersion.getContentStream(false),
 			latestFileVersion.getSize(), serviceContext);
 
-		dlAppHelperLocalService.addFileEntry(
-			getUserId(), destinationFileEntry, null, serviceContext);
-
 		for (int i = fileVersions.size() - 2; i >= 0; i--) {
 			FileVersion fileVersion = fileVersions.get(i);
 
@@ -3257,9 +3262,6 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 						getUserId(), curDestFolder.getGroupId(),
 						srcFileEntry.getFileEntryId(),
 						curDestFolder.getFolderId(), serviceContext);
-
-					dlAppHelperLocalService.addFileEntry(
-						getUserId(), fileEntry, null, serviceContext);
 
 					fileEntries.add(fileEntry);
 				}
@@ -3354,7 +3356,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		throws PortalException {
 
 		try {
-			return repositoryService.getRepositoryImpl(0, fileEntryId, 0, 0);
+			return RepositoryProviderUtil.getFileEntryRepository(fileEntryId);
 		}
 		catch (InvalidRepositoryIdException irie) {
 			StringBundler sb = new StringBundler(3);
@@ -3371,7 +3373,8 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		throws PortalException {
 
 		try {
-			return repositoryService.getRepositoryImpl(0, 0, 0, fileShortcutId);
+			return RepositoryProviderUtil.getFileShortcutRepository(
+				fileShortcutId);
 		}
 		catch (InvalidRepositoryIdException irie) {
 			StringBundler sb = new StringBundler(3);
@@ -3388,7 +3391,8 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		throws PortalException {
 
 		try {
-			return repositoryService.getRepositoryImpl(0, 0, fileVersionId, 0);
+			return RepositoryProviderUtil.getFileVersionRepository(
+				fileVersionId);
 		}
 		catch (InvalidRepositoryIdException irie) {
 			StringBundler sb = new StringBundler(3);
@@ -3405,7 +3409,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		throws PortalException {
 
 		try {
-			return repositoryService.getRepositoryImpl(folderId, 0, 0, 0);
+			return RepositoryProviderUtil.getFolderRepository(folderId);
 		}
 		catch (InvalidRepositoryIdException irie) {
 			StringBundler sb = new StringBundler(3);
@@ -3432,7 +3436,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		throws PortalException {
 
 		try {
-			return repositoryService.getRepositoryImpl(repositoryId);
+			return RepositoryProviderUtil.getRepository(repositoryId);
 		}
 		catch (InvalidRepositoryIdException irie) {
 			StringBundler sb = new StringBundler(3);

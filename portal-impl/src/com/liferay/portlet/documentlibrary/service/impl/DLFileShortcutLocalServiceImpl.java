@@ -52,7 +52,6 @@ public class DLFileShortcutLocalServiceImpl
 
 		User user = userPersistence.findByPrimaryKey(userId);
 		folderId = getFolderId(user.getCompanyId(), folderId);
-		Date now = new Date();
 
 		validate(user, toFileEntryId);
 
@@ -66,8 +65,6 @@ public class DLFileShortcutLocalServiceImpl
 		fileShortcut.setCompanyId(user.getCompanyId());
 		fileShortcut.setUserId(user.getUserId());
 		fileShortcut.setUserName(user.getFullName());
-		fileShortcut.setCreateDate(serviceContext.getCreateDate(now));
-		fileShortcut.setModifiedDate(serviceContext.getModifiedDate(now));
 		fileShortcut.setRepositoryId(repositoryId);
 		fileShortcut.setFolderId(folderId);
 		fileShortcut.setToFileEntryId(toFileEntryId);
@@ -76,7 +73,7 @@ public class DLFileShortcutLocalServiceImpl
 		fileShortcut.setStatus(WorkflowConstants.STATUS_APPROVED);
 		fileShortcut.setStatusByUserId(userId);
 		fileShortcut.setStatusByUserName(user.getFullName());
-		fileShortcut.setStatusDate(now);
+		fileShortcut.setStatusDate(new Date());
 
 		dlFileShortcutPersistence.update(fileShortcut);
 
@@ -377,8 +374,6 @@ public class DLFileShortcutLocalServiceImpl
 
 		validate(user, toFileEntryId);
 
-		fileShortcut.setModifiedDate(
-			serviceContext.getModifiedDate(new Date()));
 		fileShortcut.setFolderId(folderId);
 		fileShortcut.setToFileEntryId(toFileEntryId);
 		fileShortcut.setTreePath(fileShortcut.buildTreePath());
@@ -433,7 +428,7 @@ public class DLFileShortcutLocalServiceImpl
 		fileShortcut.setStatus(status);
 		fileShortcut.setStatusByUserId(user.getUserId());
 		fileShortcut.setStatusByUserName(user.getFullName());
-		fileShortcut.setStatusDate(serviceContext.getModifiedDate(new Date()));
+		fileShortcut.setStatusDate(serviceContext.getModifiedDate(null));
 
 		dlFileShortcutPersistence.update(fileShortcut);
 	}

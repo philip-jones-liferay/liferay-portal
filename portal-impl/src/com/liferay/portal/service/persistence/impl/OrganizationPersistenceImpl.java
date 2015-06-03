@@ -42,6 +42,8 @@ import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.impl.OrganizationImpl;
 import com.liferay.portal.model.impl.OrganizationModelImpl;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextThreadLocal;
 import com.liferay.portal.service.persistence.GroupPersistence;
 import com.liferay.portal.service.persistence.OrganizationPersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
@@ -49,6 +51,7 @@ import com.liferay.portal.service.persistence.UserPersistence;
 import java.io.Serializable;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -6644,6 +6647,28 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 			String uuid = PortalUUIDUtil.generate();
 
 			organization.setUuid(uuid);
+		}
+
+		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+
+		Date now = new Date();
+
+		if (isNew && (organization.getCreateDate() == null)) {
+			if (serviceContext == null) {
+				organization.setCreateDate(now);
+			}
+			else {
+				organization.setCreateDate(serviceContext.getCreateDate(now));
+			}
+		}
+
+		if (!organizationModelImpl.hasSetModifiedDate()) {
+			if (serviceContext == null) {
+				organization.setModifiedDate(now);
+			}
+			else {
+				organization.setModifiedDate(serviceContext.getModifiedDate(now));
+			}
 		}
 
 		Session session = null;

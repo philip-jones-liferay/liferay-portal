@@ -50,13 +50,12 @@ BackgroundTask lastCompletedInitialPublicationBackgroundTask = BackgroundTaskLoc
 
 <c:if test="<%= (lastCompletedInitialPublicationBackgroundTask != null) && (lastCompletedInitialPublicationBackgroundTask.getStatus() == BackgroundTaskConstants.STATUS_FAILED) %>">
 	<div class="alert alert-danger">
-		<liferay-ui:message key="an-unexpected-error-occurred--with-the-initial-staging-publication" />
+		<liferay-ui:message key="an-unexpected-error-occurred-with-the-initial-staging-publication" />
 
-		<liferay-portlet:actionURL portletName="<%= PortletKeys.GROUP_PAGES %>" var="deleteBackgroundTaskURL">
-			<portlet:param name="struts_action" value="/group_pages/delete_background_task" />
+		<portlet:actionURL name="deleteBackgroundTask" var="deleteBackgroundTaskURL">
 			<portlet:param name="redirect" value="<%= currentURL %>" />
 			<portlet:param name="backgroundTaskId" value="<%= String.valueOf(lastCompletedInitialPublicationBackgroundTask.getBackgroundTaskId()) %>" />
-		</liferay-portlet:actionURL>
+		</portlet:actionURL>
 
 		<liferay-ui:icon-delete
 			confirmation="are-you-sure-you-want-to-remove-the-initial-staging-publication"
@@ -66,7 +65,7 @@ BackgroundTask lastCompletedInitialPublicationBackgroundTask = BackgroundTaskLoc
 		/>
 	</div>
 
-	<liferay-util:include page="/html/portlet/layouts_admin/publish_process_message_task_details.jsp">
+	<liferay-util:include page="/html/portlet/export_import/publish_process_message_task_details.jsp">
 		<liferay-util:param name="backgroundTaskId" value="<%= String.valueOf(lastCompletedInitialPublicationBackgroundTask.getBackgroundTaskId()) %>" />
 	</liferay-util:include>
 </c:if>
@@ -87,8 +86,8 @@ BackgroundTask lastCompletedInitialPublicationBackgroundTask = BackgroundTaskLoc
 						id: 'publishProcesses',
 						title: '<liferay-ui:message key="initial-publication" />',
 
-						<liferay-portlet:renderURL portletName="<%= PortletKeys.LAYOUTS_ADMIN %>" var="publishProcessesURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-							<portlet:param name="struts_action" value="/layouts_admin/publish_layouts" />
+						<liferay-portlet:renderURL portletName="<%= PortletKeys.EXPORT_IMPORT %>" var="publishProcessesURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+							<portlet:param name="struts_action" value="/export_import/publish_layouts" />
 							<portlet:param name="<%= Constants.CMD %>" value="view_processes" />
 							<portlet:param name="<%= SearchContainer.DEFAULT_CUR_PARAM %>" value="<%= ParamUtil.getString(request, SearchContainer.DEFAULT_CUR_PARAM) %>" />
 							<portlet:param name="<%= SearchContainer.DEFAULT_DELTA_PARAM %>" value="<%= ParamUtil.getString(request, SearchContainer.DEFAULT_DELTA_PARAM) %>" />

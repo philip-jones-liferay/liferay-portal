@@ -70,6 +70,8 @@ import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.MVCCModel;
 import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextThreadLocal;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.service.persistence.impl.NestedSetsTreeManager;
 import com.liferay.portal.service.persistence.impl.PersistenceNestedSetsTreeManager;
@@ -530,6 +532,10 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			</#list>
 		</#if>
 
+		<#if entity.hasColumn("createDate", "Date") && entity.hasColumn("modifiedDate", "Date")>
+			<#assign castEntityModelImpl = true>
+		</#if>
+
 		<#if castEntityModelImpl>
 			${entity.name}ModelImpl ${entity.varName}ModelImpl = (${entity.name}ModelImpl)${entity.varName};
 		</#if>
@@ -539,6 +545,30 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				String uuid = PortalUUIDUtil.generate();
 
 				${entity.varName}.setUuid(uuid);
+			}
+		</#if>
+
+		<#if entity.hasColumn("createDate", "Date") && entity.hasColumn("modifiedDate", "Date")>
+			ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+
+			Date now = new Date();
+
+			if (isNew && (${entity.varName}.getCreateDate() == null)) {
+				if (serviceContext == null) {
+					${entity.varName}.setCreateDate(now);
+				}
+				else {
+					${entity.varName}.setCreateDate(serviceContext.getCreateDate(now));
+				}
+			}
+
+			if (!${entity.varName}ModelImpl.hasSetModifiedDate()) {
+				if (serviceContext == null) {
+					${entity.varName}.setModifiedDate(now);
+				}
+				else {
+					${entity.varName}.setModifiedDate(serviceContext.getModifiedDate(now));
+				}
 			}
 		</#if>
 

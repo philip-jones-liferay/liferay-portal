@@ -142,8 +142,7 @@ AUI.add(
 					getRepeatedSiblings: function() {
 						var instance = this;
 
-						return AArray.filter(
-							instance.getSiblings(),
+						return instance.getSiblings().filter(
 							function(item) {
 								return item.get('name') === instance.get('name');
 							}
@@ -187,7 +186,7 @@ AUI.add(
 
 						var siblings = instance.getSiblings();
 
-						var index = AArray.indexOf(siblings, instance);
+						var index = siblings.indexOf(instance);
 
 						siblings.splice(index, 1);
 
@@ -241,7 +240,7 @@ AUI.add(
 
 						var siblings = instance.getSiblings();
 
-						var index = AArray.indexOf(siblings, instance);
+						var index = siblings.indexOf(instance);
 
 						var form = instance.get('form');
 

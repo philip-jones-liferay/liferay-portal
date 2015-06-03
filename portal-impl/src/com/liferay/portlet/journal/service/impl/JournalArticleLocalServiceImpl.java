@@ -108,12 +108,14 @@ import com.liferay.portlet.dynamicdatamapping.StorageFieldRequiredException;
 import com.liferay.portlet.dynamicdatamapping.StructureDefinitionException;
 import com.liferay.portlet.dynamicdatamapping.model.DDMForm;
 import com.liferay.portlet.dynamicdatamapping.model.DDMFormField;
+import com.liferay.portlet.dynamicdatamapping.model.DDMStorageLink;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
 import com.liferay.portlet.dynamicdatamapping.model.LocalizedValue;
 import com.liferay.portlet.dynamicdatamapping.storage.Fields;
 import com.liferay.portlet.dynamicdatamapping.util.DDMUtil;
 import com.liferay.portlet.dynamicdatamapping.util.DDMXMLUtil;
+import com.liferay.portlet.expando.util.ExpandoBridgeUtil;
 import com.liferay.portlet.journal.ArticleContentException;
 import com.liferay.portlet.journal.ArticleDisplayDateException;
 import com.liferay.portlet.journal.ArticleExpirationDateException;
@@ -331,15 +333,15 @@ public class JournalArticleLocalServiceImpl
 
 		validateDDMStructureId(groupId, folderId, ddmStructureKey);
 
+		if (autoArticleId) {
+			articleId = String.valueOf(counterLocalService.increment());
+		}
+
 		validate(
 			user.getCompanyId(), groupId, classNameId, articleId, autoArticleId,
 			version, titleMap, content, ddmStructureKey, ddmTemplateKey,
 			expirationDate, smallImage, smallImageURL, smallImageFile,
 			smallImageBytes, serviceContext);
-
-		if (autoArticleId) {
-			articleId = String.valueOf(counterLocalService.increment());
-		}
 
 		serviceContext.setAttribute("articleId", articleId);
 
@@ -367,8 +369,6 @@ public class JournalArticleLocalServiceImpl
 		article.setCompanyId(user.getCompanyId());
 		article.setUserId(user.getUserId());
 		article.setUserName(user.getFullName());
-		article.setCreateDate(serviceContext.getCreateDate(now));
-		article.setModifiedDate(serviceContext.getModifiedDate(now));
 		article.setFolderId(folderId);
 		article.setClassNameId(classNameId);
 		article.setClassPK(classPK);
@@ -442,14 +442,7 @@ public class JournalArticleLocalServiceImpl
 				classPK, content, serviceContext);
 		}
 		else {
-			DDMTemplate ddmTemplate = ddmTemplateLocalService.getTemplate(
-				PortalUtil.getSiteGroupId(groupId),
-				classNameLocalService.getClassNameId(DDMStructure.class),
-				ddmTemplateKey, true);
-
-			ddmTemplateLinkLocalService.addTemplateLink(
-				classNameLocalService.getClassNameId(JournalArticle.class), id,
-				ddmTemplate.getTemplateId());
+			updateDDMLinks(id, groupId, ddmStructureKey, ddmTemplateKey, true);
 		}
 
 		// Message boards
@@ -760,7 +753,6 @@ public class JournalArticleLocalServiceImpl
 		User user = userPersistence.findByPrimaryKey(userId);
 		oldArticleId = StringUtil.toUpperCase(oldArticleId.trim());
 		newArticleId = StringUtil.toUpperCase(newArticleId.trim());
-		Date now = new Date();
 
 		JournalArticle oldArticle = journalArticlePersistence.findByG_A_V(
 			groupId, oldArticleId, version);
@@ -799,8 +791,6 @@ public class JournalArticleLocalServiceImpl
 		newArticle.setCompanyId(user.getCompanyId());
 		newArticle.setUserId(user.getUserId());
 		newArticle.setUserName(user.getFullName());
-		newArticle.setCreateDate(now);
-		newArticle.setModifiedDate(now);
 		newArticle.setFolderId(oldArticle.getFolderId());
 		newArticle.setTreePath(oldArticle.getTreePath());
 		newArticle.setArticleId(newArticleId);
@@ -839,7 +829,8 @@ public class JournalArticleLocalServiceImpl
 			newArticle.setStatus(oldArticle.getStatus());
 		}
 
-		newArticle.setExpandoBridgeAttributes(oldArticle);
+		ExpandoBridgeUtil.copyExpandoBridgeAttributes(
+			oldArticle.getExpandoBridge(), newArticle.getExpandoBridge());
 
 		journalArticlePersistence.update(newArticle);
 
@@ -880,6 +871,12 @@ public class JournalArticleLocalServiceImpl
 		updateAsset(
 			userId, newArticle, assetCategoryIds, assetTagNames,
 			assetLinkEntryIds);
+
+		// Dynamic data mapping
+
+		updateDDMLinks(
+			id, groupId, oldArticle.getDDMStructureKey(),
+			oldArticle.getDDMTemplateKey(), true);
 
 		return newArticle;
 	}
@@ -975,6 +972,8 @@ public class JournalArticleLocalServiceImpl
 
 		if (article.getClassNameId() !=
 				classNameLocalService.getClassNameId(DDMStructure.class)) {
+
+			ddmStorageLinkLocalService.deleteClassStorageLink(article.getId());
 
 			ddmTemplateLinkLocalService.deleteTemplateLink(
 				classNameLocalService.getClassNameId(JournalArticle.class),
@@ -3430,7 +3429,6 @@ public class JournalArticleLocalServiceImpl
 			}
 
 			article.setFolderId(newFolderId);
-			article.setModifiedDate(new Date());
 			article.setTreePath(article.buildTreePath());
 
 			journalArticlePersistence.update(article);
@@ -3524,8 +3522,6 @@ public class JournalArticleLocalServiceImpl
 		throws PortalException {
 
 		// Article
-
-		article.setModifiedDate(new Date());
 
 		int oldStatus = article.getStatus();
 
@@ -3713,8 +3709,6 @@ public class JournalArticleLocalServiceImpl
 			article.setContent(content);
 		}
 
-		article.setModifiedDate(new Date());
-
 		journalArticlePersistence.update(article);
 
 		return article;
@@ -3754,7 +3748,6 @@ public class JournalArticleLocalServiceImpl
 		}
 
 		article.setArticleId(trashArticleId);
-		article.setModifiedDate(new Date());
 
 		journalArticlePersistence.update(article);
 
@@ -5222,7 +5215,6 @@ public class JournalArticleLocalServiceImpl
 			user, groupId, articleId, article.getVersion(), addNewVersion,
 			content, images);
 
-		article.setModifiedDate(serviceContext.getModifiedDate(now));
 		article.setFolderId(folderId);
 		article.setTreePath(article.buildTreePath());
 		article.setTitleMap(titleMap, locale);
@@ -5262,7 +5254,9 @@ public class JournalArticleLocalServiceImpl
 			article.setStatus(WorkflowConstants.STATUS_EXPIRED);
 		}
 
-		article.setExpandoBridgeAttributes(serviceContext);
+		ExpandoBridgeUtil.setExpandoBridgeAttributes(
+			latestArticle.getExpandoBridge(), article.getExpandoBridge(),
+			serviceContext);
 
 		journalArticlePersistence.update(article);
 
@@ -5282,21 +5276,9 @@ public class JournalArticleLocalServiceImpl
 				article.getClassPK(), content, serviceContext);
 		}
 		else {
-			DDMTemplate ddmTemplate = ddmTemplateLocalService.getTemplate(
-				PortalUtil.getSiteGroupId(groupId),
-				classNameLocalService.getClassNameId(DDMStructure.class),
-				ddmTemplateKey, true);
-
-			if (addNewVersion) {
-				ddmTemplateLinkLocalService.addTemplateLink(
-					classNameLocalService.getClassNameId(JournalArticle.class),
-					article.getId(), ddmTemplate.getTemplateId());
-			}
-			else {
-				ddmTemplateLinkLocalService.updateTemplateLink(
-					classNameLocalService.getClassNameId(JournalArticle.class),
-					latestArticle.getId(), ddmTemplate.getTemplateId());
-			}
+			updateDDMLinks(
+				article.getId(), groupId, ddmStructureKey, ddmTemplateKey,
+				addNewVersion);
 		}
 
 		// Small image
@@ -5475,7 +5457,7 @@ public class JournalArticleLocalServiceImpl
 			article.setUserId(oldArticle.getUserId());
 			article.setUserName(user.getFullName());
 			article.setCreateDate(oldArticle.getCreateDate());
-			article.setModifiedDate(new Date());
+			article.setFolderId(oldArticle.getFolderId());
 			article.setClassNameId(oldArticle.getClassNameId());
 			article.setClassPK(oldArticle.getClassPK());
 			article.setArticleId(articleId);
@@ -5504,7 +5486,15 @@ public class JournalArticleLocalServiceImpl
 
 			article.setStatus(WorkflowConstants.STATUS_DRAFT);
 			article.setStatusDate(new Date());
-			article.setExpandoBridgeAttributes(oldArticle);
+
+			ExpandoBridgeUtil.copyExpandoBridgeAttributes(
+				oldArticle.getExpandoBridge(), article.getExpandoBridge());
+
+			// Dynamic data mapping
+
+			updateDDMLinks(
+				id, groupId, oldArticle.getDDMStructureKey(),
+				oldArticle.getDDMTemplateKey(), true);
 		}
 		else {
 			article = oldArticle;
@@ -7400,6 +7390,44 @@ public class JournalArticleLocalServiceImpl
 		}
 	}
 
+	protected void updateDDMLinks(
+			long id, long groupId, String ddmStructureKey,
+			String ddmTemplateKey, boolean incrementVersion)
+		throws PortalException {
+
+		DDMStructure ddmStructure = ddmStructureLocalService.getStructure(
+			PortalUtil.getSiteGroupId(groupId),
+			classNameLocalService.getClassNameId(JournalArticle.class),
+			ddmStructureKey, true);
+
+		DDMTemplate ddmTemplate = ddmTemplateLocalService.getTemplate(
+			PortalUtil.getSiteGroupId(groupId),
+			classNameLocalService.getClassNameId(DDMStructure.class),
+			ddmTemplateKey, true);
+
+		if (incrementVersion) {
+			ddmStorageLinkLocalService.addStorageLink(
+				ddmStructure.getClassNameId(), id,
+				ddmStructure.getStructureId(), new ServiceContext());
+
+			ddmTemplateLinkLocalService.addTemplateLink(
+				classNameLocalService.getClassNameId(JournalArticle.class), id,
+				ddmTemplate.getTemplateId());
+		}
+		else {
+			DDMStorageLink ddmStorageLink =
+				ddmStorageLinkLocalService.getClassStorageLink(id);
+
+			ddmStorageLink.setStructureId(ddmStructure.getStructureId());
+
+			ddmStorageLinkLocalService.updateDDMStorageLink(ddmStorageLink);
+
+			ddmTemplateLinkLocalService.updateTemplateLink(
+				classNameLocalService.getClassNameId(JournalArticle.class), id,
+				ddmTemplate.getTemplateId());
+		}
+	}
+
 	protected void updateDDMStructurePredefinedValues(
 		long ddmStructureId, String content, ServiceContext serviceContext) {
 
@@ -7519,7 +7547,7 @@ public class JournalArticleLocalServiceImpl
 			classNameLocalService.getClassNameId(JournalArticle.class),
 			ddmStructureKey, true);
 
-		validateDDMStructureFields(ddmStructure, classNameId, serviceContext);
+		validateDDMStructureFields(ddmStructure, classNameId, content);
 
 		if (Validator.isNotNull(ddmTemplateKey)) {
 			DDMTemplate ddmTemplate = ddmTemplateLocalService.getTemplate(
@@ -7646,12 +7674,8 @@ public class JournalArticleLocalServiceImpl
 	}
 
 	protected void validateDDMStructureFields(
-			DDMStructure ddmStructure, long classNameId,
-			ServiceContext serviceContext)
+			DDMStructure ddmStructure, long classNameId, Fields fields)
 		throws PortalException {
-
-		Fields fields = DDMUtil.getFields(
-			ddmStructure.getStructureId(), serviceContext);
 
 		for (com.liferay.portlet.dynamicdatamapping.storage.Field field :
 				fields) {
@@ -7667,6 +7691,26 @@ public class JournalArticleLocalServiceImpl
 				throw new StorageFieldRequiredException();
 			}
 		}
+	}
+
+	protected void validateDDMStructureFields(
+			DDMStructure ddmStructure, long classNameId,
+			ServiceContext serviceContext)
+		throws PortalException {
+
+		Fields fields = DDMUtil.getFields(
+			ddmStructure.getStructureId(), serviceContext);
+
+		validateDDMStructureFields(ddmStructure, classNameId, fields);
+	}
+
+	protected void validateDDMStructureFields(
+			DDMStructure ddmStructure, long classNameId, String content)
+		throws PortalException {
+
+		Fields fields = DDMXMLUtil.getFields(ddmStructure, content);
+
+		validateDDMStructureFields(ddmStructure, classNameId, fields);
 	}
 
 	protected void validateDDMStructureId(

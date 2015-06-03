@@ -32,6 +32,8 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextThreadLocal;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.mobiledevicerules.NoSuchActionException;
@@ -43,6 +45,7 @@ import com.liferay.portlet.mobiledevicerules.service.persistence.MDRActionPersis
 import java.io.Serializable;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -2156,6 +2159,28 @@ public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 			String uuid = PortalUUIDUtil.generate();
 
 			mdrAction.setUuid(uuid);
+		}
+
+		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+
+		Date now = new Date();
+
+		if (isNew && (mdrAction.getCreateDate() == null)) {
+			if (serviceContext == null) {
+				mdrAction.setCreateDate(now);
+			}
+			else {
+				mdrAction.setCreateDate(serviceContext.getCreateDate(now));
+			}
+		}
+
+		if (!mdrActionModelImpl.hasSetModifiedDate()) {
+			if (serviceContext == null) {
+				mdrAction.setModifiedDate(now);
+			}
+			else {
+				mdrAction.setModifiedDate(serviceContext.getModifiedDate(now));
+			}
 		}
 
 		Session session = null;

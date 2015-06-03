@@ -265,6 +265,8 @@
 				<classpath mode="compile">lib/development/catalina.jar</classpath>
 				<classpath mode="compile">lib/development/cobertura.jar</classpath>
 				<classpath mode="compile">lib/development/com.liferay.ant.bnd.jar</classpath>
+				<classpath mode="compile">lib/development/com.liferay.ant.build.logger.jar</classpath>
+				<classpath mode="compile">lib/development/com.liferay.ant.jgit.jar</classpath>
 				<classpath mode="compile">lib/development/com.liferay.tld.formatter.jar</classpath>
 				<classpath mode="compile">lib/development/com.liferay.whip.jar</classpath>
 				<classpath mode="compile">lib/development/deployment.jar</classpath>
@@ -371,7 +373,9 @@
 				<classpath mode="compile">lib/portal/closure-compiler.jar</classpath>
 				<classpath mode="compile">lib/portal/com.liferay.rtl.css.jar</classpath>
 				<classpath mode="compile">lib/portal/com.liferay.ruby.gems.jar</classpath>
+				<classpath mode="compile">lib/portal/com.liferay.sass.compiler.api.jar</classpath>
 				<classpath mode="compile">lib/portal/com.liferay.sass.compiler.jni.jar</classpath>
+				<classpath mode="compile">lib/portal/com.liferay.sass.compiler.ruby.jar</classpath>
 				<classpath mode="compile">lib/portal/commons-beanutils.jar</classpath>
 				<classpath mode="compile">lib/portal/commons-codec.jar</classpath>
 				<classpath mode="compile">lib/portal/commons-collections.jar</classpath>
@@ -398,7 +402,6 @@
 				<classpath mode="compile">lib/portal/easyconf.jar</classpath>
 				<classpath mode="compile">lib/portal/eclipse-core-runtime.jar</classpath>
 				<classpath mode="compile">lib/portal/ecs.jar</classpath>
-				<classpath mode="compile">lib/portal/ehcache.jar</classpath>
 				<classpath mode="compile">lib/portal/fastutil.jar</classpath>
 				<classpath mode="compile">lib/portal/fontbox.jar</classpath>
 				<classpath mode="compile">lib/portal/freshcookies-security.jar</classpath>
@@ -423,7 +426,6 @@
 				<classpath mode="compile">lib/portal/jai_codec.jar</classpath>
 				<classpath mode="compile">lib/portal/jai_core.jar</classpath>
 				<classpath mode="compile">lib/portal/jakarta-regexp.jar</classpath>
-				<classpath mode="compile">lib/portal/jamwiki-core.jar</classpath>
 				<classpath mode="compile">lib/portal/java-diff.jar</classpath>
 				<classpath mode="compile">lib/portal/java-libpst.jar</classpath>
 				<classpath mode="compile">lib/portal/javassist.jar</classpath>
@@ -485,7 +487,6 @@
 				<classpath mode="compile">lib/portal/poi.jar</classpath>
 				<classpath mode="compile">lib/portal/portal-client.jar</classpath>
 				<classpath mode="compile">lib/portal/portals-bridges.jar</classpath>
-				<classpath mode="compile">lib/portal/quartz.jar</classpath>
 				<classpath mode="compile">lib/portal/rdffilter.jar</classpath>
 				<classpath mode="compile">lib/portal/ridl.jar</classpath>
 				<classpath mode="compile">lib/portal/rome.jar</classpath>

@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.lar.BaseStagedModelDataHandler;
 import com.liferay.portal.kernel.lar.ExportImportPathUtil;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.StagedModelModifiedDateComparator;
+import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
@@ -35,11 +36,18 @@ import java.util.Map;
 /**
  * @author Sergio González
  */
+@OSGiBeanProperties
 public class LayoutFriendlyURLStagedModelDataHandler
 	extends BaseStagedModelDataHandler<LayoutFriendlyURL> {
 
 	public static final String[] CLASS_NAMES =
 		{LayoutFriendlyURL.class.getName()};
+
+	@Override
+	public void deleteStagedModel(LayoutFriendlyURL layoutFriendlyURL) {
+		LayoutFriendlyURLLocalServiceUtil.deleteLayoutFriendlyURL(
+			layoutFriendlyURL);
+	}
 
 	@Override
 	public void deleteStagedModel(
@@ -48,8 +56,7 @@ public class LayoutFriendlyURLStagedModelDataHandler
 		LayoutFriendlyURL layoutFriendlyURL = fetchStagedModelByUuidAndGroupId(
 			uuid, groupId);
 
-		LayoutFriendlyURLLocalServiceUtil.deleteLayoutFriendlyURL(
-			layoutFriendlyURL);
+		deleteStagedModel(layoutFriendlyURL);
 	}
 
 	@Override

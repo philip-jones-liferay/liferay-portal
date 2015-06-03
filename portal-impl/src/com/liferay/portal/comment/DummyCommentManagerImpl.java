@@ -15,9 +15,9 @@
 package com.liferay.portal.comment;
 
 import com.liferay.portal.kernel.comment.BaseDiscussionPermission;
-import com.liferay.portal.kernel.comment.Comment;
 import com.liferay.portal.kernel.comment.CommentManager;
 import com.liferay.portal.kernel.comment.Discussion;
+import com.liferay.portal.kernel.comment.DiscussionComment;
 import com.liferay.portal.kernel.comment.DiscussionPermission;
 import com.liferay.portal.kernel.util.Function;
 import com.liferay.portal.security.permission.PermissionChecker;
@@ -87,6 +87,11 @@ public class DummyCommentManagerImpl implements CommentManager {
 	}
 
 	@Override
+	public boolean hasDiscussion(String className, long classPK) {
+		return false;
+	}
+
+	@Override
 	public void subscribeDiscussion(
 		long userId, long groupId, String className, long classPK) {
 	}
@@ -113,7 +118,7 @@ public class DummyCommentManagerImpl implements CommentManager {
 		}
 
 		@Override
-		public Comment getRootComment() {
+		public DiscussionComment getRootDiscussionComment() {
 			return null;
 		}
 
@@ -124,30 +129,26 @@ public class DummyCommentManagerImpl implements CommentManager {
 
 			@Override
 			public boolean hasAddPermission(
-				long companyId, long groupId, String className, long classPK,
-				long userId) {
+				long companyId, long groupId, String className, long classPK) {
 
 				return false;
 			}
 
 			@Override
-			public boolean hasDeletePermission(
-				String className, long classPK, long commentId, long userId) {
+			public boolean hasDeletePermission(long commentId) {
 
 				return false;
 			}
 
 			@Override
-			public boolean hasUpdatePermission(
-				String className, long classPK, long commentId, long userId) {
+			public boolean hasUpdatePermission(long commentId) {
 
 				return false;
 			}
 
 			@Override
 			public boolean hasViewPermission(
-				long companyId, long groupId, String className, long classPK,
-				long userId) {
+				long companyId, long groupId, String className, long classPK) {
 
 				return false;
 			}

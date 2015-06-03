@@ -30,7 +30,7 @@
 </tr>
 <tr>
 	<td>DIALOG</td>
-	<td>//iframe[@class='dialog-iframe-node ']</td>
+	<td>//iframe[contains(@class,'dialog-iframe-node')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -61,6 +61,11 @@
 <tr>
 	<td>TEMPLATES</td>
 	<td>//iframe[contains(@src,'scopeTitle=Templates')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>UPLOAD_IMAGE</td>
+	<td>//iframe[contains(@id,'changeLogo_iframe')]</td>
 	<td></td>
 </tr>
 </tbody>

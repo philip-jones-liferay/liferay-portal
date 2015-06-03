@@ -123,7 +123,7 @@ public class PortletDisplayTemplateImpl implements PortletDisplayTemplate {
 				Group liveGroup = group.getLiveGroup();
 
 				if (!liveGroup.isStagedPortlet(
-						PortletKeys.PORTLET_DISPLAY_TEMPLATES)) {
+						PortletKeys.PORTLET_DISPLAY_TEMPLATE)) {
 
 					return liveGroup.getGroupId();
 				}
@@ -159,32 +159,37 @@ public class PortletDisplayTemplateImpl implements PortletDisplayTemplate {
 	public DDMTemplate getDefaultPortletDisplayTemplateDDMTemplate(
 		long groupId, long classNameId) {
 
-		DDMTemplate defaultDDMTemplate = null;
-
 		TemplateHandler templateHandler =
 			TemplateHandlerRegistryUtil.getTemplateHandler(classNameId);
 
-		if (templateHandler != null) {
-			defaultDDMTemplate = getPortletDisplayTemplateDDMTemplate(
-				groupId, classNameId,
-				DISPLAY_STYLE_PREFIX + templateHandler.getDefaultTemplateKey());
+		if ((templateHandler == null) ||
+			(templateHandler.getDefaultTemplateKey() == null)) {
+
+			return null;
 		}
 
-		if (defaultDDMTemplate == null) {
-			List<DDMTemplate> ddmTemplates =
-				DDMTemplateLocalServiceUtil.getTemplates(groupId, classNameId);
+		return getPortletDisplayTemplateDDMTemplate(
+			groupId, classNameId,
+			getDisplayStyle(templateHandler.getDefaultTemplateKey()));
+	}
 
-			if (!ddmTemplates.isEmpty()) {
-				defaultDDMTemplate = ddmTemplates.get(0);
-			}
-		}
-
-		return defaultDDMTemplate;
+	@Override
+	public String getDisplayStyle(String ddmTemplateKey) {
+		return DISPLAY_STYLE_PREFIX + ddmTemplateKey;
 	}
 
 	@Override
 	public DDMTemplate getPortletDisplayTemplateDDMTemplate(
 		long groupId, long classNameId, String displayStyle) {
+
+		return getPortletDisplayTemplateDDMTemplate(
+			groupId, classNameId, displayStyle, false);
+	}
+
+	@Override
+	public DDMTemplate getPortletDisplayTemplateDDMTemplate(
+		long groupId, long classNameId, String displayStyle,
+		boolean useDefault) {
 
 		long portletDisplayDDMTemplateGroupId = getDDMTemplateGroupId(groupId);
 
@@ -203,6 +208,12 @@ public class PortletDisplayTemplateImpl implements PortletDisplayTemplate {
 				catch (PortalException e) {
 				}
 			}
+		}
+
+		if ((portletDisplayDDMTemplate == null) && useDefault) {
+			portletDisplayDDMTemplate =
+				getDefaultPortletDisplayTemplateDDMTemplate(
+					groupId, classNameId);
 		}
 
 		return portletDisplayDDMTemplate;

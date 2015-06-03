@@ -108,12 +108,21 @@ public class PoshiRunner {
 		}
 		finally {
 			try {
-				_runTearDown();
+				if (!PropsValues.TEST_SKIP_TEAR_DOWN) {
+					_runTearDown();
+				}
 			}
 			catch (Exception e) {
 				PoshiRunnerStackTraceUtil.printStackTrace(e.getMessage());
 
 				PoshiRunnerStackTraceUtil.emptyStackTrace();
+			}
+			finally {
+				CommandLoggerHandler.stopRunning();
+
+				LoggerUtil.stopLogger();
+
+				SeleniumUtil.stopSelenium();
 			}
 		}
 	}
@@ -142,7 +151,11 @@ public class PoshiRunner {
 			PoshiRunnerStackTraceUtil.startStackTrace(
 				classCommandName, "test-case");
 
+			XMLLoggerHandler.updateStatus(commandElement, "pending");
+
 			PoshiRunnerExecutor.parseElement(commandElement);
+
+			XMLLoggerHandler.updateStatus(commandElement, "pass");
 
 			PoshiRunnerStackTraceUtil.emptyStackTrace();
 		}
@@ -163,24 +176,11 @@ public class PoshiRunner {
 	}
 
 	private void _runTearDown() throws Exception {
-		try {
-			CommandLoggerHandler.logClassCommandName(
-				_testClassName + "#tear-down");
+		CommandLoggerHandler.logClassCommandName(_testClassName + "#tear-down");
 
-			SummaryLoggerHandler.startMajorSteps();
+		SummaryLoggerHandler.startMajorSteps();
 
-			_runClassCommandName(_testClassName + "#tear-down");
-		}
-		catch (Exception e) {
-			throw e;
-		}
-		finally {
-			CommandLoggerHandler.stopRunning();
-
-			LoggerUtil.stopLogger();
-
-			SeleniumUtil.stopSelenium();
-		}
+		_runClassCommandName(_testClassName + "#tear-down");
 	}
 
 	private final String _testClassCommandName;

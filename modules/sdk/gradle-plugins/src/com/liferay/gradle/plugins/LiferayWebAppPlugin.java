@@ -32,28 +32,19 @@ import groovy.lang.Closure;
 
 import java.io.File;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
+import java.util.concurrent.Callable;
 
 import org.gradle.api.Action;
 import org.gradle.api.GradleException;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
-import org.gradle.api.artifacts.Configuration;
-import org.gradle.api.artifacts.ModuleVersionIdentifier;
-import org.gradle.api.artifacts.ResolvedArtifact;
-import org.gradle.api.artifacts.ResolvedConfiguration;
-import org.gradle.api.artifacts.ResolvedModuleVersion;
 import org.gradle.api.file.DuplicatesStrategy;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileCopyDetails;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.file.RelativePath;
-import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.internal.file.copy.CopySpecInternal;
 import org.gradle.api.internal.file.copy.CopySpecResolver;
 import org.gradle.api.plugins.BasePlugin;
@@ -63,6 +54,7 @@ import org.gradle.api.plugins.WarPluginConvention;
 import org.gradle.api.specs.Spec;
 import org.gradle.api.tasks.Copy;
 import org.gradle.api.tasks.SourceSet;
+import org.gradle.api.tasks.TaskInputs;
 import org.gradle.api.tasks.TaskOutputs;
 import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.api.tasks.bundling.War;
@@ -72,8 +64,6 @@ import org.gradle.api.tasks.compile.JavaCompile;
  * @author Andrea Di Giorgi
  */
 public class LiferayWebAppPlugin extends LiferayJavaPlugin {
-
-	public static final String DEPLOY_TASK_NAME = "deploy";
 
 	public static final String DIRECT_DEPLOY_TASK_NAME = "directDeploy";
 
@@ -154,20 +144,17 @@ public class LiferayWebAppPlugin extends LiferayJavaPlugin {
 		buildServiceTask.finalizedBy(buildServiceJarTask);
 	}
 
+	@Override
 	protected Copy addTaskDeploy(Project project) {
-		Copy copy = GradleUtil.addTask(project, DEPLOY_TASK_NAME, Copy.class);
+		Copy copy = super.addTaskDeploy(project);
 
-		copy.dependsOn(WarPlugin.WAR_TASK_NAME);
-
-		copy.setDescription(
-			"Assembles the project into a WAR file and deploys it to Liferay.");
 		copy.setGroup(WarPlugin.WEB_APP_GROUP);
 
 		return copy;
 	}
 
 	protected DirectDeployTask addTaskDirectDeploy(Project project) {
-		DirectDeployTask directDeployTask = GradleUtil.addTask(
+		final DirectDeployTask directDeployTask = GradleUtil.addTask(
 			project, DIRECT_DEPLOY_TASK_NAME, DirectDeployTask.class);
 
 		directDeployTask.dependsOn(WarPlugin.WAR_TASK_NAME);
@@ -177,16 +164,25 @@ public class LiferayWebAppPlugin extends LiferayJavaPlugin {
 				"to Liferay, skipping the auto deploy directory.");
 		directDeployTask.setGroup(WarPlugin.WEB_APP_GROUP);
 
+		TaskInputs taskInputs = directDeployTask.getInputs();
+
+		taskInputs.dir(
+			new Callable<File>() {
+
+				@Override
+				public File call() throws Exception {
+					return directDeployTask.getWebAppFile();
+				}
+
+			});
+
 		return directDeployTask;
 	}
 
 	@Override
-	protected void addTasks(
-		Project project, LiferayExtension liferayExtension) {
+	protected void addTasks(Project project) {
+		super.addTasks(project);
 
-		super.addTasks(project, liferayExtension);
-
-		addTaskDeploy(project);
 		addTaskDirectDeploy(project);
 	}
 
@@ -203,19 +199,15 @@ public class LiferayWebAppPlugin extends LiferayJavaPlugin {
 	}
 
 	@Override
-	protected void configureDependencies(
-		Project project, LiferayExtension liferayExtension) {
+	protected void configureDependencies(Project project) {
+		super.configureDependencies(project);
 
-		super.configureDependencies(project, liferayExtension);
-
-		configureDependenciesProvidedCompile(project, liferayExtension);
+		configureDependenciesProvidedCompile(project);
 	}
 
 	@Override
-	protected void configureDependenciesCompile(
-		Project project, LiferayExtension liferayExtension) {
-
-		super.configureDependenciesCompile(project, liferayExtension);
+	protected void configureDependenciesCompile(Project project) {
+		super.configureDependenciesCompile(project);
 
 		project.afterEvaluate(
 			new Action<Project>() {
@@ -234,9 +226,7 @@ public class LiferayWebAppPlugin extends LiferayJavaPlugin {
 			});
 	}
 
-	protected void configureDependenciesProvidedCompile(
-		Project project, LiferayExtension liferayExtension) {
-
+	protected void configureDependenciesProvidedCompile(Project project) {
 		for (String dependencyNotation : COMPILE_DEPENDENCY_NOTATIONS) {
 			GradleUtil.addDependency(
 				project, WarPlugin.PROVIDED_COMPILE_CONFIGURATION_NAME,
@@ -246,33 +236,25 @@ public class LiferayWebAppPlugin extends LiferayJavaPlugin {
 
 	@Override
 	protected void configureProperties(Project project) {
+		super.configureProperties(project);
+
 		configureWebAppDirName(project);
 	}
 
 	@Override
 	protected void configureSourceSetMain(Project project) {
-		SourceSet sourceSet = GradleUtil.getSourceSet(
-			project, SourceSet.MAIN_SOURCE_SET_NAME);
-
-		SourceDirectorySet javaSourceDirectorySet = sourceSet.getJava();
-
+		File classesDir = project.file("docroot/WEB-INF/classes");
 		File srcDir = project.file("docroot/WEB-INF/src");
 
-		Set<File> srcDirs = Collections.singleton(srcDir);
-
-		javaSourceDirectorySet.setSrcDirs(srcDirs);
-
-		SourceDirectorySet resourcesSourceDirectorySet =
-			sourceSet.getResources();
-
-		resourcesSourceDirectorySet.setSrcDirs(srcDirs);
+		configureSourceSet(
+			project, SourceSet.MAIN_SOURCE_SET_NAME, classesDir, srcDir);
 	}
 
 	@Override
 	protected void configureTaskBuildCssRootDirs(BuildCssTask buildCssTask) {
 		FileCollection rootDirs = buildCssTask.getRootDirs();
 
-		if ((rootDirs != null) && !rootDirs.isEmpty()) {
+		if (!rootDirs.isEmpty()) {
 			return;
 		}
 
@@ -326,6 +308,7 @@ public class LiferayWebAppPlugin extends LiferayJavaPlugin {
 		}
 	}
 
+	@Override
 	protected void configureTaskBuildXSDInputDir(BuildXSDTask buildXSDTask) {
 		File inputDir = new File(
 			getWebAppDir(buildXSDTask.getProject()), "WEB-INF/xsd");
@@ -333,15 +316,12 @@ public class LiferayWebAppPlugin extends LiferayJavaPlugin {
 		buildXSDTask.setInputDir(inputDir);
 	}
 
-	protected void configureTaskDeploy(
-		Project project, LiferayExtension liferayExtension) {
+	@Override
+	protected void configureTaskDeployFrom(Copy deployTask) {
+		War war = (War)GradleUtil.getTask(
+			deployTask.getProject(), WarPlugin.WAR_TASK_NAME);
 
-		Copy copy = (Copy)GradleUtil.getTask(project, DEPLOY_TASK_NAME);
-
-		War war = (War)GradleUtil.getTask(project, WarPlugin.WAR_TASK_NAME);
-
-		copy.from(war.getArchivePath());
-		copy.into(liferayExtension.getDeployDir());
+		deployTask.from(war.getOutputs());
 	}
 
 	protected void configureTaskDirectDeploy(
@@ -353,12 +333,6 @@ public class LiferayWebAppPlugin extends LiferayJavaPlugin {
 
 		configureTaskDirectDeployAppServerDeployDir(
 			directDeployTask, liferayExtension);
-		configureTaskDirectDeployAppServerLibGlobalDir(
-			directDeployTask, liferayExtension);
-		configureTaskDirectDeployAppServerPortalDir(
-			directDeployTask, liferayExtension);
-		configureTaskDirectDeployAppServerType(
-			directDeployTask, liferayExtension);
 		configureTaskDirectDeployWebAppFile(directDeployTask);
 		configureTaskDirectDeployWebAppType(directDeployTask);
 	}
@@ -369,33 +343,6 @@ public class LiferayWebAppPlugin extends LiferayJavaPlugin {
 		if (directDeployTask.getAppServerDeployDir() == null) {
 			directDeployTask.setAppServerDeployDir(
 				liferayExtension.getAppServerDeployDir());
-		}
-	}
-
-	protected void configureTaskDirectDeployAppServerLibGlobalDir(
-		DirectDeployTask directDeployTask, LiferayExtension liferayExtension) {
-
-		if (directDeployTask.getAppServerLibGlobalDir() == null) {
-			directDeployTask.setAppServerLibGlobalDir(
-				liferayExtension.getAppServerLibGlobalDir());
-		}
-	}
-
-	protected void configureTaskDirectDeployAppServerPortalDir(
-		DirectDeployTask directDeployTask, LiferayExtension liferayExtension) {
-
-		if (directDeployTask.getAppServerPortalDir() == null) {
-			directDeployTask.setAppServerPortalDir(
-				liferayExtension.getAppServerPortalDir());
-		}
-	}
-
-	protected void configureTaskDirectDeployAppServerType(
-		DirectDeployTask directDeployTask, LiferayExtension liferayExtension) {
-
-		if (Validator.isNull(directDeployTask.getAppServerType())) {
-			directDeployTask.setAppServerType(
-				liferayExtension.getAppServerType());
 		}
 	}
 
@@ -427,7 +374,6 @@ public class LiferayWebAppPlugin extends LiferayJavaPlugin {
 
 		super.configureTasks(project, liferayExtension);
 
-		configureTaskDeploy(project, liferayExtension);
 		configureTaskDirectDeploy(project, liferayExtension);
 		configureTaskWar(project, liferayExtension);
 
@@ -530,63 +476,8 @@ public class LiferayWebAppPlugin extends LiferayJavaPlugin {
 	}
 
 	protected void configureTaskWarRenameDependencies(War war) {
-		final Project project = war.getProject();
-
-		Closure<String> closure = new Closure<String>(null) {
-
-			@SuppressWarnings("unused")
-			public String doCall(String name) {
-				Map<String, String> newDependencyNames =
-					_getNewDependencyNames();
-
-				String newDependencyName = newDependencyNames.get(name);
-
-				if (Validator.isNotNull(newDependencyName)) {
-					return newDependencyName;
-				}
-
-				return name;
-			}
-
-			private Map<String, String> _getNewDependencyNames() {
-				if (_newDependencyNames != null) {
-					return _newDependencyNames;
-				}
-
-				_newDependencyNames = new HashMap<>();
-
-				Configuration compileConfiguration =
-					GradleUtil.getConfiguration(
-						project, JavaPlugin.COMPILE_CONFIGURATION_NAME);
-
-				ResolvedConfiguration resolvedConfiguration =
-					compileConfiguration.getResolvedConfiguration();
-
-				for (ResolvedArtifact resolvedArtifact :
-						resolvedConfiguration.getResolvedArtifacts()) {
-
-					ResolvedModuleVersion resolvedModuleVersion =
-						resolvedArtifact.getModuleVersion();
-
-					ModuleVersionIdentifier moduleVersionIdentifier =
-						resolvedModuleVersion.getId();
-
-					String oldDependencyName =
-						moduleVersionIdentifier.getName() + "-" +
-							moduleVersionIdentifier.getVersion() + ".jar";
-					String newDependencyName =
-						moduleVersionIdentifier.getName() + ".jar";
-
-					_newDependencyNames.put(
-						oldDependencyName, newDependencyName);
-				}
-
-				return _newDependencyNames;
-			}
-
-			private Map<String, String> _newDependencyNames;
-
-		};
+		Closure<String> closure = new RenameDependencyClosure(
+			war.getProject(), JavaPlugin.COMPILE_CONFIGURATION_NAME);
 
 		CopySpecInternal copySpecInternal = war.getRootSpec();
 

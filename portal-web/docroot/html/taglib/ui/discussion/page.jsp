@@ -25,7 +25,7 @@ DiscussionTaglibHelper discussionTaglibHelper = new DiscussionTaglibHelper(reque
 DiscussionPermission discussionPermission = CommentManagerUtil.getDiscussionPermission(discussionRequestHelper.getPermissionChecker());
 Discussion discussion = CommentManagerUtil.getDiscussion(discussionTaglibHelper.getUserId(), discussionRequestHelper.getScopeGroupId(), discussionTaglibHelper.getClassName(), discussionTaglibHelper.getClassPK(), new ServiceContextFunction(renderRequest));
 
-Comment rootComment = discussion.getRootComment();
+DiscussionComment rootDiscussionComment = discussion.getRootDiscussionComment();
 
 CommentSectionDisplayContext commentSectionDisplayContext = CommentDisplayContextProviderUtil.getCommentSectionDisplayContext(request, response, discussionPermission, discussion);
 %>
@@ -49,9 +49,6 @@ CommentSectionDisplayContext commentSectionDisplayContext = CommentDisplayContex
 				<aui:input name="assetEntryVisible" type="hidden" value="<%= discussionTaglibHelper.isAssetEntryVisible() %>" />
 				<aui:input name="className" type="hidden" value="<%= discussionTaglibHelper.getClassName() %>" />
 				<aui:input name="classPK" type="hidden" value="<%= discussionTaglibHelper.getClassPK() %>" />
-				<aui:input name="permissionClassName" type="hidden" value="<%= discussionTaglibHelper.getPermissionClassName() %>" />
-				<aui:input name="permissionClassPK" type="hidden" value="<%= discussionTaglibHelper.getPermissionClassPK() %>" />
-				<aui:input name="permissionOwnerId" type="hidden" value="<%= String.valueOf(discussionTaglibHelper.getUserId()) %>" />
 				<aui:input name="commentId" type="hidden" />
 				<aui:input name="parentCommentId" type="hidden" />
 				<aui:input name="body" type="hidden" />
@@ -59,15 +56,15 @@ CommentSectionDisplayContext commentSectionDisplayContext = CommentDisplayContex
 				<aui:input name="ajax" type="hidden" value="<%= true %>" />
 
 				<%
-				Comment comment = rootComment;
+				DiscussionComment discussionComment = rootDiscussionComment;
 				%>
 
 				<c:if test="<%= commentSectionDisplayContext.isControlsVisible() %>">
 					<aui:fieldset cssClass="add-comment" id='<%= randomNamespace + "messageScroll0" %>'>
 						<c:if test="<%= !discussion.isMaxCommentsLimitExceeded() %>">
-							<div id="<%= randomNamespace %>messageScroll<%= rootComment.getCommentId() %>">
-								<aui:input name="commentId0" type="hidden" value="<%= rootComment.getCommentId() %>" />
-								<aui:input name="parentCommentId0" type="hidden" value="<%= rootComment.getCommentId() %>" />
+							<div id="<%= randomNamespace %>messageScroll<%= rootDiscussionComment.getCommentId() %>">
+								<aui:input name="commentId0" type="hidden" value="<%= rootDiscussionComment.getCommentId() %>" />
+								<aui:input name="parentCommentId0" type="hidden" value="<%= rootDiscussionComment.getCommentId() %>" />
 							</div>
 						</c:if>
 
@@ -148,12 +145,12 @@ CommentSectionDisplayContext commentSectionDisplayContext = CommentDisplayContex
 						int rootIndexPage = 0;
 						boolean moreCommentsPagination = false;
 
-						CommentIterator commentIterator = rootComment.getThreadCommentsIterator();
+						DiscussionCommentIterator discussionCommentIterator = rootDiscussionComment.getThreadDiscussionCommentIterator();
 
-						while (commentIterator.hasNext()) {
+						while (discussionCommentIterator.hasNext()) {
 							index = GetterUtil.getInteger(request.getAttribute("liferay-ui:discussion:index"), 1);
 
-							rootIndexPage = commentIterator.getIndexPage();
+							rootIndexPage = discussionCommentIterator.getIndexPage();
 
 							if ((index + 1) > PropsValues.DISCUSSION_COMMENTS_DELTA_VALUE) {
 								moreCommentsPagination = true;
@@ -161,10 +158,8 @@ CommentSectionDisplayContext commentSectionDisplayContext = CommentDisplayContex
 								break;
 							}
 
-							comment = commentIterator.next();
-
-							request.setAttribute("liferay-ui:discussion:currentComment", comment);
 							request.setAttribute("liferay-ui:discussion:discussion", discussion);
+							request.setAttribute("liferay-ui:discussion:discussionComment", discussionCommentIterator.next());
 							request.setAttribute("liferay-ui:discussion:randomNamespace", randomNamespace);
 						%>
 
@@ -419,8 +414,6 @@ CommentSectionDisplayContext commentSectionDisplayContext = CommentDisplayContex
 							classPK: <%= discussionTaglibHelper.getClassPK() %>,
 							hideControls: '<%= discussionTaglibHelper.isHideControls() %>',
 							index: form.fm('index').val(),
-							permissionClassName: '<%= discussionTaglibHelper.getPermissionClassName() %>',
-							permissionClassPK: '<%= discussionTaglibHelper.getPermissionClassPK() %>',
 							randomNamespace: '<%= randomNamespace %>',
 							ratingsEnabled: '<%= discussionTaglibHelper.isRatingsEnabled() %>',
 							rootIndexPage: form.fm('rootIndexPage').val(),

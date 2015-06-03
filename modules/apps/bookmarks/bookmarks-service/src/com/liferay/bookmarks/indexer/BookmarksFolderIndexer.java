@@ -46,9 +46,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Eduardo Garcia
  */
-@Component(
-	immediate = true, service = Indexer.class
-)
+@Component(immediate = true, service = Indexer.class)
 public class BookmarksFolderIndexer extends BaseIndexer {
 
 	public static final String CLASS_NAME = BookmarksFolder.class.getName();
@@ -79,6 +77,10 @@ public class BookmarksFolderIndexer extends BaseIndexer {
 			permissionChecker, folder, ActionKeys.VIEW);
 	}
 
+	/**
+	 * @deprecated As of 7.0.0
+	 */
+	@Deprecated
 	@Override
 	public void postProcessContextQuery(
 			BooleanQuery contextQuery, SearchContext searchContext)

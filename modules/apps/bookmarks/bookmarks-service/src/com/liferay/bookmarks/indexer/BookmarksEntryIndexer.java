@@ -54,9 +54,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Bruno Farache
  * @author Raymond Augé
  */
-@Component(
-	immediate = true, service = Indexer.class
-)
+@Component(immediate = true, service = Indexer.class)
 public class BookmarksEntryIndexer extends BaseIndexer {
 
 	public static final String CLASS_NAME = BookmarksEntry.class.getName();
@@ -85,6 +83,10 @@ public class BookmarksEntryIndexer extends BaseIndexer {
 			permissionChecker, entryClassPK, ActionKeys.VIEW);
 	}
 
+	/**
+	 * @deprecated As of 7.0.0
+	 */
+	@Deprecated
 	@Override
 	public void postProcessContextQuery(
 			BooleanQuery contextQuery, SearchContext searchContext)
