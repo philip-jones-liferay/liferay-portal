@@ -69,18 +69,6 @@ public class DummyIndexer implements Indexer {
 		return null;
 	}
 
-	/**
-	 * @deprecated As of 7.0.0, replaced by {@link #getFacetBooleanFilter}
-	 */
-	@Deprecated
-	@Override
-	public BooleanQuery getFacetQuery(
-			String className, SearchContext searchContext)
-		throws Exception {
-
-		return null;
-	}
-
 	@Override
 	public BooleanQuery getFullQuery(SearchContext searchContext) {
 		return null;
@@ -182,7 +170,7 @@ public class DummyIndexer implements Indexer {
 
 	@Override
 	public void postProcessContextBooleanFilter(
-			BooleanFilter booleanFilter, SearchContext searchContext)
+			BooleanFilter contextBooleanFilter, SearchContext searchContext)
 		throws Exception {
 	}
 
@@ -198,7 +186,16 @@ public class DummyIndexer implements Indexer {
 
 	@Override
 	public void postProcessSearchQuery(
-		BooleanQuery searchQuery, SearchContext searchContext) {
+		BooleanQuery searchQuery, BooleanFilter fullQueryBooleanFilter,
+		SearchContext searchContext) {
+	}
+
+	@Override
+	public void postProcessSearchQuery(
+			BooleanQuery searchQuery, SearchContext searchContext)
+		throws Exception {
+
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

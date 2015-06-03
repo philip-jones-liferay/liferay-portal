@@ -49,14 +49,6 @@ public interface Indexer {
 			String className, SearchContext searchContext)
 		throws Exception;
 
-	/**
-	 * @deprecated As of 7.0.0, replaced by {@link #getFacetBooleanFilter}
-	 */
-	@Deprecated
-	public BooleanQuery getFacetQuery(
-			String className, SearchContext searchContext)
-		throws Exception;
-
 	public BooleanQuery getFullQuery(SearchContext searchContext)
 		throws SearchException;
 
@@ -108,7 +100,7 @@ public interface Indexer {
 		throws Exception;
 
 	public void postProcessContextBooleanFilter(
-			BooleanFilter booleanFilter, SearchContext searchContext)
+			BooleanFilter contextBooleanFilter, SearchContext searchContext)
 		throws Exception;
 
 	/**
@@ -120,6 +112,16 @@ public interface Indexer {
 			BooleanQuery contextQuery, SearchContext searchContext)
 		throws Exception;
 
+	public void postProcessSearchQuery(
+			BooleanQuery searchQuery, BooleanFilter fullQueryBooleanFilter,
+			SearchContext searchContext)
+		throws Exception;
+
+	/**
+	 * @deprecated As of 7.0.0, replaced by {@link #postProcessSearchQuery(
+	 *             BooleanQuery, BooleanFilter, SearchContext)}
+	 */
+	@Deprecated
 	public void postProcessSearchQuery(
 			BooleanQuery searchQuery, SearchContext searchContext)
 		throws Exception;
