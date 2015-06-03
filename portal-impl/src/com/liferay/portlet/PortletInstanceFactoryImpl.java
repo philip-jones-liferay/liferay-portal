@@ -14,14 +14,6 @@
 
 package com.liferay.portlet;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.portlet.PortletConfig;
-import javax.portlet.PortletContext;
-import javax.portlet.PortletException;
-import javax.servlet.ServletContext;
-
 import com.liferay.portal.kernel.portlet.PortletBag;
 import com.liferay.portal.kernel.portlet.PortletBagPool;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
@@ -37,6 +29,15 @@ import com.liferay.registry.ServiceReference;
 import com.liferay.registry.ServiceTracker;
 import com.liferay.registry.ServiceTrackerCustomizer;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.portlet.PortletConfig;
+import javax.portlet.PortletContext;
+import javax.portlet.PortletException;
+
+import javax.servlet.ServletContext;
+
 /**
  * @author Brian Wing Shun Chan
  * @author Shuyang Zhou
@@ -47,16 +48,16 @@ public class PortletInstanceFactoryImpl implements PortletInstanceFactory {
 
 	public PortletInstanceFactoryImpl() {
 		_pool = new ConcurrentHashMap<>();
-		
+
 		Registry registry = RegistryUtil.getRegistry();
 
 		Filter filter = registry.getFilter(
-			"(&(javax.portlet.name="
-			+ "com_liferay_monitoring_web_portlet_MonitoringPortletFactoryImpl)"
-			+ "(objectClass=" +	InvokerPortletFactory.class.getName() + "))");
+			"(&(javax.portlet.name=" +
+			"com_liferay_monitoring_web_portlet_MonitoringPortletFactoryImpl)" +
+			"(objectClass=" + InvokerPortletFactory.class.getName() + "))");
 
-		_serviceTracker = registry.trackServices(filter, 
-				new InvokerPortletFactoryTrackerCustomizer());
+		_serviceTracker = registry.trackServices(
+			filter, new InvokerPortletFactoryTrackerCustomizer());
 
 		_serviceTracker.open();
 	}
@@ -223,9 +224,8 @@ public class PortletInstanceFactoryImpl implements PortletInstanceFactory {
 
 	@Override
 	public void destroy(Portlet portlet) {
-		
 		_serviceTracker.close();
-		
+
 		clear(portlet);
 
 		PortletConfigFactoryUtil.destroy(portlet);
@@ -267,8 +267,8 @@ public class PortletInstanceFactoryImpl implements PortletInstanceFactory {
 
 			Registry registry = RegistryUtil.getRegistry();
 
-			InvokerPortletFactory invokerPortletFactory =
-				registry.getService(serviceReference);
+			InvokerPortletFactory invokerPortletFactory = registry.getService(
+				serviceReference);
 
 			_invokerPortletFactory = invokerPortletFactory;
 
@@ -290,5 +290,7 @@ public class PortletInstanceFactoryImpl implements PortletInstanceFactory {
 
 			registry.ungetService(serviceReference);
 		}
+
 	}
+
 }
