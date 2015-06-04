@@ -364,11 +364,7 @@
 		<put name="portlet_content" value="/portlet/group_statistics/add_activity_counter.jsp" />
 	</definition>
 
-<<<<<<< HEAD
-<!-- Image Gallery Display -->
-=======
 	<!-- Image Gallery Display -->
->>>>>>> LPS-56065-PortalSettingsPortletToOSGI Remove struts path
 
 	<definition name="portlet.image_gallery_display" extends="portlet" />
 
