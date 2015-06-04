@@ -312,7 +312,7 @@
 		<put name="portlet_content" value="/portlet/document_library_display/view.jsp" />
 	</definition>
 
-	<!-- Export Import -->
+ 	<!-- Export Import -->
 
 	<definition name="portlet.export_import" extends="portlet" />
 
