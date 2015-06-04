@@ -220,6 +220,114 @@
 
 	<definition name="portlet.dockbar.view" path="/portlet/dockbar/view.jsp" />
 
+	<!-- Document Library -->
+
+	<definition name="portlet.document_library" extends="portlet" />
+
+	<definition name="portlet.document_library.compare_versions" extends="portlet.document_library">
+		<put name="portlet_content" value="/portlet/document_library/compare_versions.jsp" />
+	</definition>
+
+	<definition name="portlet.document_library.edit_file_entry" extends="portlet.document_library">
+		<put name="portlet_content" value="/portlet/document_library/edit_file_entry.jsp" />
+	</definition>
+
+	<definition name="portlet.document_library.edit_file_entry_type" extends="portlet.document_library">
+		<put name="portlet_content" value="/portlet/document_library/edit_file_entry_type.jsp" />
+	</definition>
+
+	<definition name="portlet.document_library.edit_file_shortcut" extends="portlet.document_library">
+		<put name="portlet_content" value="/portlet/document_library/edit_file_shortcut.jsp" />
+	</definition>
+
+	<definition name="portlet.document_library.edit_file_version" extends="portlet.document_library">
+		<put name="portlet_content" value="/portlet/document_library/edit_file_version.jsp" />
+	</definition>
+
+	<definition name="portlet.document_library.edit_folder" extends="portlet.document_library">
+		<put name="portlet_content" value="/portlet/document_library/edit_folder.jsp" />
+	</definition>
+
+	<definition name="portlet.document_library.edit_repository" extends="portlet.document_library">
+		<put name="portlet_content" value="/portlet/document_library/edit_repository.jsp" />
+	</definition>
+
+	<definition name="portlet.document_library.error" extends="portlet.document_library">
+		<put name="portlet_content" value="/portlet/document_library/error.jsp" />
+	</definition>
+
+	<definition name="portlet.document_library.move_entries" extends="portlet.document_library">
+		<put name="portlet_content" value="/portlet/document_library/move_entries.jsp" />
+	</definition>
+
+	<definition name="portlet.document_library.search" extends="portlet.document_library">
+		<put name="portlet_content" value="/portlet/document_library/search.jsp" />
+	</definition>
+
+	<definition name="portlet.document_library.select_file_entry" extends="portlet.document_library">
+		<put name="portlet_content" value="/portlet/document_library/select_file_entry.jsp" />
+	</definition>
+
+	<definition name="portlet.document_library.select_folder" extends="portlet.document_library">
+		<put name="portlet_content" value="/portlet/document_library/select_folder.jsp" />
+	</definition>
+
+	<definition name="portlet.document_library.select_group" extends="portlet.document_library">
+		<put name="portlet_content" value="/portlet/document_library/select_group.jsp" />
+	</definition>
+
+	<definition name="portlet.document_library.select_restricted_file_entry_type" extends="portlet.document_library">
+		<put name="portlet_content" value="/portlet/document_library/select_restricted_file_entry_type.jsp" />
+	</definition>
+
+	<definition name="portlet.document_library.upload_multiple_file_entries" extends="portlet.document_library">
+		<put name="portlet_content" value="/portlet/document_library/upload_multiple_file_entries.jsp" />
+	</definition>
+
+	<definition name="portlet.document_library.view" extends="portlet.document_library">
+		<put name="portlet_content" value="/portlet/document_library/view.jsp" />
+	</definition>
+
+	<definition name="portlet.document_library.view_file_entry" extends="portlet.document_library">
+		<put name="portlet_content" value="/portlet/document_library/view_file_entry.jsp" />
+	</definition>
+
+	<definition name="portlet.document_library.view_file_entry_type" extends="portlet.document_library">
+		<put name="portlet_content" value="/portlet/document_library/view_file_entry_type.jsp" />
+	</definition>
+
+	<!-- Document Library Display-->
+
+	<definition name="portlet.document_library_display" extends="portlet" />
+
+	<definition name="portlet.document_library_display.search" extends="portlet.document_library_display">
+		<put name="portlet_content" value="/portlet/document_library_display/search.jsp" />
+	</definition>
+
+	<definition name="portlet.document_library_display.select_add_file_entry_type" extends="portlet.document_library_display">
+		<put name="portlet_content" value="/portlet/document_library_display/select_add_file_entry_type.jsp" />
+	</definition>
+
+	<definition name="portlet.document_library_display.view" extends="portlet.document_library_display">
+		<put name="portlet_content" value="/portlet/document_library_display/view.jsp" />
+	</definition>
+
+	<!-- Expando -->
+
+	<definition name="portlet.expando" extends="portlet" />
+
+	<definition name="portlet.expando.edit_expando" extends="portlet.expando">
+		<put name="portlet_content" value="/portlet/expando/edit_expando.jsp" />
+	</definition>
+
+	<definition name="portlet.expando.view" extends="portlet.expando">
+		<put name="portlet_content" value="/portlet/expando/view.jsp" />
+	</definition>
+
+	<definition name="portlet.expando.view_attributes" extends="portlet.expando">
+		<put name="portlet_content" value="/portlet/expando/view_attributes.jsp" />
+	</definition>
+
 	<!-- Export Import -->
 
 	<definition name="portlet.export_import" extends="portlet" />
@@ -286,6 +394,22 @@
 
 	<definition name="portlet.invitation.view" extends="portlet.invitation">
 		<put name="portlet_content" value="/portlet/invitation/view.jsp" />
+	</definition>
+
+	<!-- Layouts Admin -->
+
+	<definition name="portlet.layouts_admin" extends="portlet" />
+
+	<definition name="portlet.layouts_admin.add_layout" extends="portlet.layouts_admin">
+		<put name="portlet_content" value="/portlet/layouts_admin/add_layout.jsp" />
+	</definition>
+
+	<definition name="portlet.layouts_admin.edit_layouts" extends="portlet.layouts_admin">
+		<put name="portlet_content" value="/portlet/layouts_admin/view.jsp" />
+	</definition>
+
+	<definition name="portlet.layouts_admin.error" extends="portlet.layouts_admin">
+		<put name="portlet_content" value="/portlet/layouts_admin/error.jsp" />
 	</definition>
 
 	<!-- Login -->
@@ -514,40 +638,40 @@
 		<put name="portlet_content" value="/portlet/plugins_admin/view.jsp" />
 	</definition>
 
-	<!-- Portlet Configuration -->
+	<!-- Portal Settings -->
 
-	<definition name="portlet.portlet_configuration" extends="portlet" />
+	<definition name="portlet.portal_settings" extends="portlet" />
 
-	<definition name="portlet.portlet_configuration.edit_archived_setups" extends="portlet.portlet_configuration">
-		<put name="portlet_content" value="/portlet/portlet_configuration/edit_archived_setups.jsp" />
+	<definition name="portlet.portal_settings.edit_company" extends="portlet.portal_settings">
+		<put name="portlet_content" value="/portlet/portal_settings/edit_company.jsp" />
 	</definition>
 
-	<definition name="portlet.portlet_configuration.edit_configuration" extends="portlet.portlet_configuration">
-		<put name="portlet_content" value="/portlet/portlet_configuration/edit_configuration.jsp" />
+	<definition name="portlet.portal_settings.edit_ldap_server" extends="portlet.portal_settings">
+		<put name="portlet_content" value="/portlet/portal_settings/edit_ldap_server.jsp" />
 	</definition>
 
-	<definition name="portlet.portlet_configuration.edit_permissions" extends="portlet.portlet_configuration">
-		<put name="portlet_content" value="/portlet/portlet_configuration/edit_permissions.jsp" />
+	<definition name="portlet.portal_settings.error" extends="portlet.portal_settings">
+		<put name="portlet_content" value="/portlet/portal_settings/error.jsp" />
 	</definition>
 
-	<definition name="portlet.portlet_configuration.edit_public_render_parameters" extends="portlet.portlet_configuration">
-		<put name="portlet_content" value="/portlet/portlet_configuration/edit_public_render_parameters.jsp" />
+	<definition name="portlet.portal_settings.test_cas_configuration" extends="portlet.portal_settings">
+		<put name="portlet_content" value="/portlet/portal_settings/test_cas_configuration.jsp" />
 	</definition>
 
-	<definition name="portlet.portlet_configuration.edit_scope" extends="portlet.portlet_configuration">
-		<put name="portlet_content" value="/portlet/portlet_configuration/edit_scope.jsp" />
+	<definition name="portlet.portal_settings.test_ldap_connection" extends="portlet.portal_settings">
+		<put name="portlet_content" value="/portlet/portal_settings/test_ldap_connection.jsp" />
 	</definition>
 
-	<definition name="portlet.portlet_configuration.edit_sharing" extends="portlet.portlet_configuration">
-		<put name="portlet_content" value="/portlet/portlet_configuration/edit_sharing.jsp" />
+	<definition name="portlet.portal_settings.test_ldap_groups" extends="portlet.portal_settings">
+		<put name="portlet_content" value="/portlet/portal_settings/test_ldap_groups.jsp" />
 	</definition>
 
-	<definition name="portlet.portlet_configuration.edit_supported_clients" extends="portlet.portlet_configuration">
-		<put name="portlet_content" value="/portlet/portlet_configuration/edit_supported_clients.jsp" />
+	<definition name="portlet.portal_settings.test_ldap_users" extends="portlet.portal_settings">
+		<put name="portlet_content" value="/portlet/portal_settings/test_ldap_users.jsp" />
 	</definition>
 
-	<definition name="portlet.portlet_configuration.error" extends="portlet.portlet_configuration">
-		<put name="portlet_content" value="/portlet/portlet_configuration/error.jsp" />
+	<definition name="portlet.portal_settings.test_opensso_configuration" extends="portlet.portal_settings">
+		<put name="portlet_content" value="/portlet/portal_settings/test_opensso_configuration.jsp" />
 	</definition>
 
 	<!-- Portlet Sharing -->
