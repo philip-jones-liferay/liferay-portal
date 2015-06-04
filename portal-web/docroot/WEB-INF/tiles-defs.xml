@@ -364,7 +364,7 @@
 		<put name="portlet_content" value="/portlet/group_statistics/add_activity_counter.jsp" />
 	</definition>
 
-	<!-- Image Gallery Display -->
+    <!-- Image Gallery Display -->
 
 	<definition name="portlet.image_gallery_display" extends="portlet" />
 
