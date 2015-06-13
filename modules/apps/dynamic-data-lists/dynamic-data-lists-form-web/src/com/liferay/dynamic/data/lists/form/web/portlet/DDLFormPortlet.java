@@ -14,7 +14,10 @@
 
 package com.liferay.dynamic.data.lists.form.web.portlet;
 
+import com.liferay.dynamic.data.lists.exception.NoSuchRecordSetException;
 import com.liferay.dynamic.data.lists.form.web.constants.DDLFormPortletKeys;
+import com.liferay.dynamic.data.lists.model.DDLRecordSet;
+import com.liferay.dynamic.data.lists.service.DDLRecordSetService;
 import com.liferay.dynamic.data.mapping.form.renderer.DDMFormRenderer;
 import com.liferay.dynamic.data.mapping.form.renderer.DDMFormRenderingContext;
 import com.liferay.dynamic.data.mapping.form.renderer.DDMFormRenderingException;
@@ -29,9 +32,6 @@ import com.liferay.portal.kernel.util.PrefsParamUtil;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.WebKeys;
-import com.liferay.portlet.dynamicdatalists.NoSuchRecordSetException;
-import com.liferay.portlet.dynamicdatalists.model.DDLRecordSet;
-import com.liferay.portlet.dynamicdatalists.service.DDLRecordSetService;
 import com.liferay.portlet.dynamicdatamapping.NoSuchStructureException;
 import com.liferay.portlet.dynamicdatamapping.NoSuchStructureLayoutException;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
@@ -65,10 +65,10 @@ import org.osgi.service.component.annotations.Reference;
 		"com.liferay.portlet.use-default-template=true",
 		"javax.portlet.display-name=Dynamic Data Lists Form",
 		"javax.portlet.expiration-cache=0",
-		"javax.portlet.init-param.config-template=/configuration.jsp",
+		"javax.portlet.init-param.config-template=/display/configuration.jsp",
 		"javax.portlet.init-param.copy-request-parameters=true",
-		"javax.portlet.init-param.template-path=/",
-		"javax.portlet.init-param.view-template=/view.jsp",
+		"javax.portlet.init-param.template-path=/display/",
+		"javax.portlet.init-param.view-template=/display/view.jsp",
 		"javax.portlet.name=" + DDLFormPortletKeys.DYNAMIC_DATA_LISTS_FORM,
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=guest,power-user,user",
@@ -141,7 +141,7 @@ public class DDLFormPortlet extends MVCPortlet {
 			SessionErrors.contains(
 				renderRequest, PrincipalException.class.getName())) {
 
-			include(templatePath + "error.jsp", renderRequest, renderResponse);
+			include(templatePath + "/error.jsp", renderRequest, renderResponse);
 		}
 		else {
 			super.doDispatch(renderRequest, renderResponse);

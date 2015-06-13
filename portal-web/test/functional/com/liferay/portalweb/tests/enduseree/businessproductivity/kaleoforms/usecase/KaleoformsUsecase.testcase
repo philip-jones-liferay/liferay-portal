@@ -2038,7 +2038,7 @@
 		</execute>
 
 		<execute macro="Page#gotoCP">
-			<var name="portletName" value="Workflow" />
+			<var name="portletName" value="Workflow Definition" />
 		</execute>
 
 		<execute macro="KaleoDesigner#editWorkflowDefinitionViaWorkflowCP">
@@ -2362,7 +2362,7 @@
 		<var name="workflowDefinitionTitle" value="Single Approver" />
 
 		<execute macro="Page#gotoContentCP">
-			<var name="portletName" value="Forms" />
+			<var name="portletName" value="Dynamic Data Lists" />
 		</execute>
 
 		<execute macro="DDLDataDefinition#addCP">
@@ -4229,7 +4229,7 @@
 		<var name="kfProcessName" value="Kaleo Forms Process Predefined" />
 
 		<execute macro="Page#gotoCP">
-			<var name="portletName" value="Workflow" />
+			<var name="portletName" value="Workflow Definition" />
 		</execute>
 
 		<execute macro="Workflow#uploadDefinition">
@@ -5453,7 +5453,7 @@
 		<var name="kfProcessName" value="Kaleo Forms Process" />
 
 		<execute macro="Page#gotoCP">
-			<var name="portletName" value="Workflow" />
+			<var name="portletName" value="Workflow Definition" />
 		</execute>
 
 		<execute macro="Workflow#uploadDefinition">
@@ -5634,7 +5634,7 @@
 		<var name="kfProcessName" value="Kaleo Forms Process" />
 
 		<execute macro="Page#gotoCP">
-			<var name="portletName" value="Workflow" />
+			<var name="portletName" value="Workflow Definition" />
 		</execute>
 
 		<execute macro="Workflow#uploadDefinition">
@@ -6015,7 +6015,7 @@
 		</execute>
 
 		<execute macro="Page#gotoContentCP">
-			<var name="portletName" value="Forms" />
+			<var name="portletName" value="Dynamic Data Lists" />
 		</execute>
 
 		<execute macro="DDLTemplate#deleteTemplateCP">
@@ -6273,7 +6273,7 @@
 		<execute function="AssertElementNotPresent" locator1="PGKaleoformsSubmitnew#NEW_PROCESS_FIELDS_TEXT_FIELD" />
 
 		<execute macro="Page#gotoContentCP">
-			<var name="portletName" value="Forms" />
+			<var name="portletName" value="Dynamic Data Lists" />
 		</execute>
 
 		<execute macro="DDLTemplate#deleteTemplateCP">
@@ -6738,7 +6738,7 @@
 		<var name="workflowDefinitionTitle" value="Single Approver" />
 
 		<execute macro="Page#gotoContentCP">
-			<var name="portletName" value="Forms" />
+			<var name="portletName" value="Dynamic Data Lists" />
 		</execute>
 
 		<execute macro="DDLDataDefinition#addCP">
@@ -6874,7 +6874,7 @@
 		<var name="workflowDefinitionTitle" value="Single Approver" />
 
 		<execute macro="Page#gotoContentCP">
-			<var name="portletName" value="Forms" />
+			<var name="portletName" value="Dynamic Data Lists" />
 		</execute>
 
 		<execute macro="DDLDataDefinition#addCP">
@@ -7040,7 +7040,7 @@
 		<var name="workflowDefinitionTitle" value="Single Approver" />
 
 		<execute macro="Page#gotoContentCP">
-			<var name="portletName" value="Forms" />
+			<var name="portletName" value="Dynamic Data Lists" />
 		</execute>
 
 		<execute macro="DDLDataDefinition#addCP">
@@ -7177,7 +7177,7 @@
 		<var name="nodeNotificationsTemplate"><![CDATA[Submission reviewed. The reviewer left the following: $taskComments.]]></var>
 
 		<execute macro="Page#gotoCP">
-			<var name="portletName" value="Workflow" />
+			<var name="portletName" value="Workflow Definition" />
 		</execute>
 
 		<execute macro="KaleoDesigner#editWorkflowDefinitionViaWorkflowCP">
@@ -7823,7 +7823,7 @@
 		</execute>
 
 		<execute macro="Page#gotoCP">
-			<var name="portletName" value="Workflow" />
+			<var name="portletName" value="Workflow Definition" />
 		</execute>
 
 		<execute macro="KaleoDesigner#editWorkflowDefinitionViaWorkflowCP">
@@ -8506,7 +8506,7 @@
 		<var name="workflowDefinitionTitle" value="Single Approver" />
 
 		<execute macro="Page#gotoContentCP">
-			<var name="portletName" value="Forms" />
+			<var name="portletName" value="Dynamic Data Lists" />
 		</execute>
 
 		<execute macro="DDLDataDefinition#addCP">
@@ -8925,7 +8925,7 @@
 		<var name="workflowDefinitionTitle" value="Single Approver" />
 
 		<execute macro="Page#gotoContentCP">
-			<var name="portletName" value="Forms" />
+			<var name="portletName" value="Dynamic Data Lists" />
 		</execute>
 
 		<execute macro="DDLDataDefinition#addCP">

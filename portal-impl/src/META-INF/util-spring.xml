@@ -259,6 +259,11 @@
 			<bean class="com.liferay.portal.sanitizer.SanitizerImpl" />
 		</property>
 	</bean>
+	<bean id="com.liferay.portal.kernel.search.SearchResultManagerUtil" class="com.liferay.portal.kernel.search.SearchResultManagerUtil">
+		<property name="searchResultManager">
+			<bean class="com.liferay.portal.search.SearchResultManagerImpl" />
+		</property>
+	</bean>
 	<bean id="com.liferay.portal.kernel.servlet.BrowserSnifferUtil" class="com.liferay.portal.kernel.servlet.BrowserSnifferUtil">
 		<property name="browserSniffer">
 			<bean class="com.liferay.portal.servlet.BrowserSnifferImpl" />
@@ -874,31 +879,9 @@
 			<bean class="com.liferay.portlet.documentlibrary.util.DLValidatorImpl" />
 		</property>
 	</bean>
-	<bean id="com.liferay.portlet.dynamicdatalists.lar.DDLRecordSetStagedModelDataHandler" class="com.liferay.portlet.dynamicdatalists.lar.DDLRecordSetStagedModelDataHandler" />
-	<bean id="com.liferay.portlet.dynamicdatalists.lar.DDLRecordStagedModelDataHandler" class="com.liferay.portlet.dynamicdatalists.lar.DDLRecordStagedModelDataHandler" />
-	<bean id="com.liferay.portlet.dynamicdatalists.util.DDLExporterFactory" class="com.liferay.portlet.dynamicdatalists.util.DDLExporterFactory">
-		<property name="DDLExporters">
-			<map>
-				<entry key="csv">
-					<bean class="com.liferay.portlet.dynamicdatalists.util.DDLCSVExporter" />
-				</entry>
-				<entry key="xml">
-					<bean class="com.liferay.portlet.dynamicdatalists.util.DDLXMLExporter" />
-				</entry>
-			</map>
-		</property>
-	</bean>
-	<bean id="com.liferay.portlet.dynamicdatalists.util.DDLIndexer" class="com.liferay.portlet.dynamicdatalists.util.DDLIndexer" />
-	<bean id="com.liferay.portlet.dynamicdatalists.util.DDLUtil" class="com.liferay.portlet.dynamicdatalists.util.DDLUtil">
-		<property name="DDL">
-			<bean class="com.liferay.portlet.dynamicdatalists.util.DDLImpl" />
-		</property>
-	</bean>
-	<bean id="com.liferay.portlet.dynamicdatalists.workflow.DDLRecordWorkflowHandler" class="com.liferay.portlet.dynamicdatalists.workflow.DDLRecordWorkflowHandler" />
+	<bean id="com.liferay.portlet.dynamicdatamapping.io.DDMFormFieldTypesJSONSerializer" class="com.liferay.portlet.dynamicdatamapping.io.DDMFormFieldTypesJSONSerializerImpl" />
 	<bean id="com.liferay.portlet.dynamicdatamapping.io.DDMFormFieldTypesJSONSerializerUtil" class="com.liferay.portlet.dynamicdatamapping.io.DDMFormFieldTypesJSONSerializerUtil">
-		<property name="DDMFormFieldTypesJSONSerializer">
-			<bean class="com.liferay.portlet.dynamicdatamapping.io.DDMFormFieldTypesJSONSerializerImpl" />
-		</property>
+		<property name="DDMFormFieldTypesJSONSerializer" ref="com.liferay.portlet.dynamicdatamapping.io.DDMFormFieldTypesJSONSerializer" />
 	</bean>
 	<bean id="com.liferay.portlet.dynamicdatamapping.io.DDMFormJSONDeserializer" class="com.liferay.portlet.dynamicdatamapping.io.DDMFormJSONDeserializerImpl" />
 	<bean id="com.liferay.portlet.dynamicdatamapping.io.DDMFormJSONDeserializerUtil" class="com.liferay.portlet.dynamicdatamapping.io.DDMFormJSONDeserializerUtil">
@@ -909,10 +892,9 @@
 			<bean class="com.liferay.portlet.dynamicdatamapping.io.DDMFormJSONSerializerImpl" />
 		</property>
 	</bean>
+	<bean id="com.liferay.portlet.dynamicdatamapping.io.DDMFormLayoutJSONDeserializer" class="com.liferay.portlet.dynamicdatamapping.io.DDMFormLayoutJSONDeserializerImpl" />
 	<bean id="com.liferay.portlet.dynamicdatamapping.io.DDMFormLayoutJSONDeserializerUtil" class="com.liferay.portlet.dynamicdatamapping.io.DDMFormLayoutJSONDeserializerUtil">
-		<property name="DDMFormLayoutJSONDeserializer">
-			<bean class="com.liferay.portlet.dynamicdatamapping.io.DDMFormLayoutJSONDeserializerImpl" />
-		</property>
+		<property name="DDMFormLayoutJSONDeserializer" ref="com.liferay.portlet.dynamicdatamapping.io.DDMFormLayoutJSONDeserializer" />
 	</bean>
 	<bean id="com.liferay.portlet.dynamicdatamapping.io.DDMFormLayoutJSONSerializerUtil" class="com.liferay.portlet.dynamicdatamapping.io.DDMFormLayoutJSONSerializerUtil">
 		<property name="DDMFormLayoutJSONSerializer">
@@ -1014,22 +996,20 @@
 			<bean class="com.liferay.portlet.dynamicdatamapping.storage.query.ConditionFactoryImpl" />
 		</property>
 	</bean>
+	<bean id="com.liferay.portlet.dynamicdatamapping.util.DDM" class="com.liferay.portlet.dynamicdatamapping.util.DDMImpl" />
+	<bean id="com.liferay.portlet.dynamicdatamapping.util.DDMFormValuesToFieldsConverter" class="com.liferay.portlet.dynamicdatamapping.util.DDMFormValuesToFieldsConverterImpl" />
 	<bean id="com.liferay.portlet.dynamicdatamapping.util.DDMFormValuesToFieldsConverterUtil" class="com.liferay.portlet.dynamicdatamapping.util.DDMFormValuesToFieldsConverterUtil">
-		<property name="DDMFormValuesToFieldsConverter">
-			<bean class="com.liferay.portlet.dynamicdatamapping.util.DDMFormValuesToFieldsConverterImpl" />
-		</property>
+		<property name="DDMFormValuesToFieldsConverter" ref="com.liferay.portlet.dynamicdatamapping.util.DDMFormValuesToFieldsConverter" />
 	</bean>
+	<bean id="com.liferay.portlet.dynamicdatamapping.util.DDMIndexer" class="com.liferay.portlet.dynamicdatamapping.util.DDMIndexerImpl" />
 	<bean id="com.liferay.portlet.dynamicdatamapping.util.DDMIndexerUtil" class="com.liferay.portlet.dynamicdatamapping.util.DDMIndexerUtil">
-		<property name="DDMIndexer">
-			<bean class="com.liferay.portlet.dynamicdatamapping.util.DDMIndexerImpl" />
-		</property>
+		<property name="DDMIndexer" ref="com.liferay.portlet.dynamicdatamapping.util.DDMIndexer" />
 	</bean>
 	<bean id="com.liferay.portlet.dynamicdatamapping.util.DDMTemplateHelperUtil" class="com.liferay.portlet.dynamicdatamapping.util.DDMTemplateHelperUtil">
 		<property name="DDMTemplateHelper">
 			<bean class="com.liferay.portlet.dynamicdatamapping.util.DDMTemplateHelperImpl" />
 		</property>
 	</bean>
-	<bean id="com.liferay.portlet.dynamicdatamapping.util.DDM" class="com.liferay.portlet.dynamicdatamapping.util.DDMImpl" />
 	<bean id="com.liferay.portlet.dynamicdatamapping.util.DDMUtil" class="com.liferay.portlet.dynamicdatamapping.util.DDMUtil">
 		<property name="DDM" ref="com.liferay.portlet.dynamicdatamapping.util.DDM" />
 	</bean>
@@ -1107,7 +1087,6 @@
 	</bean>
 	<bean id="com.liferay.portlet.journal.workflow.JournalArticleWorkflowHandler" class="com.liferay.portlet.journal.workflow.JournalArticleWorkflowHandler" />
 	<bean id="com.liferay.portlet.layoutprototypes.lar.LayoutPrototypeStagedModelDataHandler" class="com.liferay.portlet.layoutprototypes.lar.LayoutPrototypeStagedModelDataHandler" />
-	<bean id="com.liferay.portlet.layoutsadmin.LayoutAdminViewPortletProvider" class="com.liferay.portlet.layoutsadmin.LayoutAdminEditPortletProvider" />
 	<bean id="com.liferay.portlet.layoutsadmin.lar.LayoutFriendlyURLStagedModelDataHandler" class="com.liferay.portlet.layoutsadmin.lar.LayoutFriendlyURLStagedModelDataHandler" />
 	<bean id="com.liferay.portlet.layoutsadmin.lar.LayoutStagedModelDataHandler" class="com.liferay.portlet.layoutsadmin.lar.LayoutStagedModelDataHandler">
 		<property name="LayoutLocalServiceHelper">

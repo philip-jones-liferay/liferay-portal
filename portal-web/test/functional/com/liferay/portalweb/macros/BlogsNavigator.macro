@@ -5,9 +5,11 @@
 			<var name="entryTitle" value="${entryTitle}" />
 		</execute>
 
-		<execute function="Pause" locator1="1000" />
-
 		<execute function="Click" locator1="Comments#COMMENT_FIELD" />
+	</command>
+
+	<command name="gotoConfigurationPermissionsPG">
+		<execute function="AssertClick" locator1="BasePortletConfiguration#NAVIGATION_PERMISSIONS" value1="Permissions" />
 	</command>
 
 	<command name="gotoConfigurationScopePG">

@@ -97,36 +97,16 @@ if (fileEntryId != 0) {
 <%
 PortletURL itemSelectorURL = liferayPortletResponse.createRenderURL(PortletKeys.ITEM_SELECTOR);
 
-itemSelectorURL.setParameter("criteria", "com.liferay.document.library.item.selector.web.DLItemSelectorCriterion");
-itemSelectorURL.setParameter("itemSelectedEventName", liferayPortletResponse.getNamespace() + "selectImage");
+itemSelectorURL.setParameter("criteria", "com.liferay.item.selector.criteria.image.criterion.ImageItemSelectorCriterion");
+itemSelectorURL.setParameter("itemSelectedEventName", randomNamespace + "selectImage");
 
 JSONObject itemSelectorJSONParamJSONObject = JSONFactoryUtil.createJSONObject();
 
-JSONArray desiredReturnTypesJSONArray = JSONFactoryUtil.createJSONArray();
+JSONArray desiredItemSelectorReturnTypesJSONArray = JSONFactoryUtil.createJSONArray();
 
-desiredReturnTypesJSONArray.put(URL.class.getName());
-desiredReturnTypesJSONArray.put(FileEntry.class.getName());
+desiredItemSelectorReturnTypesJSONArray.put("FILE_ENTRY");
 
-itemSelectorJSONParamJSONObject.put("desiredReturnTypes", desiredReturnTypesJSONArray);
-
-itemSelectorJSONParamJSONObject.put("folderId", DLFolderConstants.DEFAULT_PARENT_FOLDER_ID);
-
-JSONArray mimeTypesJSONArray = JSONFactoryUtil.createJSONArray();
-
-mimeTypesJSONArray.put("image/bmp");
-mimeTypesJSONArray.put("image/gif");
-mimeTypesJSONArray.put("image/jpeg");
-mimeTypesJSONArray.put("image/pjpeg");
-mimeTypesJSONArray.put("image/tiff");
-mimeTypesJSONArray.put("image/x-citrix-jpeg");
-mimeTypesJSONArray.put("image/x-citrix-png");
-mimeTypesJSONArray.put("image/x-ms-bmp");
-mimeTypesJSONArray.put("image/x-png");
-mimeTypesJSONArray.put("image/x-tiff");
-
-itemSelectorJSONParamJSONObject.put("mimeTypes", mimeTypesJSONArray);
-
-itemSelectorJSONParamJSONObject.put("repositoryId", scopeGroupId);
+itemSelectorJSONParamJSONObject.put("desiredItemSelectorReturnTypes", desiredItemSelectorReturnTypesJSONArray);
 
 itemSelectorURL.setParameter("0_json", itemSelectorJSONParamJSONObject.toString());
 

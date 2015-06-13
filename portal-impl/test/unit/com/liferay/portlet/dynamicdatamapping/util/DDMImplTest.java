@@ -45,6 +45,7 @@ public class DDMImplTest extends BaseDDMTestCase {
 
 	@Before
 	public void setUp() throws Exception {
+		setUpDDMFormFieldTypeRegistryUtil();
 		setUpDDMFormJSONDeserializerUtil();
 		setUpDDMFormJSONSerializerUtil();
 		setUpDDMStructureLocalServiceUtil();
@@ -517,9 +518,11 @@ public class DDMImplTest extends BaseDDMTestCase {
 		DDMFormLayoutColumn actualDDMFormLayoutColumn =
 			actualDDMFormLayoutColumns.get(0);
 
+		List<String> actualDDMFormFieldNames =
+			actualDDMFormLayoutColumn.getDDMFormFieldNames();
+
 		Assert.assertEquals(
-			expectedDDMFormFieldName,
-			actualDDMFormLayoutColumn.getDDMFormFieldName());
+			expectedDDMFormFieldName, actualDDMFormFieldNames.get(0));
 		Assert.assertEquals(
 			DDMFormLayoutColumn.FULL, actualDDMFormLayoutColumn.getSize());
 	}

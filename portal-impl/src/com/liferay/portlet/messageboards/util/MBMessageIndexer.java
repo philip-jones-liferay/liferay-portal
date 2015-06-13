@@ -36,6 +36,7 @@ import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.search.Summary;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
+import com.liferay.portal.kernel.search.filter.TermsFilter;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
@@ -188,26 +189,30 @@ public class MBMessageIndexer
 			(categoryIds[0] !=
 				MBCategoryConstants.DEFAULT_PARENT_CATEGORY_ID)) {
 
-			BooleanFilter categoriesFilter = new BooleanFilter();
+			TermsFilter categoriesTermsFilter = new TermsFilter(
+				Field.CATEGORY_ID);
 
 			for (long categoryId : categoryIds) {
 				try {
 					MBCategoryServiceUtil.getCategory(categoryId);
 				}
-				catch (Exception e) {
+				catch (PortalException pe) {
 					if (_log.isDebugEnabled()) {
-						_log.debug("Unable to get category " + categoryId, e);
+						_log.debug(
+							"Unable to get message boards category " +
+								categoryId,
+							pe);
 					}
 
 					continue;
 				}
 
-				categoriesFilter.addTerm(Field.CATEGORY_ID, categoryId);
+				categoriesTermsFilter.addValue(String.valueOf(categoryId));
 			}
 
-			if (categoriesFilter.hasClauses()) {
+			if (!categoriesTermsFilter.isEmpty()) {
 				contextBooleanFilter.add(
-					categoriesFilter, BooleanClauseOccur.MUST);
+					categoriesTermsFilter, BooleanClauseOccur.MUST);
 			}
 		}
 	}
@@ -442,18 +447,26 @@ public class MBMessageIndexer
 			new ActionableDynamicQuery.PerformActionMethod() {
 
 				@Override
-				public void performAction(Object object)
-					throws PortalException {
-
+				public void performAction(Object object) {
 					MBMessage message = (MBMessage)object;
 
 					if (message.isDiscussion() && message.isRoot()) {
 						return;
 					}
 
-					Document document = getDocument(message);
+					try {
+						Document document = getDocument(message);
 
-					actionableDynamicQuery.addDocument(document);
+						actionableDynamicQuery.addDocument(document);
+					}
+					catch (PortalException pe) {
+						if (_log.isWarnEnabled()) {
+							_log.warn(
+								"Unable to index message boards message " +
+									message.getMessageId(),
+								pe);
+						}
+					}
 				}
 
 			});

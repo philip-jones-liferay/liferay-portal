@@ -163,7 +163,7 @@
 		</execute>
 	</command>
 
-	<command known-issues="LPS-54712" name="AddCategorywithSiteRole" priority="4">
+	<command name="AddCategorywithSiteRole" priority="4">
 		<var name="pageName" value="Test Page Name" />
 		<var name="siteName" value="Test Site Name" />
 
@@ -372,7 +372,7 @@
 		</execute>
 	</command>
 
-	<command known-issues="LPS-54823" name="AddWCFailWithRequiredVocabularyAssetType" priority="3">
+	<command name="AddWCFailWithRequiredVocabularyAssetType" priority="3">
 		<execute macro="Page#gotoContentCP">
 			<var name="portletName" value="Categories" />
 		</execute>
@@ -416,7 +416,7 @@
 		</execute>
 	</command>
 
-	<command known-issues="LPS-54823" name="AddWCWithOptionalVocabularyAssetType" priority="3">
+	<command name="AddWCWithOptionalVocabularyAssetType" priority="3">
 		<execute macro="Page#gotoContentCP">
 			<var name="portletName" value="Categories" />
 		</execute>
@@ -457,7 +457,7 @@
 		</execute>
 	</command>
 
-	<command known-issues="LPS-54712" name="DeletePartialCategory" priority="5">
+	<command name="DeletePartialCategory" priority="5">
 		<execute macro="Page#gotoContentCP">
 			<var name="portletName" value="Categories" />
 		</execute>
@@ -567,7 +567,7 @@
 		</execute>
 	</command>
 
-	<command known-issues="LPS-54823" name="DisableMultipleCategories" priority="4">
+	<command name="DisableMultipleCategories" priority="4">
 		<var name="vocabularyName" value="Vocabulary Name" />
 
 		<execute macro="Page#gotoContentCP">
@@ -665,7 +665,7 @@
 		</execute>
 	</command>
 
-	<command known-issues="LPS-54823" name="DuplicateCategoriesViaWebContentCopy" priority="3">
+	<command name="DuplicateCategoriesViaWebContentCopy" priority="3">
 		<var name="categoryName" value="Category Name" />
 		<var name="vocabularyName" value="Vocabulary Name" />
 		<var name="webContentContent" value="Web Content Content" />
@@ -707,7 +707,7 @@
 		</execute>
 	</command>
 
-	<command known-issues="LPS-54823" name="ExportImportWCWithCategoryViaAP" priority="4">
+	<command known-issues="LPS-55978" name="ExportImportWCWithCategoryViaAP" priority="4">
 		<execute macro="Page#gotoCP">
 			<var name="portletName" value="Sites" />
 		</execute>
@@ -782,10 +782,8 @@
 			<var name="categoryName" value="Category Name" />
 		</execute>
 
-		<execute macro="Page#gotoPagesCP">
-			<var name="portletName" value="Site Pages" />
+		<execute macro="LAR#gotoExportSite">
 			<var name="siteScopeName" value="Site Name" />
-			<var name="siteURL" value="true" />
 		</execute>
 
 		<execute function="AssertClick" locator1="CPSitepages#TOOLBAR_EXPORT" value1="Export" />
@@ -1015,7 +1013,7 @@
 		</execute>
 	</command>
 
-	<command known-issues="LPS-54823" name="SearchEditedCategory" priority="4">
+	<command name="SearchEditedCategory" priority="4">
 		<execute macro="Page#gotoContentCP">
 			<var name="portletName" value="Categories" />
 		</execute>

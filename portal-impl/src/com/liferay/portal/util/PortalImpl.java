@@ -1107,27 +1107,29 @@ public class PortalImpl implements Portal {
 			}
 
 			if ((pos > 0) && (pos < canonicalURL.length())) {
-				String friendlyURL = canonicalURL.substring(pos);
+				boolean replaceFriendlyURL = true;
 
-				int[] friendlyURLIndex = getGroupFriendlyURLIndex(friendlyURL);
+				String currentURL = canonicalURL.substring(pos);
+
+				int[] friendlyURLIndex = getGroupFriendlyURLIndex(currentURL);
 
 				if (friendlyURLIndex != null) {
 					int y = friendlyURLIndex[1];
 
-					friendlyURL = friendlyURL.substring(y);
+					currentURL = currentURL.substring(y);
 
-					if (friendlyURL.equals(StringPool.SLASH)) {
-						friendlyURL = StringPool.BLANK;
+					if (currentURL.equals(StringPool.SLASH)) {
+						replaceFriendlyURL = false;
 					}
 				}
 
-				if (Validator.isNotNull(friendlyURL)) {
+				if (replaceFriendlyURL) {
 					String canonicalURLPrefix = canonicalURL.substring(0, pos);
 
 					String canonicalURLSuffix = canonicalURL.substring(pos);
 
 					canonicalURLSuffix = StringUtil.replaceFirst(
-						canonicalURLSuffix, friendlyURL,
+						canonicalURLSuffix, layout.getFriendlyURL(),
 						layout.getFriendlyURL(locale));
 
 					canonicalURL = canonicalURLPrefix.concat(
@@ -7389,12 +7391,6 @@ public class PortalImpl implements Portal {
 				layoutType.removeStatesPortletId(portletId);
 
 				updateLayout = true;
-			}
-
-			if (portletId.equals(PortletKeys.LAYOUTS_ADMIN) ||
-				portletId.equals(PortletKeys.PORTLET_CONFIGURATION)) {
-
-				updateLayout = false;
 			}
 
 			if (updateLayout) {

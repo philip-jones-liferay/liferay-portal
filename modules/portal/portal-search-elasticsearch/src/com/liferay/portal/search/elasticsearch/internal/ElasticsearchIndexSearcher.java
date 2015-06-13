@@ -22,8 +22,10 @@ import com.liferay.portal.kernel.search.BaseIndexSearcher;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.DocumentImpl;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.GeoDistanceSort;
 import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.HitsImpl;
+import com.liferay.portal.kernel.search.IndexSearcher;
 import com.liferay.portal.kernel.search.Query;
 import com.liferay.portal.kernel.search.QueryConfig;
 import com.liferay.portal.kernel.search.SearchContext;
@@ -32,6 +34,7 @@ import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.facet.Facet;
 import com.liferay.portal.kernel.search.facet.collector.FacetCollector;
 import com.liferay.portal.kernel.search.filter.FilterTranslator;
+import com.liferay.portal.kernel.search.geolocation.GeoLocationPoint;
 import com.liferay.portal.kernel.search.highlight.HighlightUtil;
 import com.liferay.portal.kernel.search.query.QueryTranslator;
 import com.liferay.portal.kernel.search.suggest.QuerySuggester;
@@ -60,6 +63,7 @@ import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.common.geo.GeoDistance;
 import org.elasticsearch.common.text.Text;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.FilterBuilder;
@@ -72,8 +76,9 @@ import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.highlight.HighlightField;
 import org.elasticsearch.search.sort.FieldSortBuilder;
-import org.elasticsearch.search.sort.ScoreSortBuilder;
+import org.elasticsearch.search.sort.GeoDistanceSortBuilder;
 import org.elasticsearch.search.sort.SortBuilder;
+import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 
 import org.osgi.service.component.annotations.Component;
@@ -83,7 +88,10 @@ import org.osgi.service.component.annotations.Reference;
  * @author Michael C. Han
  * @author Milen Dyankov
  */
-@Component(immediate = true, service = ElasticsearchIndexSearcher.class)
+@Component(
+	immediate = true, property = {"search.engine.impl=Elasticsearch"},
+	service = IndexSearcher.class
+)
 public class ElasticsearchIndexSearcher extends BaseIndexSearcher {
 
 	@Override
@@ -180,7 +188,7 @@ public class ElasticsearchIndexSearcher extends BaseIndexSearcher {
 	}
 
 	@Override
-	@Reference(service = ElasticsearchQuerySuggester.class, unbind = "-")
+	@Reference(target = "(search.engine.impl=Elasticsearch)", unbind = "-")
 	public void setQuerySuggester(QuerySuggester querySuggester) {
 		super.setQuerySuggester(querySuggester);
 	}
@@ -345,13 +353,38 @@ public class ElasticsearchIndexSearcher extends BaseIndexSearcher {
 			SortBuilder sortBuilder = null;
 
 			if (sortFieldName.equals("_score")) {
-				sortBuilder = new ScoreSortBuilder();
+				sortBuilder = SortBuilders.scoreSort();
+			}
+			else if (sort.getType() == Sort.GEO_DISTANCE_TYPE) {
+				GeoDistanceSort geoDistanceSort = (GeoDistanceSort)sort;
+
+				GeoDistanceSortBuilder geoDistanceSortBuilder =
+					SortBuilders.geoDistanceSort(sortFieldName);
+
+				geoDistanceSortBuilder.geoDistance(GeoDistance.DEFAULT);
+
+				for (GeoLocationPoint geoLocationPoint :
+						geoDistanceSort.getGeoLocationPoints()) {
+
+					geoDistanceSortBuilder.point(
+						geoLocationPoint.getLatitude(),
+						geoLocationPoint.getLongitude());
+				}
+
+				Collection<String> geoHashes = geoDistanceSort.getGeoHashes();
+
+				if (!geoHashes.isEmpty()) {
+					geoDistanceSort.addGeoHash(
+						geoHashes.toArray(new String[geoHashes.size()]));
+				}
+
+				sortBuilder = geoDistanceSortBuilder;
 			}
 			else {
-				FieldSortBuilder fieldSortBuilder = new FieldSortBuilder(
+				FieldSortBuilder fieldSortBuilder = SortBuilders.fieldSort(
 					sortFieldName);
 
-				fieldSortBuilder.ignoreUnmapped(true);
+				fieldSortBuilder.unmappedType("string");
 
 				sortBuilder = fieldSortBuilder;
 			}
@@ -394,7 +427,7 @@ public class ElasticsearchIndexSearcher extends BaseIndexSearcher {
 
 		if (query.getPreBooleanFilter() != null) {
 			FilterBuilder filterBuilder = _filterTranslator.translate(
-				query.getPreBooleanFilter());
+				query.getPreBooleanFilter(), searchContext);
 
 			queryBuilder = QueryBuilders.filteredQuery(
 				queryBuilder, filterBuilder);
@@ -552,14 +585,14 @@ public class ElasticsearchIndexSearcher extends BaseIndexSearcher {
 		_facetProcessor = facetProcessor;
 	}
 
-	@Reference(unbind = "-")
+	@Reference(target = "(search.engine.impl=Elasticsearch)", unbind = "-")
 	protected void setFilterTranslator(
 		FilterTranslator<FilterBuilder> filterTranslator) {
 
 		_filterTranslator = filterTranslator;
 	}
 
-	@Reference(unbind = "-")
+	@Reference(target = "(search.engine.impl=Elasticsearch)", unbind = "-")
 	protected void setQueryTranslator(
 		QueryTranslator<QueryBuilder> queryTranslator) {
 

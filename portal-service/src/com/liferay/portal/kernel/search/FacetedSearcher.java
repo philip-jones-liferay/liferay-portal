@@ -17,6 +17,8 @@ package com.liferay.portal.kernel.search;
 import com.liferay.portal.kernel.search.facet.Facet;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
+import com.liferay.portal.kernel.search.generic.BooleanQueryImpl;
+import com.liferay.portal.kernel.search.generic.MatchAllQuery;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
@@ -24,7 +26,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portlet.expando.model.ExpandoBridge;
 import com.liferay.portlet.expando.model.ExpandoColumnConstants;
 import com.liferay.portlet.expando.util.ExpandoBridgeFactoryUtil;
-import com.liferay.portlet.expando.util.ExpandoBridgeIndexerUtil;
 
 import java.util.Map;
 import java.util.Set;
@@ -57,8 +58,8 @@ public class FacetedSearcher extends BaseSearcher {
 				properties.getProperty(ExpandoColumnConstants.INDEX_TYPE));
 
 			if (indexType != ExpandoColumnConstants.INDEX_TYPE_NONE) {
-				String fieldName = ExpandoBridgeIndexerUtil.encodeFieldName(
-					attributeName);
+				String fieldName = getExpandoFieldName(
+					searchContext, expandoBridge, attributeName);
 
 				if (searchContext.isAndSearch()) {
 					searchQuery.addRequiredTerm(fieldName, keywords);
@@ -75,8 +76,7 @@ public class FacetedSearcher extends BaseSearcher {
 			BooleanFilter fullQueryBooleanFilter, SearchContext searchContext)
 		throws Exception {
 
-		BooleanQuery searchQuery = BooleanQueryFactoryUtil.create(
-			searchContext);
+		BooleanQuery searchQuery = new BooleanQueryImpl();
 
 		String keywords = searchContext.getKeywords();
 
@@ -150,7 +150,7 @@ public class FacetedSearcher extends BaseSearcher {
 				facetBooleanFilter, BooleanClauseOccur.MUST);
 		}
 
-		BooleanQuery fullQuery = BooleanQueryFactoryUtil.create(searchContext);
+		BooleanQuery fullQuery = new BooleanQueryImpl();
 
 		if (fullQueryBooleanFilter.hasClauses()) {
 			fullQuery.setPreBooleanFilter(fullQueryBooleanFilter);
@@ -207,8 +207,16 @@ public class FacetedSearcher extends BaseSearcher {
 			queryBooleanFilter.addRequiredTerm(
 				Field.COMPANY_ID, searchContext.getCompanyId());
 
-			BooleanQuery fullQuery = createFullQuery(
-				queryBooleanFilter, searchContext);
+			Query fullQuery = getFullQuery(searchContext);
+
+			if (!fullQuery.hasChildren()) {
+				BooleanFilter preBooleanFilter =
+					fullQuery.getPreBooleanFilter();
+
+				fullQuery = new MatchAllQuery();
+
+				fullQuery.setPreBooleanFilter(preBooleanFilter);
+			}
 
 			QueryConfig queryConfig = searchContext.getQueryConfig();
 

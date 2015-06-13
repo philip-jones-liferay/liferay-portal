@@ -17,7 +17,6 @@ package com.liferay.portal.spring.context;
 import com.liferay.portal.bean.BeanLocatorImpl;
 import com.liferay.portal.dao.orm.hibernate.FieldInterceptionHelperUtil;
 import com.liferay.portal.deploy.hot.IndexerPostProcessorRegistry;
-import com.liferay.portal.deploy.hot.SchedulerEntryRegistry;
 import com.liferay.portal.deploy.hot.ServiceWrapperRegistry;
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
@@ -111,6 +110,14 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 		PortalContextLoaderLifecycleThreadLocal.setDestroying(true);
 
 		ThreadLocalCacheManager.destroy();
+
+		if (_indexerPostProcessorRegistry != null) {
+			_indexerPostProcessorRegistry.close();
+		}
+
+		if (_serviceWrapperRegistry != null) {
+			_serviceWrapperRegistry.close();
+		}
 
 		try {
 			ClearThreadLocalUtil.clearThreadLocal();
@@ -263,31 +270,14 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 
 				@Override
 				public void destroy() {
-					if (_indexerPostProcessorRegistry != null) {
-						_indexerPostProcessorRegistry.close();
-					}
-
-					if (_schedulerEntryRegistry != null) {
-						_schedulerEntryRegistry.close();
-					}
-
-					if (_serviceWrapperRegistry != null) {
-						_serviceWrapperRegistry.close();
-					}
 				}
 
 				@Override
 				public void dependenciesFulfilled() {
 					_indexerPostProcessorRegistry =
 						new IndexerPostProcessorRegistry();
-					_schedulerEntryRegistry = new SchedulerEntryRegistry();
 					_serviceWrapperRegistry = new ServiceWrapperRegistry();
 				}
-
-				private IndexerPostProcessorRegistry
-					_indexerPostProcessorRegistry;
-				private SchedulerEntryRegistry _schedulerEntryRegistry;
-				private ServiceWrapperRegistry _serviceWrapperRegistry;
 
 			});
 
@@ -415,5 +405,7 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 	}
 
 	private ArrayApplicationContext _arrayApplicationContext;
+	private IndexerPostProcessorRegistry _indexerPostProcessorRegistry;
+	private ServiceWrapperRegistry _serviceWrapperRegistry;
 
 }

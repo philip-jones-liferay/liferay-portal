@@ -107,7 +107,7 @@
 		<var name="kfProcessName" value="Kaleo Forms Process" />
 
 		<execute macro="Page#gotoContentCP">
-			<var name="portletName" value="Forms" />
+			<var name="portletName" value="Dynamic Data Lists" />
 		</execute>
 
 		<execute macro="DDLDataDefinition#addCP">
@@ -345,7 +345,7 @@
 		<execute macro="KaleoFormsAdmin#viewNoUnpublishedWorkflowDefinitions" />
 
 		<execute macro="Page#gotoCP">
-			<var name="portletName" value="Workflow" />
+			<var name="portletName" value="Workflow Definition" />
 		</execute>
 
 		<execute macro="Workflow#reactivateInactiveWorkflowDefinition">
@@ -428,7 +428,7 @@
 		<execute macro="KaleoFormsAdmin#viewNoUnpublishedWorkflowDefinitions" />
 
 		<execute macro="Page#gotoCP">
-			<var name="portletName" value="Workflow" />
+			<var name="portletName" value="Workflow Definition" />
 		</execute>
 
 		<execute macro="Workflow#deleteSpecificWorkflowDefinition">
@@ -460,7 +460,7 @@
 		<execute macro="KaleoFormsAdmin#viewNoUnpublishedWorkflowDefinitions" />
 
 		<execute macro="Page#gotoCP">
-			<var name="portletName" value="Workflow" />
+			<var name="portletName" value="Workflow Definition" />
 		</execute>
 
 		<execute macro="Workflow#reactivateInactiveWorkflowDefinition">
@@ -632,7 +632,7 @@
 		<var name="kfProcessName" value="Kaleo Forms Process" />
 
 		<execute macro="Page#gotoContentCP">
-			<var name="portletName" value="Forms" />
+			<var name="portletName" value="Dynamic Data Lists" />
 		</execute>
 
 		<execute macro="DDLDataDefinition#addCP">
@@ -990,7 +990,7 @@
 		<var name="kfProcessName" value="Kaleo Forms Process" />
 
 		<execute macro="Page#gotoContentCP">
-			<var name="portletName" value="Forms" />
+			<var name="portletName" value="Dynamic Data Lists" />
 		</execute>
 
 		<execute macro="DDLDataDefinition#addCP">
@@ -1373,7 +1373,7 @@
 		<var name="kfProcessName" value="Kaleo Forms Process" />
 
 		<execute macro="Page#gotoContentCP">
-			<var name="portletName" value="Forms" />
+			<var name="portletName" value="Dynamic Data Lists" />
 		</execute>
 
 		<execute macro="DDLDataDefinition#addCP">
@@ -1520,7 +1520,7 @@
 		</execute>
 
 		<execute macro="Page#gotoContentCP">
-			<var name="portletName" value="Forms" />
+			<var name="portletName" value="Dynamic Data Lists" />
 		</execute>
 
 		<execute macro="DDLDataDefinition#editCP">
@@ -2267,7 +2267,7 @@
 		<var name="workflowDefinitionTitleEdit" value="New Uploaded Definition Edit" />
 
 		<execute macro="Page#gotoCP">
-			<var name="portletName" value="Workflow" />
+			<var name="portletName" value="Workflow Definition" />
 		</execute>
 
 		<execute macro="Workflow#uploadDefinition">

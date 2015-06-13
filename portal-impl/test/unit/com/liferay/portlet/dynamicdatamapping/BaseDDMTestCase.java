@@ -47,6 +47,10 @@ import com.liferay.portlet.dynamicdatamapping.model.LocalizedValue;
 import com.liferay.portlet.dynamicdatamapping.model.Value;
 import com.liferay.portlet.dynamicdatamapping.model.impl.DDMStructureImpl;
 import com.liferay.portlet.dynamicdatamapping.model.impl.DDMTemplateImpl;
+import com.liferay.portlet.dynamicdatamapping.registry.DDMFormFieldType;
+import com.liferay.portlet.dynamicdatamapping.registry.DDMFormFieldTypeRegistry;
+import com.liferay.portlet.dynamicdatamapping.registry.DDMFormFieldTypeRegistryUtil;
+import com.liferay.portlet.dynamicdatamapping.registry.DDMFormFieldTypeSettings;
 import com.liferay.portlet.dynamicdatamapping.service.DDMStructureLocalServiceUtil;
 import com.liferay.portlet.dynamicdatamapping.service.DDMTemplateLocalServiceUtil;
 import com.liferay.portlet.dynamicdatamapping.storage.DDMFormFieldValue;
@@ -54,12 +58,14 @@ import com.liferay.portlet.dynamicdatamapping.storage.DDMFormValues;
 import com.liferay.portlet.dynamicdatamapping.storage.Field;
 import com.liferay.portlet.dynamicdatamapping.storage.Fields;
 import com.liferay.portlet.dynamicdatamapping.util.DDMImpl;
+import com.liferay.portlet.dynamicdatamapping.util.test.DDMFormFieldTypeSettingsTestUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -184,6 +190,15 @@ public abstract class BaseDDMTestCase extends PowerMockito {
 		return createDDMFormFieldValue(StringUtil.randomString(), name, value);
 	}
 
+	protected DDMFormLayoutColumn createDDMFormLayoutColumn(
+		int size, String... fieldNames) {
+
+		DDMFormLayoutColumn ddmFormLayoutColumn = new DDMFormLayoutColumn(
+			size, fieldNames);
+
+		return ddmFormLayoutColumn;
+	}
+
 	protected List<DDMFormLayoutColumn> createDDMFormLayoutColumns(
 		String... fieldNames) {
 
@@ -192,10 +207,16 @@ public abstract class BaseDDMTestCase extends PowerMockito {
 		int size = 12 / fieldNames.length;
 
 		for (String fieldName : fieldNames) {
-			ddmFormLayoutColumns.add(new DDMFormLayoutColumn(fieldName, size));
+			ddmFormLayoutColumns.add(new DDMFormLayoutColumn(size, fieldName));
 		}
 
 		return ddmFormLayoutColumns;
+	}
+
+	protected DDMFormLayoutRow createDDMFormLayoutRow(
+		DDMFormLayoutColumn... ddmFormLayoutColumns) {
+
+		return createDDMFormLayoutRow(Arrays.asList(ddmFormLayoutColumns));
 	}
 
 	protected DDMFormLayoutRow createDDMFormLayoutRow(
@@ -426,6 +447,16 @@ public abstract class BaseDDMTestCase extends PowerMockito {
 		return StringUtil.read(inputStream);
 	}
 
+	protected void setUpDDMFormFieldTypeRegistryUtil() {
+		setUpDefaultDDMFormFieldType();
+
+		DDMFormFieldTypeRegistryUtil ddmFormFieldTypeRegistryUtil =
+			new DDMFormFieldTypeRegistryUtil();
+
+		ddmFormFieldTypeRegistryUtil.setDDMFormFieldTypeRegistry(
+			_ddmFormFieldTypeRegistry);
+	}
+
 	protected void setUpDDMFormJSONDeserializerUtil() {
 		DDMFormJSONDeserializerUtil ddmFormJSONDeserializerUtil =
 			new DDMFormJSONDeserializerUtil();
@@ -485,6 +516,30 @@ public abstract class BaseDDMTestCase extends PowerMockito {
 				}
 
 			}
+		);
+	}
+
+	protected void setUpDefaultDDMFormFieldType() {
+		when (
+			_defaultDDMFormFieldType.getDDMFormFieldTypeSettings()
+		).then(
+			new Answer<Class<? extends DDMFormFieldTypeSettings>>() {
+
+				@Override
+				public Class<? extends DDMFormFieldTypeSettings> answer(
+						InvocationOnMock invocationOnMock)
+					throws Throwable {
+
+					return DDMFormFieldTypeSettingsTestUtil.getSettings();
+				}
+
+			}
+		);
+
+		when(
+			_ddmFormFieldTypeRegistry.getDDMFormFieldType(Matchers.anyString())
+		).thenReturn(
+			_defaultDDMFormFieldType
 		);
 	}
 
@@ -688,5 +743,11 @@ public abstract class BaseDDMTestCase extends PowerMockito {
 		private static final long serialVersionUID = 1L;
 
 	}
+
+	@Mock
+	private DDMFormFieldTypeRegistry _ddmFormFieldTypeRegistry;
+
+	@Mock
+	private DDMFormFieldType _defaultDDMFormFieldType;
 
 }

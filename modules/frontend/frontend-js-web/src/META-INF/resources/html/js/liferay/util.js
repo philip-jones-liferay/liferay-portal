@@ -751,7 +751,7 @@
 					plid: 0,
 					portletId: 0,
 					title: '',
-					url: themeDisplay.getPathMain() + '/portlet_configuration/update_title'
+					url: themeDisplay.getPathMain() + '/portal/update_portlet_title'
 				}
 			);
 

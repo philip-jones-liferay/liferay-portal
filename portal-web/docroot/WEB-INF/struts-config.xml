@@ -115,6 +115,8 @@
 			<forward name="portal.update_password" path="portal.update_password" />
 		</action>
 
+		<action path="/portal/update_portlet_title" type="com.liferay.portal.action.UpdatePortletTitleAction" />
+
 		<action path="/portal/update_reminder_query" type="com.liferay.portal.action.UpdateReminderQueryAction">
 			<forward name="portal.update_reminder_query" path="portal.update_reminder_query" />
 		</action>
@@ -162,24 +164,9 @@
 			<forward name="portlet.admin.error" path="portlet.admin.error" />
 		</action>
 
-		<action path="/admin_server/edit_organization" type="com.liferay.portlet.usersadmin.action.EditOrganizationAction">
-			<forward name="portlet.users_admin.edit_organization" path="portlet.directory.view_organization" />
-			<forward name="portlet.users_admin.error" path="portlet.directory.error" />
-		</action>
-
-		<action path="/admin_server/edit_role_permissions" type="com.liferay.portlet.rolesadmin.action.EditRolePermissionsAction">
-			<forward name="portlet.roles_admin.edit_role_permissions" path="portlet.roles_admin.edit_role_permissions" />
-			<forward name="portlet.roles_admin.error" path="portlet.roles_admin.error" />
-		</action>
-
 		<action path="/admin_server/edit_server" type="com.liferay.portlet.admin.action.EditServerAction">
 			<forward name="portlet.admin.edit_permissions" path="portlet.admin.edit_permissions" />
 			<forward name="portlet.admin.error" path="portlet.admin.error" />
-		</action>
-
-		<action path="/admin_server/edit_user" type="com.liferay.portlet.usersadmin.action.EditUserAction">
-			<forward name="portlet.users_admin.edit_user" path="portlet.directory.view_user" />
-			<forward name="portlet.users_admin.error" path="portlet.directory.error" />
 		</action>
 
 		<action path="/admin_server/view" forward="portlet.admin.view" />
@@ -433,17 +420,6 @@
 			<forward name="portlet.document_library.view" path="portlet.document_library_display.view" />
 		</action>
 
-		<!-- Expando -->
-
-		<action path="/expando/edit_expando" type="com.liferay.portlet.expando.action.EditExpandoAction">
-			<forward name="portlet.expando.edit_expando" path="portlet.expando.edit_expando" />
-			<forward name="portlet.expando.error" path="portlet.expando.error" />
-		</action>
-
-		<action path="/expando/view" forward="portlet.expando.view" />
-
-		<action path="/expando/view_attributes" forward="portlet.expando.view_attributes" />
-
 		<!-- Export Import -->
 
 		<action path="/export_import/confirmation" type="com.liferay.portlet.exportimport.action.ConfirmationExportImportConfigurationAction">
@@ -507,29 +483,6 @@
 			<forward name="portlet.iframe.view" path="portlet.iframe.view" />
 		</action>
 
-		<!-- Group Pages -->
-
-		<action path="/group_pages/add_layout" forward="portlet.layouts_admin.add_layout" />
-
-		<action path="/group_pages/edit_layout_set" type="com.liferay.portlet.layoutsadmin.action.EditLayoutSetAction">
-			<forward name="portlet.layouts_admin.edit_layouts" path="portlet.layouts_admin.edit_layouts" />
-			<forward name="portlet.layouts_admin.error" path="portlet.layouts_admin.error" />
-		</action>
-
-		<action path="/group_pages/edit_layouts" type="com.liferay.portlet.grouppages.action.EditLayoutsAction">
-			<forward name="portlet.layouts_admin.edit_layouts" path="portlet.layouts_admin.edit_layouts" />
-			<forward name="portlet.layouts_admin.error" path="portlet.layouts_admin.error" />
-		</action>
-
-		<action path="/group_pages/get_layouts" type="com.liferay.portlet.layoutsadmin.action.GetLayoutsAction" />
-
-		<action path="/group_pages/mobile_device_rules" type="com.liferay.portlet.layoutsadmin.action.MobileDeviceRulesAction">
-			<forward name="portlet.layouts_admin.edit_layouts" path="portlet.layouts_admin.edit_layouts" />
-			<forward name="portlet.layouts_admin.error" path="portlet.layouts_admin.error" />
-		</action>
-
-		<action path="/group_pages/sitemap" type="com.liferay.portlet.layoutsadmin.action.SitemapAction" />
-
 		<!-- Image Gallery Display -->
 
 		<action path="/image_gallery_display/edit_folder" type="com.liferay.portlet.documentlibrary.action.EditFolderAction">
@@ -587,25 +540,6 @@
 
 		<action path="/invitation/view" type="com.liferay.portlet.invitation.action.ViewAction">
 			<forward name="portlet.invitation.view" path="portlet.invitation.view" />
-		</action>
-
-		<!-- Layouts Admin -->
-
-		<action path="/layouts_admin/add_layout" forward="portlet.layouts_admin.add_layout" />
-
-		<action path="/layouts_admin/edit_layout_set" type="com.liferay.portlet.layoutsadmin.action.EditLayoutSetAction">
-			<forward name="portlet.layouts_admin.edit_layouts" path="portlet.layouts_admin.edit_layouts" />
-			<forward name="portlet.layouts_admin.error" path="portlet.layouts_admin.error" />
-		</action>
-
-		<action path="/layouts_admin/edit_layouts" type="com.liferay.portlet.layoutsadmin.action.EditLayoutsAction">
-			<forward name="portlet.layouts_admin.edit_layouts" path="portlet.layouts_admin.edit_layouts" />
-			<forward name="portlet.layouts_admin.error" path="portlet.layouts_admin.error" />
-		</action>
-
-		<action path="/layouts_admin/mobile_device_rules" type="com.liferay.portlet.layoutsadmin.action.MobileDeviceRulesAction">
-			<forward name="portlet.layouts_admin.edit_layouts" path="portlet.layouts_admin.edit_layouts" />
-			<forward name="portlet.layouts_admin.error" path="portlet.layouts_admin.error" />
 		</action>
 
 		<!-- Login -->
@@ -858,23 +792,6 @@
 			<forward name="portlet.my_account.view" path="portlet.my_account.view" />
 		</action>
 
-		<!-- My Pages -->
-
-		<action path="/my_pages/edit_layout_set" type="com.liferay.portlet.layoutsadmin.action.EditLayoutSetAction">
-			<forward name="portlet.layouts_admin.edit_layouts" path="portlet.layouts_admin.edit_layouts" />
-			<forward name="portlet.layouts_admin.error" path="portlet.layouts_admin.error" />
-		</action>
-
-		<action path="/my_pages/edit_layouts" type="com.liferay.portlet.layoutsadmin.action.EditLayoutsAction">
-			<forward name="portlet.layouts_admin.edit_layouts" path="portlet.layouts_admin.edit_layouts" />
-			<forward name="portlet.layouts_admin.error" path="portlet.layouts_admin.error" />
-		</action>
-
-		<action path="/my_pages/view" type="com.liferay.portlet.mypages.action.ViewAction">
-			<forward name="portlet.my_pages.edit_layouts" path="portlet.layouts_admin.edit_layouts" />
-			<forward name="portlet.my_pages.view" path="portlet.my_account.view" />
-		</action>
-
 		<!-- News -->
 
 		<action path="/news/edit" type="com.liferay.portlet.news.action.EditPreferencesAction">
@@ -911,53 +828,6 @@
 		</action>
 
 		<action path="/plugins_admin/view" forward="portlet.plugins_admin.view" />
-
-		<!-- Portlet Configuration -->
-
-		<action path="/portlet_configuration/add_group_statistics_activity_counter" forward="portlet.group_statistics.add_activity_counter" />
-
-		<action path="/portlet_configuration/add_user_statistics_activity_counter" forward="portlet.user_statistics.add_activity_counter" />
-
-		<action path="/portlet_configuration/delete_background_task" type="com.liferay.portlet.backgroundtask.action.DeleteBackgroundTaskAction" />
-
-		<action path="/portlet_configuration/edit_archived_setups" type="com.liferay.portlet.portletconfiguration.action.EditArchivedSetupsAction">
-			<forward name="portlet.portlet_configuration.edit_archived_setups" path="portlet.portlet_configuration.edit_archived_setups" />
-			<forward name="portlet.portlet_configuration.error" path="portlet.portlet_configuration.error" />
-		</action>
-
-		<action path="/portlet_configuration/edit_configuration" type="com.liferay.portlet.portletconfiguration.action.EditConfigurationAction">
-			<forward name="portlet.portlet_configuration.edit_configuration" path="portlet.portlet_configuration.edit_configuration" />
-			<forward name="portlet.portlet_configuration.error" path="portlet.portlet_configuration.error" />
-		</action>
-
-		<action path="/portlet_configuration/edit_permissions" type="com.liferay.portlet.portletconfiguration.action.EditPermissionsAction">
-			<forward name="portlet.portlet_configuration.edit_permissions" path="portlet.portlet_configuration.edit_permissions" />
-			<forward name="portlet.portlet_configuration.error" path="portlet.portlet_configuration.error" />
-		</action>
-
-		<action path="/portlet_configuration/edit_public_render_parameters" type="com.liferay.portlet.portletconfiguration.action.EditPublicRenderParametersAction">
-			<forward name="portlet.portlet_configuration.edit_public_render_parameters" path="portlet.portlet_configuration.edit_public_render_parameters" />
-			<forward name="portlet.portlet_configuration.error" path="portlet.portlet_configuration.error" />
-		</action>
-
-		<action path="/portlet_configuration/edit_scope" type="com.liferay.portlet.portletconfiguration.action.EditScopeAction">
-			<forward name="portlet.portlet_configuration.edit_scope" path="portlet.portlet_configuration.edit_scope" />
-			<forward name="portlet.portlet_configuration.error" path="portlet.portlet_configuration.error" />
-		</action>
-
-		<action path="/portlet_configuration/edit_sharing" type="com.liferay.portlet.portletconfiguration.action.EditSharingAction">
-			<forward name="portlet.portlet_configuration.edit_sharing" path="portlet.portlet_configuration.edit_sharing" />
-			<forward name="portlet.portlet_configuration.error" path="portlet.portlet_configuration.error" />
-		</action>
-
-		<action path="/portlet_configuration/edit_supported_clients" type="com.liferay.portlet.portletconfiguration.action.EditSupportedClientsAction">
-			<forward name="portlet.portlet_configuration.edit_supported_clients" path="portlet.portlet_configuration.edit_supported_clients" />
-			<forward name="portlet.portlet_configuration.error" path="portlet.portlet_configuration.error" />
-		</action>
-
-		<action path="/portlet_configuration/select_organization" forward="portlet.users_admin.select_organization" />
-
-		<action path="/portlet_configuration/update_title" type="com.liferay.portlet.portletconfiguration.action.UpdateTitleAction" />
 
 		<!-- Portlet Sharing -->
 
@@ -996,13 +866,6 @@
 			<forward name="portlet.roles_admin.error" path="portlet.roles_admin.error" />
 		</action>
 
-		<action path="/roles_admin/edit_user" type="com.liferay.portlet.usersadmin.action.EditUserAction">
-			<forward name="portlet.users_admin.edit_user" path="portlet.users_admin.edit_user" />
-			<forward name="portlet.users_admin.error" path="portlet.users_admin.error" />
-		</action>
-
-		<action path="/roles_admin/select_organization" forward="portlet.users_admin.select_organization" />
-
 		<action path="/roles_admin/select_organization_role" forward="portlet.roles_admin.select_organization_role" />
 
 		<action path="/roles_admin/select_regular_role" forward="portlet.roles_admin.select_regular_role" />
@@ -1010,8 +873,6 @@
 		<action path="/roles_admin/select_site_role" forward="portlet.roles_admin.select_site_role" />
 
 		<action path="/roles_admin/view" forward="portlet.roles_admin.view" />
-
-		<action path="/roles_admin/view_users" forward="portlet.users_admin.view" />
 
 		<!-- Shopping -->
 

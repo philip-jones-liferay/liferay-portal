@@ -16,6 +16,8 @@ package com.liferay.portlet.usersadmin.util;
 
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.BaseIndexer;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.BooleanQuery;
@@ -25,10 +27,12 @@ import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.search.Summary;
 import com.liferay.portal.kernel.search.WildcardQuery;
-import com.liferay.portal.kernel.search.WildcardQueryFactoryUtil;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.QueryFilter;
+import com.liferay.portal.kernel.search.filter.TermsFilter;
+import com.liferay.portal.kernel.search.generic.WildcardQueryImpl;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -88,15 +92,14 @@ public class OrganizationIndexer extends BaseIndexer {
 			"excludedOrganizationIds");
 
 		if (ListUtil.isNotEmpty(excludedOrganizationIds)) {
-			BooleanFilter booleanFilter = new BooleanFilter();
+			TermsFilter termsFilter = new TermsFilter("organizationId");
 
-			for (long excludedOrganizationId : excludedOrganizationIds) {
-				booleanFilter.addTerm(
-					"organizationId", String.valueOf(excludedOrganizationId));
-			}
+			termsFilter.addValues(
+				ArrayUtil.toStringArray(
+					excludedOrganizationIds.toArray(
+						new Long[excludedOrganizationIds.size()])));
 
-			contextBooleanFilter.add(
-				booleanFilter, BooleanClauseOccur.MUST_NOT);
+			contextBooleanFilter.add(termsFilter, BooleanClauseOccur.MUST_NOT);
 		}
 
 		List<Organization> organizationsTree = (List<Organization>)params.get(
@@ -108,8 +111,8 @@ public class OrganizationIndexer extends BaseIndexer {
 			for (Organization organization : organizationsTree) {
 				String treePath = organization.buildTreePath();
 
-				WildcardQuery wildcardQuery = WildcardQueryFactoryUtil.create(
-					searchContext, Field.TREE_PATH, treePath);
+				WildcardQuery wildcardQuery = new WildcardQueryImpl(
+					Field.TREE_PATH, treePath);
 
 				booleanFilter.add(new QueryFilter(wildcardQuery));
 			}
@@ -296,14 +299,22 @@ public class OrganizationIndexer extends BaseIndexer {
 			new ActionableDynamicQuery.PerformActionMethod() {
 
 				@Override
-				public void performAction(Object object)
-					throws PortalException {
-
+				public void performAction(Object object) {
 					Organization organization = (Organization)object;
 
-					Document document = getDocument(organization);
+					try {
+						Document document = getDocument(organization);
 
-					actionableDynamicQuery.addDocument(document);
+						actionableDynamicQuery.addDocument(document);
+					}
+					catch (PortalException pe) {
+						if (_log.isWarnEnabled()) {
+							_log.warn(
+								"Unable to index organization " +
+									organization.getOrganizationId(),
+								pe);
+						}
+					}
 				}
 
 			});
@@ -311,5 +322,8 @@ public class OrganizationIndexer extends BaseIndexer {
 
 		actionableDynamicQuery.performActions();
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		OrganizationIndexer.class);
 
 }

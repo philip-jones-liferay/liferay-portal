@@ -36,6 +36,7 @@ import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.search.Summary;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
+import com.liferay.portal.kernel.search.filter.TermsFilter;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
@@ -153,7 +154,7 @@ public class WikiPageIndexer
 		long[] nodeIds = searchContext.getNodeIds();
 
 		if (ArrayUtil.isNotEmpty(nodeIds)) {
-			BooleanFilter nodesIdBooleanFilter = new BooleanFilter();
+			TermsFilter nodesIdTermsFilter = new TermsFilter(Field.NODE_ID);
 
 			for (long nodeId : nodeIds) {
 				try {
@@ -161,18 +162,18 @@ public class WikiPageIndexer
 				}
 				catch (Exception e) {
 					if (_log.isDebugEnabled()) {
-						_log.debug("Unable to get node " + nodeId, e);
+						_log.debug("Unable to get wiki node " + nodeId, e);
 					}
 
 					continue;
 				}
 
-				nodesIdBooleanFilter.addTerm(Field.NODE_ID, nodeId);
+				nodesIdTermsFilter.addValue(String.valueOf(nodeId));
 			}
 
-			if (nodesIdBooleanFilter.hasClauses()) {
+			if (!nodesIdTermsFilter.isEmpty()) {
 				contextBooleanFilter.add(
-					nodesIdBooleanFilter, BooleanClauseOccur.MUST);
+					nodesIdTermsFilter, BooleanClauseOccur.MUST);
 			}
 		}
 	}
@@ -321,14 +322,21 @@ public class WikiPageIndexer
 			new ActionableDynamicQuery.PerformActionMethod() {
 
 				@Override
-				public void performAction(Object object)
-					throws PortalException {
-
+				public void performAction(Object object) {
 					WikiPage page = (WikiPage)object;
 
-					Document document = getDocument(page);
+					try {
+						Document document = getDocument(page);
 
-					actionableDynamicQuery.addDocument(document);
+						actionableDynamicQuery.addDocument(document);
+					}
+					catch (PortalException pe) {
+						if (_log.isWarnEnabled()) {
+							_log.warn(
+								"Unable to index wiki page " + page.getPageId(),
+								pe);
+						}
+					}
 				}
 
 			});

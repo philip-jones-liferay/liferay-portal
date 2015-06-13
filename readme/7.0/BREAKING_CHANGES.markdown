@@ -20,7 +20,7 @@ feature or API will be dropped in an upcoming version.
 replaces an old API, in spite of the old API being kept in Liferay Portal for
 backwards compatibility.
 
-*This document has been reviewed through commit `1e1103f`.*
+*This document has been reviewed through commit `92185c4`.*
 
 ## Breaking Changes Contribution Guidelines
 
@@ -1518,7 +1518,7 @@ change is used for the blog abstract field.
 
 ---------------------------------------
 
-### Moved the Contact Name Exception Classes to Inner classes of ContactNameException
+### Moved the Contact Name Exception Classes to Inner Classes of ContactNameException
 - **Date:** 2015-May-05
 - **JIRA Ticket:** LPS-55364
 
@@ -1619,7 +1619,7 @@ API from the Document Library, as a part of the portal modularization effort.
 
 ---------------------------------------
 
-### Removed addFileEntry method from DLAppHelperLocalService
+### Removed addFileEntry Method from DLAppHelperLocalService
 - **Date:** 2015-May-20
 - **JIRA Ticket:** LPS-47645
 
@@ -1759,7 +1759,7 @@ Old code:
 New code:
 
     if (mbMessageIndexer instanceof RelatedEntryIndexer) {
-        RelatedEntryIndexer relatedEntryIndexer = 
+        RelatedEntryIndexer relatedEntryIndexer =
             (RelatedEntryIndexer)mbMessageIndexer;
 
         relatedEntryIndexer.addRelatedEntryFields(...);
@@ -1778,7 +1778,7 @@ Old code:
 New code:
 
     if (journalIndexer instanceof DDMStructureIndexer) {
-        DDMStructureIndexer ddmStructureIndexer = 
+        DDMStructureIndexer ddmStructureIndexer =
             (DDMStructureIndexer)journalIndexer;
 
         ddmStructureIndexer.reindexDDMStructures(...);
@@ -1791,7 +1791,6 @@ Old code:
 
     mbMessageIndexer.getQueryString(...);
 
-
 New code:
 
     SearchEngineUtil.getQueryString(...);
@@ -1802,3 +1801,170 @@ The `addRelatedEntryFields` and `reindexDDMStructures` methods were not related
 to core indexing functions. They were functions of specialized indexers.
 
 The `getQueryString` method was an unnecessary convenience method.
+
+---------------------------------------
+
+### Removed mbMessages and fileEntryTuples Attributes from app-view-search-entry Tag
+- **Date:** 2015-May-27
+- **JIRA Ticket:** LPS-55886
+
+#### What changed?
+
+The `mbMessages` and `fileEntryTuples` attributes from the
+`app-view-search-entry` tag have been removed. Related methods `getMbMessages`,
+`getFileEntryTuples`, and `addMbMessage` have also been removed from the
+`SearchResult` class.
+
+#### Who is affected?
+
+This affects developers that use the `app-view-search-entry` tag in their views,
+have developed hooks to customize the tag JSP, or have developed a portlet that
+uses that tag. Also, any custom code that uses the `SearchResult` class may be
+affected.
+
+#### How should I update my code?
+
+The new attributes `commentRelatedSearchResults` and
+`fileEntryRelatedSearchResults` should be used instead. The expected value is
+the one returned by the `getCommentRelatedSearchResults` and
+`getFileEntryRelatedSearchResults` methods in `SearchResult`.
+
+When adding comments to the `SearchResult`, the new `addComment` method should
+be used instead of the `addMbMessage` method.
+
+#### Why was this change made?
+
+As part of the modularization efforts, references to `MBMessage` needed to be
+removed for the Message Boards portlet to be placed into its own OSGi bundle.
+
+---------------------------------------
+
+### Replaced Method getPermissionQuery with getPermissionFilter in SearchPermissionChecker, and getFacetQuery with getFacetBooleanFilter in Indexer
+- **Date:** 2015-Jun-02
+- **JIRA Ticket:** LPS-56064
+
+#### What changed?
+
+Method `SearchPermissionChecker.getPermissionQuery(
+long, long[], long, String, Query, SearchContext)`
+has been replaced by `SearchPermissionChecker.getPermissionBooleanFilter(
+long, long[], long, String, BooleanFilter, SearchContext)`.
+
+Method `Indexer.getFacetQuery(String, SearchContext)` has been replaced by
+`Indexer.getFacetBooleanFilter(String, SearchContext)`.
+
+#### Who is affected?
+
+This affects any code that invokes the affected methods, as well as any code
+that implements the interface methods.
+
+#### How should I update my code?
+
+Any code calling/implementing `SearchPermissionChecker.getPermissionQuery(...)`
+should instead call/implement
+`SearchPermissionChecker.getPermissionBooleanFilter(...)`.
+
+Any code calling/implementing `Indexer.getFacetQuery(...)` should instead
+call/implement `Indexer.getFacetBooleanFilter(...)`.
+
+#### Why was this change made?
+
+Permission constraints placed on search should not affect the score for returned
+search results.  Thus, these constraints should be applied as search filters.
+`SearchPermissionChecker` is also a very deep internal interface within the
+permission system.  Thus, to limit confusion in the logic for maintainability,
+the `SearchPermissionChecker.getPermissionQuery(...)` method was removed as
+opposed to deprecated.
+
+Similarly, constraints applied to facets should not affect the scoring or facet
+counts. Since `Indexer.getFacetQuery(...)` was only utilized by the
+`AssetEntriesFacet`, and used to reduce the impact of changes for
+`SearchPermissionChecker.getPermissionBooleanFilter(...)`, the method was
+removed as opposed to deprecated.
+
+---------------------------------------
+
+### Added userId Parameter to Update Operations of DDMStructureLocalService and DDMTemplateLocalService
+- **Date:** 2015-Jun-05
+- **JIRA Ticket:** LPS-50939
+
+#### What changed?
+
+A new parameter `userId` has been added to the `updateStructure` and
+`updateTemplate` methods of the `DDMStructureLocalService` and
+`DDMTemplateLocalService` classes, respectively.
+
+#### Who is affected?
+
+This affects any code that invokes the affected methods, as well as any code
+that implements the interface methods.
+
+#### How should I update my code?
+
+Any code calling/implementing
+`DDMStructureLocalServiceUtil.updateStructure(...)` or
+`DDMTemplateLocalServiceUtil.updateTemplate(...)` should pass the new `userId`
+parameter.
+
+#### Why was this change made?
+
+For the service to keep track of which user is modifying the structure or
+template, the `userId` parameter was required. In order to add support to
+structure and template versions, audit columns were also added to such models.
+
+---------------------------------------
+
+### Removed Method getEntries from DL, DLImpl, and DLUtil Classes
+- **Date:** 2015-Jun-10
+- **JIRA Ticket:** LPS-56247
+
+#### What changed?
+
+The method `getEntries` has been removed from the `DL`, `DLImpl`, and `DLUtil`
+classes.
+
+#### Who is affected?
+
+This affects any caller of the `getEntries` method.
+
+#### How should I update my code?
+
+You may use the `SearchResultUtil` class to process the search results. Note
+that this class is not completely equivalent; if you need exactly the same
+behavior as the removed method, you will need to add custom code.
+
+#### Why was this change made?
+
+The `getEntries` method was no longer used, and contained hardcoded references
+to classes that will be moved into OSGi bundles.
+
+---------------------------------------
+
+### Removed WikiUtil.getEntries Method
+- **Date:** 2015-Jun-10
+- **JIRA Ticket:** LPS-56242
+
+#### What changed?
+
+The method `getEntries()` has been removed from class `WikiUtil`.
+
+#### Who is affected?
+
+Any JSP hook or ext plugin that uses this method is affected. As the class was
+located in portal-impl, regular portlets and other safe extension points won't
+be affected.
+
+#### How should I update my code?
+
+You should review the JSP or ext plugin, updating it to remove any reference to
+the new class and mimicking the original JSP code. In case you need equivalent
+functionality to the one provided by `WikiUtil.getEntries()` you may use the
+`SearchResultUtil` class. While not totally equivalent, it offers similar
+functionality.
+
+#### Why was this change made?
+
+The `WikiUtil.getEntries()` method was no longer used, and it contained
+hardcoded references to classes that will be moved into OSGi modules.
+
+---------------------------------------

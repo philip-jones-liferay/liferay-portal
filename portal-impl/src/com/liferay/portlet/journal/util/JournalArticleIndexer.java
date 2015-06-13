@@ -22,7 +22,6 @@ import com.liferay.portal.kernel.portlet.PortletRequestModel;
 import com.liferay.portal.kernel.search.BaseIndexer;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.BooleanQuery;
-import com.liferay.portal.kernel.search.BooleanQueryFactoryUtil;
 import com.liferay.portal.kernel.search.DDMStructureIndexer;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.DocumentImpl;
@@ -34,6 +33,7 @@ import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.search.Summary;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.QueryFilter;
+import com.liferay.portal.kernel.search.generic.BooleanQueryImpl;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.Constants;
@@ -178,8 +178,7 @@ public class JournalArticleIndexer
 					ddmStructureFieldValue, structure.getFieldType(fieldName));
 			}
 
-			BooleanQuery booleanQuery = BooleanQueryFactoryUtil.create(
-				searchContext);
+			BooleanQuery booleanQuery = new BooleanQueryImpl();
 
 			booleanQuery.addRequiredTerm(
 				ddmStructureFieldName,
@@ -342,8 +341,7 @@ public class JournalArticleIndexer
 		Map<String, Query> queries = new HashMap<>();
 
 		if (Validator.isNull(searchContext.getKeywords())) {
-			BooleanQuery localizedQuery = BooleanQueryFactoryUtil.create(
-				searchContext);
+			BooleanQuery localizedQuery = new BooleanQueryImpl();
 
 			Query query = localizedQuery.addTerm(field, value, like);
 
@@ -743,9 +741,7 @@ public class JournalArticleIndexer
 			new ActionableDynamicQuery.PerformActionMethod() {
 
 				@Override
-				public void performAction(Object object)
-					throws PortalException {
-
+				public void performAction(Object object) {
 					JournalArticle article = (JournalArticle)object;
 
 					if (!PropsValues.JOURNAL_ARTICLE_INDEX_ALL_VERSIONS) {
@@ -760,9 +756,19 @@ public class JournalArticleIndexer
 						article = latestIndexableArticle;
 					}
 
-					Document document = getDocument(article);
+					try {
+						Document document = getDocument(article);
 
-					actionableDynamicQuery.addDocument(document);
+						actionableDynamicQuery.addDocument(document);
+					}
+					catch (PortalException pe) {
+						if (_log.isWarnEnabled()) {
+							_log.warn(
+								"Unable to index journal article " +
+									article.getId(),
+								pe);
+						}
+					}
 				}
 
 			});

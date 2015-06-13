@@ -880,28 +880,31 @@ AUI.add(
 
 						instance.setPercentUploaded(0);
 
-						Liferay.Util.selectEntity(
+						var itemSelectorDialog = new A.LiferayItemSelectorDialog(
 							{
-								dialog: {
-									constrain: true,
-									destroyOnHide: true,
-									modal: true
-								},
 								eventName: portletNamespace + 'selectDocumentLibrary',
-								id: portletNamespace + 'selectDocumentLibrary',
-								title: Liferay.Language.get('select-document'),
-								uri: instance.getDocumentLibraryURL()
-							},
-							function(event) {
-								instance.setValue(
-									{
-										groupId: event.groupid,
-										title: event.title,
-										uuid: event.uuid
+								on: {
+									selectedItemChange: function(event) {
+										var selectedItem = event.newVal;
+
+										if (selectedItem) {
+											var itemValue = JSON.parse(selectedItem.value);
+
+											instance.setValue(
+												{
+													groupId: itemValue.groupId,
+													title: itemValue.title,
+													uuid: itemValue.uuid
+												}
+											);
+										}
 									}
-								);
+								},
+								url: instance.getDocumentLibraryURL()
 							}
 						);
+
+						itemSelectorDialog.open();
 					},
 
 					_handleUploadButtonClick: function(event) {
@@ -917,32 +920,15 @@ AUI.add(
 
 						var portletURL = Liferay.PortletURL.createRenderURL();
 
-						portletURL.setParameter('javax.portlet.action', 'showItemSelector');
-						portletURL.setParameter('criteria', 'com.liferay.document.library.item.selector.web.DLItemSelectorCriterion');
+						portletURL.setParameter('criteria', 'com.liferay.item.selector.criteria.image.criterion.ImageItemSelectorCriterion');
 						portletURL.setParameter('itemSelectedEventName', portletNamespace + 'selectDocumentLibrary');
+						portletURL.setParameter('repositoryId', instance.get('doAsGroupId'));
 
 						var criterionJSON = {
-							desiredReturnTypes:
+							desiredItemSelectorReturnTypes:
 								[
-									'java.net.URL',
-									'com.liferay.portal.kernel.repository.model.FileEntry'
-								],
-							folderId: 0,
-							mimeTypes:
-								[
-									'image\/bmp',
-									'image\/gif',
-									'image\/jpeg',
-									'image\/pjpeg',
-									'image\/png',
-									'image\/tiff',
-									'image\/x-citrix-jpeg',
-									'image\/x-citrix-png',
-									'image\/x-ms-bmp',
-									'image\/x-png',
-									'image\/x-tiff'
-								],
-							repositoryId: Lang.toInt(themeDisplay.getScopeGroupId())
+									'FILE_ENTRY'
+								]
 						};
 
 						portletURL.setParameter('0_json', JSON.stringify(criterionJSON));
@@ -1702,6 +1688,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-base', 'aui-datatype', 'aui-image-viewer', 'aui-io-request', 'aui-parse-content', 'aui-set', 'aui-sortable-list', 'json', 'liferay-map-base', 'liferay-notice', 'liferay-portlet-url', 'liferay-translation-manager', 'uploader']
+		requires: ['aui-base', 'aui-datatype', 'aui-image-viewer', 'aui-io-request', 'aui-parse-content', 'aui-set', 'aui-sortable-list', 'json', 'liferay-item-selector-dialog', 'liferay-map-base', 'liferay-notice', 'liferay-portlet-url', 'liferay-translation-manager', 'uploader']
 	}
 );

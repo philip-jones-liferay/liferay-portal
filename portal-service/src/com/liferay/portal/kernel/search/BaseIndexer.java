@@ -28,6 +28,9 @@ import com.liferay.portal.kernel.search.facet.ScopeFacet;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.search.filter.QueryFilter;
+import com.liferay.portal.kernel.search.filter.TermsFilter;
+import com.liferay.portal.kernel.search.generic.BooleanQueryImpl;
+import com.liferay.portal.kernel.search.generic.MatchAllQuery;
 import com.liferay.portal.kernel.search.hits.HitsProcessor;
 import com.liferay.portal.kernel.search.hits.HitsProcessorRegistryUtil;
 import com.liferay.portal.kernel.trash.TrashHandler;
@@ -75,7 +78,9 @@ import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
 import com.liferay.portlet.expando.model.ExpandoBridge;
+import com.liferay.portlet.expando.model.ExpandoColumn;
 import com.liferay.portlet.expando.model.ExpandoColumnConstants;
+import com.liferay.portlet.expando.service.ExpandoColumnLocalServiceUtil;
 import com.liferay.portlet.expando.util.ExpandoBridgeFactoryUtil;
 import com.liferay.portlet.expando.util.ExpandoBridgeIndexerUtil;
 import com.liferay.portlet.ratings.model.RatingsStats;
@@ -601,6 +606,38 @@ public abstract class BaseIndexer implements Indexer {
 		return search(searchContext);
 	}
 
+	@Override
+	public long searchCount(SearchContext searchContext)
+		throws SearchException {
+
+		PermissionChecker permissionChecker =
+			PermissionThreadLocal.getPermissionChecker();
+
+		if ((permissionChecker != null) &&
+			isUseSearchResultPermissionFilter(searchContext)) {
+
+			Hits hits = search(searchContext);
+
+			return hits.getLength();
+		}
+
+		QueryConfig queryConfig = searchContext.getQueryConfig();
+
+		queryConfig.setHighlightEnabled(false);
+		queryConfig.setHitsProcessingEnabled(false);
+		queryConfig.setScoreEnabled(false);
+		queryConfig.setQueryIndexingEnabled(false);
+		queryConfig.setQuerySuggestionEnabled(false);
+
+		searchContext.setSearchEngineId(getSearchEngineId());
+
+		BooleanQuery fullQuery = getFullQuery(searchContext);
+
+		fullQuery.setQueryConfig(queryConfig);
+
+		return SearchEngineUtil.searchCount(searchContext, fullQuery);
+	}
+
 	public void setCommitImmediately(boolean commitImmediately) {
 		_commitImmediately = commitImmediately;
 	}
@@ -740,8 +777,7 @@ public abstract class BaseIndexer implements Indexer {
 			Collection<Facet> facets)
 		throws ParseException {
 
-		BooleanQuery facetBooleanQuery = BooleanQueryFactoryUtil.create(
-			searchContext);
+		BooleanQuery facetBooleanQuery = new BooleanQueryImpl();
 
 		for (Facet facet : facets) {
 			BooleanClause<Query> facetBooleanClause = facet.getFacetClause();
@@ -867,18 +903,18 @@ public abstract class BaseIndexer implements Indexer {
 
 		long[] classTypeIds = searchContext.getClassTypeIds();
 
-		if ((classTypeIds == null) || (classTypeIds.length <= 0)) {
+		if (ArrayUtil.isEmpty(classTypeIds)) {
 			return null;
 		}
 
-		BooleanFilter classTypeIdsBooleanFilter = new BooleanFilter();
+		TermsFilter classTypeIdsTermsFilter = new TermsFilter(
+			Field.CLASS_TYPE_ID);
 
-		for (long classTypeId : classTypeIds) {
-			classTypeIdsBooleanFilter.addTerm(Field.CLASS_TYPE_ID, classTypeId);
-		}
+		classTypeIdsTermsFilter.addValues(
+			ArrayUtil.toStringArray(classTypeIds));
 
 		return contextBooleanFilter.add(
-			classTypeIdsBooleanFilter, BooleanClauseOccur.MUST);
+			classTypeIdsTermsFilter, BooleanClauseOccur.MUST);
 	}
 
 	protected void addSearchEntryClassNames(
@@ -913,8 +949,8 @@ public abstract class BaseIndexer implements Indexer {
 				properties.getProperty(ExpandoColumnConstants.INDEX_TYPE));
 
 			if (indexType != ExpandoColumnConstants.INDEX_TYPE_NONE) {
-				String fieldName = ExpandoBridgeIndexerUtil.encodeFieldName(
-					attributeName);
+				String fieldName = getExpandoFieldName(
+					searchContext, expandoBridge, attributeName);
 
 				if (Validator.isNotNull(keywords)) {
 					if (searchContext.isAndSearch()) {
@@ -1109,26 +1145,12 @@ public abstract class BaseIndexer implements Indexer {
 		}
 	}
 
-	protected void addStagingGroupKeyword(Document document, long groupId)
-		throws Exception {
-
+	protected void addStagingGroupKeyword(Document document, long groupId) {
 		if (!isStagingAware()) {
 			return;
 		}
 
-		boolean stagingGroup = false;
-
-		Group group = GroupLocalServiceUtil.getGroup(groupId);
-
-		if (group.isLayout()) {
-			group = GroupLocalServiceUtil.getGroup(group.getParentGroupId());
-		}
-
-		if (group.isStagingGroup()) {
-			stagingGroup = true;
-		}
-
-		document.addKeyword(Field.STAGING_GROUP, stagingGroup);
+		document.addKeyword(Field.STAGING_GROUP, isStagingGroup(groupId));
 	}
 
 	protected void addStatus(
@@ -1229,8 +1251,7 @@ public abstract class BaseIndexer implements Indexer {
 			BooleanFilter fullQueryBooleanFilter, SearchContext searchContext)
 		throws Exception {
 
-		BooleanQuery searchQuery = BooleanQueryFactoryUtil.create(
-			searchContext);
+		BooleanQuery searchQuery = new BooleanQueryImpl();
 
 		addSearchKeywords(searchQuery, searchContext);
 		postProcessSearchQuery(
@@ -1267,8 +1288,7 @@ public abstract class BaseIndexer implements Indexer {
 				facetBooleanFilter, BooleanClauseOccur.MUST);
 		}
 
-		BooleanQuery fullBooleanQuery = BooleanQueryFactoryUtil.create(
-			searchContext);
+		BooleanQuery fullBooleanQuery = new BooleanQueryImpl();
 
 		if (fullQueryBooleanFilter.hasClauses()) {
 			fullBooleanQuery.setPreBooleanFilter(fullQueryBooleanFilter);
@@ -1398,7 +1418,15 @@ public abstract class BaseIndexer implements Indexer {
 
 		searchContext.setSearchEngineId(getSearchEngineId());
 
-		BooleanQuery fullQuery = getFullQuery(searchContext);
+		Query fullQuery = getFullQuery(searchContext);
+
+		if (!fullQuery.hasChildren()) {
+			BooleanFilter preBooleanFilter = fullQuery.getPreBooleanFilter();
+
+			fullQuery = new MatchAllQuery();
+
+			fullQuery.setPreBooleanFilter(preBooleanFilter);
+		}
 
 		QueryConfig queryConfig = searchContext.getQueryConfig();
 
@@ -1538,6 +1566,28 @@ public abstract class BaseIndexer implements Indexer {
 		return _defaultSelectedLocalizedFieldNames;
 	}
 
+	protected String getExpandoFieldName(
+		SearchContext searchContext, ExpandoBridge expandoBridge,
+		String attributeName) {
+
+		ExpandoColumn expandoColumn =
+			ExpandoColumnLocalServiceUtil.getDefaultTableColumn(
+				expandoBridge.getCompanyId(), expandoBridge.getClassName(),
+				attributeName);
+
+		String fieldName = ExpandoBridgeIndexerUtil.encodeFieldName(
+			attributeName);
+
+		if (expandoColumn.getType() ==
+				ExpandoColumnConstants.STRING_LOCALIZED) {
+
+			fieldName = DocumentImpl.getLocalizedName(
+				searchContext.getLocale(), fieldName);
+		}
+
+		return fieldName;
+	}
+
 	protected Locale getLocale(PortletRequest portletRequest) {
 		if (portletRequest != null) {
 			return portletRequest.getLocale();
@@ -1568,23 +1618,33 @@ public abstract class BaseIndexer implements Indexer {
 		return StringPool.BLANK;
 	}
 
-	protected long getSiteGroupId(long groupId) {
-		long siteGroupId = groupId;
+	protected Group getSiteGroup(long groupId) {
+		Group group = null;
 
 		try {
-			Group group = GroupLocalServiceUtil.getGroup(groupId);
+			group = GroupLocalServiceUtil.getGroup(groupId);
 
 			if (group.isLayout()) {
-				siteGroupId = group.getParentGroupId();
+				group = group.getParentGroup();
 			}
 		}
-		catch (Exception e) {
+		catch (PortalException pe) {
 			if (_log.isDebugEnabled()) {
-				_log.debug("Unable to retrieve site group", e);
+				_log.debug("Unable to get site group", pe);
 			}
 		}
 
-		return siteGroupId;
+		return group;
+	}
+
+	protected long getSiteGroupId(long groupId) {
+		Group group = getSiteGroup(groupId);
+
+		if (group == null) {
+			return groupId;
+		}
+
+		return group.getGroupId();
 	}
 
 	protected Locale getSnippetLocale(Document document, Locale locale) {
@@ -1609,6 +1669,16 @@ public abstract class BaseIndexer implements Indexer {
 		}
 
 		return null;
+	}
+
+	protected boolean isStagingGroup(long groupId) {
+		Group group = getSiteGroup(groupId);
+
+		if (group == null) {
+			return false;
+		}
+
+		return group.isStagingGroup();
 	}
 
 	protected boolean isUseSearchResultPermissionFilter(

@@ -440,18 +440,18 @@ if (inlineEdit && Validator.isNotNull(inlineEditSaveURL)) {
 		<c:if test="<%= allowBrowseDocuments %>">
 
 			<%
-			ItemSelectorCriterion layoutItemSelectorCriterion = new LayoutItemSelectorCriterion(themeDisplay.getScopeGroupId());
+			ItemSelectorCriterion urlItemSelectorCriterion = new URLItemSelectorCriterion();
 
-			Set<Class<?>> desiredReturnTypes = new HashSet<Class<?>>();
+			Set<ItemSelectorReturnType> desiredItemSelectorReturnTypes = new HashSet<ItemSelectorReturnType>();
 
-			desiredReturnTypes.add(URL.class);
+			desiredItemSelectorReturnTypes.add(DefaultItemSelectorReturnType.URL);
 
-			layoutItemSelectorCriterion.setDesiredReturnTypes(desiredReturnTypes);
+			urlItemSelectorCriterion.setDesiredItemSelectorReturnTypes(desiredItemSelectorReturnTypes);
 
-			PortletURL layoutItemSelectorURL = itemSelector.getItemSelectorURL(liferayPortletResponse, name + "selectItem", layoutItemSelectorCriterion);
+			PortletURL urlItemSelectorURL = itemSelector.getItemSelectorURL(liferayPortletResponse, name + "selectItem", urlItemSelectorCriterion);
 			%>
 
-			filebrowserBrowseUrl = '<%= layoutItemSelectorURL %>';
+			filebrowserBrowseUrl = '<%= urlItemSelectorURL %>';
 
 			<%
 			String tabs1Names = null;
@@ -466,10 +466,10 @@ if (inlineEdit && Validator.isNotNull(inlineEditSaveURL)) {
 				imageItemSelectorCriterion = new WikiAttachmentItemSelectorCriterion(GetterUtil.getLong(fileBrowserParamsMap.get("wikiPageResourcePrimKey")));
 			}
 			else {
-				imageItemSelectorCriterion = new DLItemSelectorCriterion(DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, themeDisplay.getScopeGroupId(), PropsValues.DL_FILE_ENTRY_PREVIEW_IMAGE_MIME_TYPES);
+				imageItemSelectorCriterion = new ImageItemSelectorCriterion();
 			}
 
-			imageItemSelectorCriterion.setDesiredReturnTypes(desiredReturnTypes);
+			imageItemSelectorCriterion.setDesiredItemSelectorReturnTypes(desiredItemSelectorReturnTypes);
 
 			PortletURL imageItemSelectorURL = itemSelector.getItemSelectorURL(liferayPortletResponse, name + "selectItem", imageItemSelectorCriterion);
 			%>

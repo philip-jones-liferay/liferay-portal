@@ -35,9 +35,10 @@ wikiAttachmentsSearchContainer.setResults(wikiPage.getAttachmentsFileEntries(wik
 
 <item-selector-ui:browser
 	displayStyle="<%= displayStyle %>"
+	displayStyleURL="<%= portletURL %>"
 	idPrefix="wikiAttachments"
 	itemSelectedEventName="<%= GetterUtil.getString(request.getAttribute(WikiAttachmentItemSelectorView.ITEM_SELECTED_EVENT_NAME)) %>"
-	returnType="<%= ReturnType.parseFirst(wikiAttachmentItemSelectorCriterion.getDesiredReturnTypes()) %>"
+	returnType="<%= ReturnType.parseFirst(wikiAttachmentItemSelectorCriterion.getDesiredItemSelectorReturnTypes()) %>"
 	searchContainer="<%= wikiAttachmentsSearchContainer %>"
 	tabName="attachments"
 />
