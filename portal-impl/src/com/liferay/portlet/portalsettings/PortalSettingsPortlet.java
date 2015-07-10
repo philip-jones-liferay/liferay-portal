@@ -1,17 +1,18 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.portlet.portalsettings;
-
-
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletException;
-import javax.portlet.PortletPreferences;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.AccountNameException;
@@ -63,8 +64,23 @@ import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.portlet.usersadmin.util.UsersAdminUtil;
 
-public class PortalSettingsPortlet extends MVCPortlet {
+import java.io.IOException;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+import javax.portlet.PortletException;
+import javax.portlet.PortletPreferences;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
+
+/**
+ *  @author Philip Jones
+ */
+public class PortalSettingsPortlet extends MVCPortlet {
 
 	public void deleteLDAPServer(
 			ActionRequest actionRequest, ActionResponse actionResponse)
@@ -259,11 +275,11 @@ public class PortalSettingsPortlet extends MVCPortlet {
 			SessionErrors.contains(
 				renderRequest, NoSuchPasswordPolicyException.class.getName()) ||
 			SessionErrors.contains(
-				renderRequest, PrincipalException.class.getName()) ||
+				renderRequest, PrincipalException.getNestedClasses()) ||
 			SessionErrors.contains(
 				renderRequest, PasswordPolicyNameException.class.getName()) ||
 			SessionErrors.contains(
-				renderRequest, PrincipalException.class.getName()) ||
+				renderRequest, PrincipalException.getNestedClasses()) ||
 			SessionErrors.contains(
 				renderRequest,
 				RequiredPasswordPolicyException.class.getName()) ||
