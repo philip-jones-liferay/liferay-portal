@@ -272,8 +272,6 @@
 		<put name="portlet_content" value="/portlet/maps/view.jsp" />
 	</definition>
 
-	</definition>
-
 	<!-- News -->
 
 	<definition name="portlet.news" extends="portlet" />
