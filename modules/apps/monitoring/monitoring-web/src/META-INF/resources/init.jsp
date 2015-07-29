@@ -35,6 +35,7 @@ page import="com.liferay.portal.liveusers.LiveUsers" %><%@
 page import="com.liferay.portal.model.User" %><%@
 page import="com.liferay.portal.model.UserTracker" %><%@
 page import="com.liferay.portal.model.UserTrackerPath" %><%@
+page import="com.liferay.portal.security.auth.PrincipalException" %><%@
 page import="com.liferay.portal.service.UserLocalServiceUtil" %><%@
 page import="com.liferay.portal.util.PortalUtil" %><%@
 page import="com.liferay.portal.util.PropsValues" %><%@
