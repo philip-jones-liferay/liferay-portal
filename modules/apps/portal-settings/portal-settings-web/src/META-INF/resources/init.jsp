@@ -40,6 +40,7 @@ page import="com.liferay.portal.EmailAddressException" %><%@
 page import="com.liferay.portal.LocaleException" %><%@
 page import="com.liferay.portal.NoSuchCountryException" %><%@
 page import="com.liferay.portal.NoSuchListTypeException" %><%@
+page import="com.liferay.portal.NoSuchOrganizationException" %><%@
 page import="com.liferay.portal.NoSuchRegionException" %><%@
 page import="com.liferay.portal.PhoneNumberException" %><%@
 page import="com.liferay.portal.WebsiteURLException" %><%@
