@@ -40,6 +40,7 @@ import javax.portlet.WindowStateException;
 import org.apache.log4j.Level;
 import org.osgi.service.component.annotations.Component;
 
+import com.liferay.admin.web.constants.ServerAdministrationPortletKeys;
 import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.portal.DuplicatePasswordPolicyException;
 import com.liferay.portal.NoSuchPasswordPolicyException;
@@ -135,7 +136,8 @@ import com.liferay.util.log4j.Log4JUtil;
 		"javax.portlet.expiration-cache=0",
 		"javax.portlet.init-param.template-path=/html/portlet/admin/",
 		"javax.portlet.init-param.view-template=/html/portlet/admin/view.jsp",
-		"javax.portlet.portlet-name=com_liferay_admin_portlet_ServerAdministrationPortlet",
+		"javax.portlet.name=" + ServerAdministrationPortletKeys.SERVER_ADMINISTRATION,
+		"javax.portlet.portlet-name=" + ServerAdministrationPortletKeys.SERVER_ADMINISTRATION,
 		"javax.portlet.security-role-ref=administrator",
 		"javax.portlet.supports.mime-type=text/html",
 		"javax.portlet.resource-bundle=content.Language"
@@ -151,7 +153,7 @@ public class ServerAdministrationPortlet extends MVCPortlet {
 		String cmd = ParamUtil.getString(actionRequest, "cmd");
 
 		PortletConfig portletConfig = PortletConfigFactoryUtil.get(
-			"com_liferay_admin_portlet_ServerAdministrationPortlet");
+			ServerAdministrationPortletKeys.SERVER_ADMINISTRATION);
 
 		PortletPreferences portletPreferences = PrefsPropsUtil.getPreferences();
 

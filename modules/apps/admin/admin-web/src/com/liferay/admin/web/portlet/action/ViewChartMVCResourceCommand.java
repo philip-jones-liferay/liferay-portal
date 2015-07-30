@@ -33,6 +33,7 @@ import org.jfree.data.Range;
 import org.jfree.data.general.DefaultValueDataset;
 import org.jfree.data.general.ValueDataset;
 
+import com.liferay.admin.web.constants.ServerAdministrationPortletKeys;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
 import com.liferay.portal.kernel.util.ContentTypes;
@@ -47,7 +48,7 @@ import com.liferay.portal.util.WebKeys;
  */
 @OSGiBeanProperties(
 	property = {
-		"javax.portlet.name=com_liferay_admin_portlet_ServerAdministrationPortlet",
+		"javax.portlet.name=" + ServerAdministrationPortletKeys.SERVER_ADMINISTRATION,
 		"mvc.command.name=/admin_server/view_chart"
 	},
 	service = MVCResourceCommand.class
