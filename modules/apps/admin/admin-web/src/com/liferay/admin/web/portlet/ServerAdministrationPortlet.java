@@ -12,7 +12,33 @@
  * details.
  */
 
-package com.liferay.portlet.admin;
+package com.liferay.admin.web.portlet;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+import javax.portlet.Portlet;
+import javax.portlet.PortletConfig;
+import javax.portlet.PortletContext;
+import javax.portlet.PortletException;
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletSession;
+import javax.portlet.PortletURL;
+import javax.portlet.ReadOnlyException;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
+import javax.portlet.ValidatorException;
+import javax.portlet.WindowState;
+import javax.portlet.WindowStateException;
+
+import org.apache.log4j.Level;
+import org.osgi.service.component.annotations.Component;
 
 import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.portal.DuplicatePasswordPolicyException;
@@ -82,7 +108,6 @@ import com.liferay.portal.upload.UploadServletRequestImpl;
 import com.liferay.portal.util.MaintenanceUtil;
 import com.liferay.portal.util.Portal;
 import com.liferay.portal.util.PortalInstances;
-import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PrefsPropsUtil;
 import com.liferay.portal.util.ShutdownUtil;
 import com.liferay.portal.util.WebKeys;
@@ -92,34 +117,31 @@ import com.liferay.portlet.admin.util.CleanUpPermissionsUtil;
 import com.liferay.portlet.documentlibrary.util.DLPreviewableProcessor;
 import com.liferay.util.log4j.Log4JUtil;
 
-import java.io.File;
-import java.io.IOException;
-
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletConfig;
-import javax.portlet.PortletContext;
-import javax.portlet.PortletException;
-import javax.portlet.PortletPreferences;
-import javax.portlet.PortletSession;
-import javax.portlet.PortletURL;
-import javax.portlet.ReadOnlyException;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-import javax.portlet.ValidatorException;
-import javax.portlet.WindowState;
-import javax.portlet.WindowStateException;
-
-import org.apache.log4j.Level;
-
 /**
  * @author Philip Jones
  */
+@Component(
+	immediate = true,
+	property = {
+		"com.liferay.portlet.css-class-wrapper=portlet-admin",
+		"com.liferay.portlet.display-category=category.hidden",
+		"com.liferay.portlet.icon=/html/icons/default.png",
+		"com.liferay.portlet.preferences-owned-by-group=true",
+		"com.liferay.portlet.private-request-attributes=false",
+		"com.liferay.portlet.private-session-attributes=false",
+		"com.liferay.portlet.render-weight=50",
+		"com.liferay.portlet.use-default-template=true",
+		"javax.portlet.display-name=Admin",							
+		"javax.portlet.expiration-cache=0",
+		"javax.portlet.init-param.template-path=/html/portlet/admin/",
+		"javax.portlet.init-param.view-template=/html/portlet/admin/view.jsp",
+		"javax.portlet.portlet-name=com_liferay_admin_portlet_ServerAdministrationPortlet",
+		"javax.portlet.security-role-ref=administrator",
+		"javax.portlet.supports.mime-type=text/html",
+		"javax.portlet.resource-bundle=content.Language"
+	},
+	service = Portlet.class
+)
 public class ServerAdministrationPortlet extends MVCPortlet {
 
 	public void editServer(
@@ -129,7 +151,7 @@ public class ServerAdministrationPortlet extends MVCPortlet {
 		String cmd = ParamUtil.getString(actionRequest, "cmd");
 
 		PortletConfig portletConfig = PortletConfigFactoryUtil.get(
-			PortletKeys.ADMIN);
+			"com_liferay_admin_portlet_ServerAdministrationPortlet");
 
 		PortletPreferences portletPreferences = PrefsPropsUtil.getPreferences();
 

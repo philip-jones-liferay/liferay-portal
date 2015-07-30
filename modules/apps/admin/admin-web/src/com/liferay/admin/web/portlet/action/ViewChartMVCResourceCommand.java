@@ -12,22 +12,11 @@
  * details.
  */
 
-package com.liferay.portlet.admin.action;
-
-import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
-import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
-import com.liferay.portal.kernel.util.ContentTypes;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portal.util.PortletKeys;
-import com.liferay.portal.util.WebKeys;
+package com.liferay.admin.web.portlet.action;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -44,12 +33,21 @@ import org.jfree.data.Range;
 import org.jfree.data.general.DefaultValueDataset;
 import org.jfree.data.general.ValueDataset;
 
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
+import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.WebKeys;
+
 /**
  * @author Philip Jones
  */
 @OSGiBeanProperties(
 	property = {
-		"javax.portlet.name=" + PortletKeys.ADMIN_SERVER,
+		"javax.portlet.name=com_liferay_admin_portlet_ServerAdministrationPortlet",
 		"mvc.command.name=/admin_server/view_chart"
 	},
 	service = MVCResourceCommand.class
