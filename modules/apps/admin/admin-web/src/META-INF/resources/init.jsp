@@ -16,8 +16,6 @@
 
 <%@ include file="/html/portlet/init.jsp" %>
 
-<%@ page import="com.liferay.portal.NoSuchOrganizationException" %>
-
 <%
 String tabs1 = ParamUtil.getString(request, "tabs1", "server");
 

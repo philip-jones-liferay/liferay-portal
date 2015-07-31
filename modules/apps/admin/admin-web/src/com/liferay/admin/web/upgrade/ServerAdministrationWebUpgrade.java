@@ -14,6 +14,12 @@
 
 package com.liferay.admin.web.upgrade;
 
+import com.liferay.admin.web.constants.ServerAdministrationPortletKeys;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+import com.liferay.portal.service.ReleaseLocalService;
+import com.liferay.portal.upgrade.util.UpgradePortletId;
+
 import java.util.Collections;
 
 import javax.servlet.ServletContext;
@@ -22,18 +28,12 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import com.liferay.admin.web.constants.ServerAdministrationPortletKeys;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.upgrade.UpgradeProcess;
-import com.liferay.portal.service.ReleaseLocalService;
-import com.liferay.portal.upgrade.util.UpgradePortletId;
-
 /**
  * @author Philip Jones
  */
 @Component(immediate = true, service = ServerAdministrationWebUpgrade.class)
 public class ServerAdministrationWebUpgrade {
-	
+
 	@Reference(unbind = "-")
 	protected void setReleaseLocalService(
 		ReleaseLocalService releaseLocalService) {
@@ -53,7 +53,8 @@ public class ServerAdministrationWebUpgrade {
 			protected String[][] getRenamePortletIdsArray() {
 				return new String[][] {
 					new String[] {
-						"137", ServerAdministrationPortletKeys.SERVER_ADMINISTRATION
+						"137",
+						ServerAdministrationPortletKeys.SERVER_ADMINISTRATION
 					}
 				};
 			}
