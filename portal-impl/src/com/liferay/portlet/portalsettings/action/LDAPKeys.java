@@ -21,7 +21,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
  */
 public class LDAPKeys {
 
-	public static final String[] _KEYS = {
+	public static final String[] KEYS = {
 		PropsKeys.LDAP_AUTH_SEARCH_FILTER, PropsKeys.LDAP_BASE_DN,
 		PropsKeys.LDAP_BASE_PROVIDER_URL,
 		PropsKeys.LDAP_CONTACT_CUSTOM_MAPPINGS, PropsKeys.LDAP_CONTACT_MAPPINGS,
