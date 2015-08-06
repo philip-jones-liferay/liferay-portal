@@ -117,7 +117,7 @@ if (ldapAuthEnabled && (ldapServerIds.length <= 0) && Validator.isNull(PrefsProp
 	<%
 	PortletURL addServerURL = renderResponse.createRenderURL();
 
-	addServerURL.setParameter("mvcPath", "/html/portlet/portal_settings/edit_ldap_server.jsp");
+	addServerURL.setParameter("mvcRenderCommandName", "/portal_settings/edit_ldap_server");
 	addServerURL.setParameter("redirect", authenticationURL);
 	%>
 
@@ -186,7 +186,7 @@ if (ldapAuthEnabled && (ldapServerIds.length <= 0) && Validator.isNull(PrefsProp
 							</c:if>
 
 							<portlet:renderURL var="editURL">
-								<portlet:param name="mvcPath" value="/html/portlet/portal_settings/edit_ldap_server.jsp" />
+								<portlet:param name="mvcRenderCommandName" value="/portal_settings/edit_ldap_server" />
 								<portlet:param name="redirect" value="<%= authenticationURL %>" />
 								<portlet:param name="ldapServerId" value="<%= String.valueOf(ldapServerId) %>" />
 							</portlet:renderURL>
@@ -197,13 +197,13 @@ if (ldapAuthEnabled && (ldapServerIds.length <= 0) && Validator.isNull(PrefsProp
 								url="<%= editURL %>"
 							/>
 
-							<portlet:actionURL name="deleteLDAPServer" var="delete">
-								<portlet:param name="mvcPath" value="/html/portlet/portal_settings/edit_ldap_server.jsp" />
+							<portlet:actionURL name="/portal_settings/delete_ldap_server" var="deleteURL">
+								<portlet:param name="mvcRenderCommandName" value="/portal_settings/delete_ldap_server" />
 								<portlet:param name="redirect" value="<%= authenticationURL %>" />
 								<portlet:param name="ldapServerId" value="<%= String.valueOf(ldapServerId) %>" />
 							</portlet:actionURL>
 
-							<liferay-ui:icon-delete url="<%= delete %>" />
+							<liferay-ui:icon-delete url="<%= deleteURL %>" />
 						</div>
 					</td>
 				</tr>
