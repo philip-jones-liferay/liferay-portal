@@ -12,9 +12,14 @@
  * details.
  */
 
-package com.liferay.portlet.portalsettings;
+package com.liferay.portlet.portalsettings.action;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+import javax.portlet.PortletPreferences;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
+import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -22,16 +27,19 @@ import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.security.ldap.LDAPSettingsUtil;
 import com.liferay.portal.service.CompanyServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PrefsPropsUtil;
 import com.liferay.portal.util.WebKeys;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletPreferences;
 
 /**
  * @author Philip Jones
  */
+@OSGiBeanProperties(
+	property = {
+		"javax.portlet.name=" + PortletKeys.PORTAL_SETTINGS,
+		"mvc.command.name=/portal_settings/delete_ldap_server"
+	}
+)
 public class DeleteLDAPServerMVCActionCommand extends BaseMVCActionCommand {
 
 	public void doProcessAction(

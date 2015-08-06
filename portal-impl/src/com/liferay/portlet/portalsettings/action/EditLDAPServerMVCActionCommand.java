@@ -12,13 +12,14 @@
  * details.
  */
 
-package com.liferay.portlet.portalsettings;
+package com.liferay.portlet.portalsettings.action;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.ldap.DuplicateLDAPServerNameException;
 import com.liferay.portal.kernel.ldap.LDAPServerNameException;
 import com.liferay.portal.kernel.ldap.LDAPUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
+import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropertiesParamUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -30,6 +31,7 @@ import com.liferay.portal.security.ldap.LDAPSettingsUtil;
 import com.liferay.portal.service.CompanyServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.Portal;
+import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PrefsPropsUtil;
 import com.liferay.portal.util.WebKeys;
 
@@ -43,6 +45,12 @@ import javax.portlet.PortletPreferences;
 /**
  * @author Philip Jones
  */
+@OSGiBeanProperties(
+	property = {
+		"javax.portlet.name=" + PortletKeys.PORTAL_SETTINGS,
+		"mvc.command.name=/portal_settings/edit_ldap_server"
+	}
+)
 public class EditLDAPServerMVCActionCommand extends BaseMVCActionCommand {
 
 	public void doProcessAction(

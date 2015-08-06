@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portlet.portalsettings;
+package com.liferay.portlet.portalsettings.action;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.ldap.DuplicateLDAPServerNameException;
@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.ldap.LDAPUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropertiesParamUtil;
@@ -34,13 +35,13 @@ import com.liferay.portal.model.Phone;
 import com.liferay.portal.model.Website;
 import com.liferay.portal.service.CompanyServiceUtil;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PrefsPropsUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.portlet.usersadmin.util.UsersAdminUtil;
 
 import java.io.IOException;
-
 import java.util.List;
 
 import javax.portlet.ActionRequest;
@@ -49,7 +50,12 @@ import javax.portlet.ActionResponse;
 /**
  * @author Philip Jones
  */
-
+@OSGiBeanProperties(
+	property = {
+		"javax.portlet.name=" + PortletKeys.PORTAL_SETTINGS,
+		"mvc.command.name=/portal_settings/edit_company"
+	}
+)
 public class EditCompanyMVCActionCommand extends BaseMVCActionCommand {
 
 	public void doProcessAction(
