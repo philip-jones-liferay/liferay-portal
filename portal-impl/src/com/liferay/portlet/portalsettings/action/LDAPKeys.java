@@ -11,7 +11,7 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-package com.liferay.portlet.portalsettings;
+package com.liferay.portlet.portalsettings.action;
 
 import com.liferay.portal.kernel.util.PropsKeys;
 
