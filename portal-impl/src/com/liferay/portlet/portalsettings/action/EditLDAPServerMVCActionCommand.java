@@ -84,9 +84,9 @@ public class EditLDAPServerMVCActionCommand extends BaseMVCActionCommand {
 
 		String defaultPostfix = LDAPSettingsUtil.getPropertyPostfix(0);
 
-		Set<String> defaultKeys = new HashSet<>(LDAPKeys._KEYS.length);
+		Set<String> defaultKeys = new HashSet<>(LDAPKeys.KEYS.length);
 
-		for (String key : LDAPKeys._KEYS) {
+		for (String key : LDAPKeys.KEYS) {
 			defaultKeys.add(key + defaultPostfix);
 		}
 

@@ -55,10 +55,10 @@ public class DeleteLDAPServerMVCActionCommand extends BaseMVCActionCommand {
 
 		String postfix = LDAPSettingsUtil.getPropertyPostfix(ldapServerId);
 
-		String[] keys = new String[LDAPKeys._KEYS.length];
+		String[] keys = new String[LDAPKeys.KEYS.length];
 
-		for (int i = 0; i < LDAPKeys._KEYS.length; i++) {
-			keys[i] = LDAPKeys._KEYS[i] + postfix;
+		for (int i = 0; i < LDAPKeys.KEYS.length; i++) {
+			keys[i] = LDAPKeys.KEYS[i] + postfix;
 		}
 
 		CompanyServiceUtil.removePreferences(themeDisplay.getCompanyId(), keys);
