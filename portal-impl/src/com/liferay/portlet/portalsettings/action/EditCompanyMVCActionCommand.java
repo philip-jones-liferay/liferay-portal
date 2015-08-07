@@ -14,6 +14,20 @@
 
 package com.liferay.portlet.portalsettings.action;
 
+import com.liferay.portal.AccountNameException;
+import com.liferay.portal.AddressCityException;
+import com.liferay.portal.AddressStreetException;
+import com.liferay.portal.AddressZipException;
+import com.liferay.portal.CompanyMxException;
+import com.liferay.portal.CompanyVirtualHostException;
+import com.liferay.portal.CompanyWebIdException;
+import com.liferay.portal.EmailAddressException;
+import com.liferay.portal.LocaleException;
+import com.liferay.portal.NoSuchCountryException;
+import com.liferay.portal.NoSuchListTypeException;
+import com.liferay.portal.NoSuchRegionException;
+import com.liferay.portal.PhoneNumberException;
+import com.liferay.portal.WebsiteURLException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.ldap.DuplicateLDAPServerNameException;
 import com.liferay.portal.kernel.ldap.LDAPServerNameException;
@@ -22,6 +36,7 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropertiesParamUtil;
@@ -33,6 +48,7 @@ import com.liferay.portal.model.Address;
 import com.liferay.portal.model.EmailAddress;
 import com.liferay.portal.model.Phone;
 import com.liferay.portal.model.Website;
+import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.service.CompanyServiceUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
@@ -59,14 +75,69 @@ import javax.portlet.ActionResponse;
 )
 public class EditCompanyMVCActionCommand extends BaseMVCActionCommand {
 
+	@Override
 	public void doProcessAction(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		validateCAS(actionRequest);
-		validateLDAP(actionRequest);
-		validateSocialInteractions(actionRequest);
-		updateCompany(actionRequest);
+		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
+
+		try {
+			if (cmd.equals(Constants.ADD) || cmd.equals(Constants.UPDATE)) {
+				validateCAS(actionRequest);
+				validateLDAP(actionRequest);
+				validateSocialInteractions(actionRequest);
+
+				String redirect = ParamUtil.getString(
+					actionRequest, "redirect");
+
+				if (SessionErrors.isEmpty(actionRequest)) {
+					updateCompany(actionRequest);
+				}
+
+				sendRedirect(actionRequest, actionResponse, redirect);
+			}
+		}
+		catch (Exception e) {
+			String mvcPath = "/html/portlet/portal_settings/edit_company.jsp";
+
+			if (e instanceof PrincipalException) {
+				SessionErrors.add(actionRequest, e.getClass());
+
+				mvcPath = "/html/portlet/portal_settings/error.jsp";
+			}
+			else if (e instanceof AddressCityException ||
+					e instanceof AccountNameException ||
+					e instanceof AddressStreetException ||
+					e instanceof AddressZipException ||
+					e instanceof CompanyMxException ||
+					e instanceof CompanyVirtualHostException ||
+					e instanceof CompanyWebIdException ||
+					e instanceof EmailAddressException ||
+					e instanceof LocaleException ||
+					e instanceof NoSuchCountryException ||
+					e instanceof NoSuchListTypeException ||
+					e instanceof NoSuchRegionException ||
+					e instanceof PhoneNumberException ||
+					e instanceof WebsiteURLException) {
+
+				if (e instanceof NoSuchListTypeException) {
+					NoSuchListTypeException nslte = (NoSuchListTypeException)e;
+
+					SessionErrors.add(
+						actionRequest,
+						e.getClass().getName() + nslte.getType());
+				}
+				else {
+					SessionErrors.add(actionRequest, e.getClass(), e);
+				}
+			}
+			else {
+				throw e;
+			}
+
+			actionResponse.setRenderParameter("mvcPath", mvcPath);
+		}
 	}
 
 	protected void updateCompany(ActionRequest actionRequest)
