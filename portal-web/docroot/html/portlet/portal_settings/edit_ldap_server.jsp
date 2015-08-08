@@ -163,6 +163,7 @@ for (int i = 0; i < groupMappingArray.length; i++) {
 	<liferay-ui:error exception="<%= LDAPFilterException.class %>" message="please-enter-a-valid-ldap-search-filter" />
 	<liferay-ui:error exception="<%= LDAPServerNameException.class %>" message="please-enter-a-valid-ldap-server-name" />
 
+    <aui:input name="<%= Constants.CMD %>" type="hidden" />
 	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 	<aui:input name="ldapServerId" type="hidden" value="<%= ldapServerId %>" />
 
@@ -339,6 +340,8 @@ for (int i = 0; i < groupMappingArray.length; i++) {
 		var groupMapping = <portlet:namespace />mapValues(groupMappingFields, groupMappingFieldValues);
 
 		form.fm('settings--<%= PropsKeys.LDAP_GROUP_MAPPINGS + postfix %>--').val(groupMapping);
+
+        form.fm('<%= Constants.CMD %>').val('<%= ldapServerId <= 0 ? Constants.ADD : Constants.UPDATE %>');
 
 		submitForm(form);
 	}

@@ -199,6 +199,7 @@ if (ldapAuthEnabled && (ldapServerIds.length <= 0) && Validator.isNull(PrefsProp
 
 							<portlet:actionURL name="/portal_settings/delete_ldap_server" var="deleteURL">
 								<portlet:param name="mvcRenderCommandName" value="/portal_settings/delete_ldap_server" />
+								<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.DELETE %>" />
 								<portlet:param name="redirect" value="<%= authenticationURL %>" />
 								<portlet:param name="ldapServerId" value="<%= String.valueOf(ldapServerId) %>" />
 							</portlet:actionURL>

@@ -596,23 +596,6 @@
 			<bean class="com.liferay.portlet.expando.util.ExpandoBridgeIndexerImpl" />
 		</property>
 	</bean>
-	<bean id="com.liferay.portlet.mobiledevicerules.service.permission.MDRPermissionUtil" class="com.liferay.portlet.mobiledevicerules.service.permission.MDRPermissionUtil">
-		<property name="MDRPermission">
-			<bean class="com.liferay.portlet.mobiledevicerules.service.permission.MDRPermissionImpl" />
-		</property>
-	</bean>
-	<bean id="com.liferay.portlet.mobiledevicerules.service.permission.MDRRuleGroupPermissionUtil" class="com.liferay.portlet.mobiledevicerules.service.permission.MDRRuleGroupPermissionUtil">
-		<property name="MDRRuleGroupPermission">
-			<bean class="com.liferay.portlet.mobiledevicerules.service.permission.MDRRuleGroupPermissionImpl" />
-		</property>
-	</bean>
-	<bean id="com.liferay.portlet.mobiledevicerules.service.permission.MDRRuleGroupInstancePermissionUtil" class="com.liferay.portlet.mobiledevicerules.service.permission.MDRRuleGroupInstancePermissionUtil">
-		<property name="MDRRuleGroupInstancePermission">
-			<bean class="com.liferay.portlet.mobiledevicerules.service.permission.MDRRuleGroupInstancePermissionImpl" />
-		</property>
-	</bean>
-	<bean id="com.liferay.portlet.portalsettings.action.DeleteLDAPServerMVCActionCommand" class="com.liferay.portlet.portalsettings.action.DeleteLDAPServerMVCActionCommand" />
-	<bean id="com.liferay.portlet.portalsettings.action.DeleteLDAPServerMVCRenderCommand" class="com.liferay.portlet.portalsettings.action.DeleteLDAPServerMVCRenderCommand" />
 	<bean id="com.liferay.portlet.portalsettings.action.EditCompanyMVCActionCommand" class="com.liferay.portlet.portalsettings.action.EditCompanyMVCActionCommand" />
 	<bean id="com.liferay.portlet.portalsettings.action.EditCompanyMVCRenderCommand" class="com.liferay.portlet.portalsettings.action.EditCompanyMVCRenderCommand" />
 	<bean id="com.liferay.portlet.portalsettings.action.EditLDAPServerMVCActionCommand" class="com.liferay.portlet.portalsettings.action.EditLDAPServerMVCActionCommand" />
