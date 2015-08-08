@@ -14,12 +14,22 @@
 
 package com.liferay.portlet.portalsettings.action;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+import javax.portlet.PortletPreferences;
+
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.ldap.DuplicateLDAPServerNameException;
+import com.liferay.portal.kernel.ldap.LDAPFilterException;
 import com.liferay.portal.kernel.ldap.LDAPServerNameException;
 import com.liferay.portal.kernel.ldap.LDAPUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropertiesParamUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -27,6 +37,7 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.ldap.LDAPSettingsUtil;
 import com.liferay.portal.service.CompanyServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -35,14 +46,8 @@ import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PrefsPropsUtil;
 import com.liferay.portal.util.WebKeys;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletPreferences;
-
 /**
+ * @author Ryan Park
  * @author Philip Jones
  */
 @OSGiBeanProperties(
@@ -53,29 +58,48 @@ import javax.portlet.PortletPreferences;
 )
 public class EditLDAPServerMVCActionCommand extends BaseMVCActionCommand {
 
+	@Override
 	public void doProcessAction(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
+		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
 
-		long ldapServerId = ParamUtil.getLong(actionRequest, "ldapServerId");
-
-		UnicodeProperties properties = PropertiesParamUtil.getProperties(
-			actionRequest, "settings--");
-
-		validateLDAPServerName(
-			ldapServerId, themeDisplay.getCompanyId(), properties);
-
-		validateSearchFilters(actionRequest);
-
-		if (ldapServerId <= 0) {
-			properties = addLDAPServer(themeDisplay.getCompanyId(), properties);
+		try {
+			if (cmd.equals(Constants.ADD) || cmd.equals(Constants.UPDATE)) {
+				updateLDAPServer(actionRequest);
+			}
+			else if (cmd.equals(Constants.DELETE)) {
+				deleteLDAPServer(actionRequest);
+			}
+			
+			String redirect = ParamUtil.getString(actionRequest, "redirect");
+			
+			sendRedirect(actionRequest, actionResponse, redirect);
 		}
+		catch (Exception e) {
+			
+			String mvcPath = 
+				"/html/portlet/portal_settings/edit_ldap_server.jsp"; 
 
-		CompanyServiceUtil.updatePreferences(
-			themeDisplay.getCompanyId(), properties);
+			if (e instanceof DuplicateLDAPServerNameException ||
+				e instanceof LDAPFilterException ||
+				e instanceof LDAPServerNameException) {
+
+				SessionErrors.add(actionRequest, e.getClass());
+			}
+			else if (e instanceof PrincipalException) {
+				SessionErrors.add(actionRequest, e.getClass());
+
+				mvcPath = "/html/portlet/portal_settings/error.jsp";
+			}
+			else {
+				throw e;
+			}
+			
+			actionResponse.setRenderParameter("mvcPath", mvcPath);
+
+		}
 	}
 
 	protected UnicodeProperties addLDAPServer(
@@ -84,9 +108,9 @@ public class EditLDAPServerMVCActionCommand extends BaseMVCActionCommand {
 
 		String defaultPostfix = LDAPSettingsUtil.getPropertyPostfix(0);
 
-		Set<String> defaultKeys = new HashSet<>(LDAPKeys.KEYS.length);
+		Set<String> defaultKeys = new HashSet<>(_KEYS.length);
 
-		for (String key : LDAPKeys.KEYS) {
+		for (String key : _KEYS) {
 			defaultKeys.add(key + defaultPostfix);
 		}
 
@@ -127,6 +151,69 @@ public class EditLDAPServerMVCActionCommand extends BaseMVCActionCommand {
 		properties.setProperty("ldap.server.ids", ldapServerIds);
 
 		return properties;
+	}
+
+	protected void deleteLDAPServer(ActionRequest actionRequest)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		long ldapServerId = ParamUtil.getLong(actionRequest, "ldapServerId");
+
+		// Remove portletPreferences
+
+		String postfix = LDAPSettingsUtil.getPropertyPostfix(ldapServerId);
+
+		String[] keys = new String[_KEYS.length];
+
+		for (int i = 0; i < _KEYS.length; i++) {
+			keys[i] = _KEYS[i] + postfix;
+		}
+
+		CompanyServiceUtil.removePreferences(themeDisplay.getCompanyId(), keys);
+
+		// Update portletPreferences
+
+		PortletPreferences portletPreferences = PrefsPropsUtil.getPreferences(
+			themeDisplay.getCompanyId(), true);
+
+		UnicodeProperties properties = new UnicodeProperties();
+
+		String ldapServerIds = portletPreferences.getValue(
+			"ldap.server.ids", StringPool.BLANK);
+
+		ldapServerIds = StringUtil.removeFromList(
+			ldapServerIds, String.valueOf(ldapServerId));
+
+		properties.put("ldap.server.ids", ldapServerIds);
+
+		CompanyServiceUtil.updatePreferences(
+			themeDisplay.getCompanyId(), properties);
+	}
+
+	protected void updateLDAPServer(ActionRequest actionRequest)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		long ldapServerId = ParamUtil.getLong(actionRequest, "ldapServerId");
+
+		UnicodeProperties properties = PropertiesParamUtil.getProperties(
+			actionRequest, "settings--");
+
+		validateLDAPServerName(
+			ldapServerId, themeDisplay.getCompanyId(), properties);
+
+		validateSearchFilters(actionRequest);
+
+		if (ldapServerId <= 0) {
+			properties = addLDAPServer(themeDisplay.getCompanyId(), properties);
+		}
+
+		CompanyServiceUtil.updatePreferences(
+			themeDisplay.getCompanyId(), properties);
 	}
 
 	protected void validateLDAPServerName(
@@ -170,5 +257,19 @@ public class EditLDAPServerMVCActionCommand extends BaseMVCActionCommand {
 
 		LDAPUtil.validateFilter(groupFilter, "importGroupSearchFilter");
 	}
+
+	private static final String[] _KEYS = {
+		PropsKeys.LDAP_AUTH_SEARCH_FILTER, PropsKeys.LDAP_BASE_DN,
+		PropsKeys.LDAP_BASE_PROVIDER_URL,
+		PropsKeys.LDAP_CONTACT_CUSTOM_MAPPINGS, PropsKeys.LDAP_CONTACT_MAPPINGS,
+		PropsKeys.LDAP_GROUP_DEFAULT_OBJECT_CLASSES,
+		PropsKeys.LDAP_GROUP_MAPPINGS, PropsKeys.LDAP_GROUPS_DN,
+		PropsKeys.LDAP_IMPORT_GROUP_SEARCH_FILTER,
+		PropsKeys.LDAP_IMPORT_USER_SEARCH_FILTER,
+		PropsKeys.LDAP_SECURITY_CREDENTIALS, PropsKeys.LDAP_SECURITY_PRINCIPAL,
+		PropsKeys.LDAP_SERVER_NAME, PropsKeys.LDAP_USER_CUSTOM_MAPPINGS,
+		PropsKeys.LDAP_USER_DEFAULT_OBJECT_CLASSES,
+		PropsKeys.LDAP_USER_MAPPINGS, PropsKeys.LDAP_USERS_DN
+	};
 
 }
