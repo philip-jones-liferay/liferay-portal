@@ -14,13 +14,6 @@
 
 package com.liferay.portlet.portalsettings.action;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletPreferences;
-
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.ldap.DuplicateLDAPServerNameException;
 import com.liferay.portal.kernel.ldap.LDAPFilterException;
@@ -45,6 +38,13 @@ import com.liferay.portal.util.Portal;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PrefsPropsUtil;
 import com.liferay.portal.util.WebKeys;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+import javax.portlet.PortletPreferences;
 
 /**
  * @author Ryan Park
@@ -72,15 +72,14 @@ public class EditLDAPServerMVCActionCommand extends BaseMVCActionCommand {
 			else if (cmd.equals(Constants.DELETE)) {
 				deleteLDAPServer(actionRequest);
 			}
-			
+
 			String redirect = ParamUtil.getString(actionRequest, "redirect");
-			
+
 			sendRedirect(actionRequest, actionResponse, redirect);
 		}
 		catch (Exception e) {
-			
-			String mvcPath = 
-				"/html/portlet/portal_settings/edit_ldap_server.jsp"; 
+			String mvcPath =
+				"/html/portlet/portal_settings/edit_ldap_server.jsp";
 
 			if (e instanceof DuplicateLDAPServerNameException ||
 				e instanceof LDAPFilterException ||
@@ -96,9 +95,8 @@ public class EditLDAPServerMVCActionCommand extends BaseMVCActionCommand {
 			else {
 				throw e;
 			}
-			
-			actionResponse.setRenderParameter("mvcPath", mvcPath);
 
+			actionResponse.setRenderParameter("mvcPath", mvcPath);
 		}
 	}
 

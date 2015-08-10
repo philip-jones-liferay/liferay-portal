@@ -107,19 +107,19 @@ public class EditCompanyMVCActionCommand extends BaseMVCActionCommand {
 				mvcPath = "/html/portlet/portal_settings/error.jsp";
 			}
 			else if (e instanceof AddressCityException ||
-					e instanceof AccountNameException ||
-					e instanceof AddressStreetException ||
-					e instanceof AddressZipException ||
-					e instanceof CompanyMxException ||
-					e instanceof CompanyVirtualHostException ||
-					e instanceof CompanyWebIdException ||
-					e instanceof EmailAddressException ||
-					e instanceof LocaleException ||
-					e instanceof NoSuchCountryException ||
-					e instanceof NoSuchListTypeException ||
-					e instanceof NoSuchRegionException ||
-					e instanceof PhoneNumberException ||
-					e instanceof WebsiteURLException) {
+					 e instanceof AccountNameException ||
+					 e instanceof AddressStreetException ||
+					 e instanceof AddressZipException ||
+					 e instanceof CompanyMxException ||
+					 e instanceof CompanyVirtualHostException ||
+					 e instanceof CompanyWebIdException ||
+					 e instanceof EmailAddressException ||
+					 e instanceof LocaleException ||
+					 e instanceof NoSuchCountryException ||
+					 e instanceof NoSuchListTypeException ||
+					 e instanceof NoSuchRegionException ||
+					 e instanceof PhoneNumberException ||
+					 e instanceof WebsiteURLException) {
 
 				if (e instanceof NoSuchListTypeException) {
 					NoSuchListTypeException nslte = (NoSuchListTypeException)e;

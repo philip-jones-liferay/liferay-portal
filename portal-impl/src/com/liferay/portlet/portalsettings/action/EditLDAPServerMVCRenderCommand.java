@@ -27,7 +27,7 @@ import javax.portlet.RenderResponse;
 @OSGiBeanProperties(
 	property = {
 		"javax.portlet.name=" + PortletKeys.PORTAL_SETTINGS,
-		"mvc.command.name=/", 
+		"mvc.command.name=/",
 			"mvc.command.name=/portal_settings/edit_ldap_server"
 	}
 )
