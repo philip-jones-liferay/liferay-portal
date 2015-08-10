@@ -27,16 +27,16 @@ import javax.portlet.RenderResponse;
 @OSGiBeanProperties(
 	property = {
 		"javax.portlet.name=" + PortletKeys.PORTAL_SETTINGS,
-		"mvc.command.name=/portal_settings/test_ldap_group"
+		"mvc.command.name=/portal_settings/test_cas_configuration"
 	}
 )
-public class TestLDAPGroupMVCRenderCommand implements MVCRenderCommand {
+public class TestCASConfigurationMVCRenderCommand implements MVCRenderCommand {
 
 	@Override
 	public String render(
 		RenderRequest renderRequest, RenderResponse renderResponse) {
 
-		return "/html/portlet/portal_settings/test_ldap_group.jsp";
+		return "/html/portlet/portal_settings/test_cas_configuration.jsp";
 	}
 
 }
