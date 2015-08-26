@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.product.menu.control.panel.application.list;
+package com.liferay.monitoring.web.application.list;
 
 import com.liferay.application.list.BaseControlPanelEntryPanelApp;
 import com.liferay.application.list.PanelApp;
