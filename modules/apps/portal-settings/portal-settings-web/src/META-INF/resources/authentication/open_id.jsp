@@ -14,9 +14,18 @@
  */
 --%>
 
+<%@page import="com.liferay.portal.security.sso.openid.constants.OpenIdConstants"%>
+<%@page import="com.liferay.portal.kernel.settings.CompanyServiceSettingsLocator"%>
+<%@ page import="com.liferay.portal.kernel.module.configuration.ConfigurationFactoryUtil" %>
+<%@ page import="com.liferay.portal.security.sso.openid.module.configuration.OpenIdConfiguration" %>
+
 <%@ include file="/init.jsp" %>
 
 <%
+OpenIdConfiguration openIdConfiguration = ConfigurationFactoryUtil.getConfiguration(OpenIdConfiguration.class, 
+			new CompanyServiceSettingsLocator(company.getCompanyId(), OpenIdConstants.SERVICE_NAME));
+
+System.out.println("openIdConfiguration.enabled() ? " + openIdConfiguration.enabled());
 boolean openIdAuthEnabled = PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.OPEN_ID_AUTH_ENABLED, PropsValues.OPEN_ID_AUTH_ENABLED);
 %>
 

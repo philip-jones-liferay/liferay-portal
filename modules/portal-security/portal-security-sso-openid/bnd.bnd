@@ -9,6 +9,9 @@ Import-Package:\
 	!org.apache.log.*,\
 	!sun.io.*,\
 	*
+Export-Package:\
+	com.liferay.portal.security.sso.openid.module.configuration,\
+	com.liferay.portal.security.sso.openid.constants
 Include-Resource:\
 	classes,\
 	META-INF/resources=src/META-INF/resources,\
