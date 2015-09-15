@@ -14,18 +14,46 @@
  */
 --%>
 
+<%@page import="com.liferay.portal.kernel.settings.ParameterMapSettingsLocator"%>
+<%@page import="com.liferay.portal.security.sso.opensso.constants.OpenSSOConstants"%>
+<%@page import="com.liferay.portal.kernel.settings.CompanyServiceSettingsLocator"%>
+<%@ page import="com.liferay.portal.kernel.module.configuration.ConfigurationFactoryUtil" %>
+<%@ page import="com.liferay.portal.security.sso.opensso.module.configuration.OpenSSOConfiguration" %>
+
 <%@ include file="/init.jsp" %>
 
 <%
-boolean openSsoAuthEnabled = PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.OPEN_SSO_AUTH_ENABLED, PropsValues.OPEN_SSO_AUTH_ENABLED);
-boolean openSsoLdapImportEnabled = PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.OPEN_SSO_LDAP_IMPORT_ENABLED, PropsValues.OPEN_SSO_LDAP_IMPORT_ENABLED);
-String openSsoLoginURL = PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.OPEN_SSO_LOGIN_URL, PropsValues.OPEN_SSO_LOGIN_URL);
-String openSsoLogoutURL = PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.OPEN_SSO_LOGOUT_URL, PropsValues.OPEN_SSO_LOGOUT_URL);
-String openSsoServiceURL = PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.OPEN_SSO_SERVICE_URL, PropsValues.OPEN_SSO_SERVICE_URL);
-String openSsoScreenNameAttr = PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.OPEN_SSO_SCREEN_NAME_ATTR, PropsValues.OPEN_SSO_SCREEN_NAME_ATTR);
-String openSsoEmailAddressAttr = PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.OPEN_SSO_EMAIL_ADDRESS_ATTR, PropsValues.OPEN_SSO_EMAIL_ADDRESS_ATTR);
-String openSsoFirstNameAttr = PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.OPEN_SSO_FIRST_NAME_ATTR, PropsValues.OPEN_SSO_FIRST_NAME_ATTR);
-String openSsoLastNameAttr = PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.OPEN_SSO_LAST_NAME_ATTR, PropsValues.OPEN_SSO_LAST_NAME_ATTR);
+OpenSSOConfiguration openSSOConfiguration = ConfigurationFactoryUtil.getConfiguration(OpenSSOConfiguration.class, 
+		new ParameterMapSettingsLocator(request.getParameterMap(), new CompanyServiceSettingsLocator(company.getCompanyId(), "com.liferay.portal.security.sso.opensso.module.configuration.OpenSSOConfiguration"))); //OpenSSOConstants.SERVICE_NAME)));
+
+boolean openSsoAuthEnabled = openSSOConfiguration.enabled();
+//PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.OPEN_SSO_AUTH_ENABLED, PropsValues.OPEN_SSO_AUTH_ENABLED);
+		 
+boolean openSsoLdapImportEnabled = openSSOConfiguration.importFromLDAP(); 
+//PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.OPEN_SSO_LDAP_IMPORT_ENABLED, PropsValues.OPEN_SSO_LDAP_IMPORT_ENABLED);
+
+String openSsoLoginURL = openSSOConfiguration.loginURL(); 
+//PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.OPEN_SSO_LOGIN_URL, PropsValues.OPEN_SSO_LOGIN_URL);
+
+boolean openSsoLogoutOnSessionExpiration = openSSOConfiguration.logoutOnSessionExpiration();
+
+String openSsoLogoutURL = openSSOConfiguration.logoutURL(); 
+//PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.OPEN_SSO_LOGOUT_URL, PropsValues.OPEN_SSO_LOGOUT_URL);
+
+String openSsoServiceURL = openSSOConfiguration.serviceURL(); 
+//PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.OPEN_SSO_SERVICE_URL, PropsValues.OPEN_SSO_SERVICE_URL);
+
+String openSsoScreenNameAttr = openSSOConfiguration.screenNameAttr(); 
+//PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.OPEN_SSO_SCREEN_NAME_ATTR, PropsValues.OPEN_SSO_SCREEN_NAME_ATTR);
+
+String openSsoEmailAddressAttr = openSSOConfiguration.emailAddressAttr(); 
+//PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.OPEN_SSO_EMAIL_ADDRESS_ATTR, PropsValues.OPEN_SSO_EMAIL_ADDRESS_ATTR);
+
+String openSsoFirstNameAttr = openSSOConfiguration.firstNameAttr(); 
+//PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.OPEN_SSO_FIRST_NAME_ATTR, PropsValues.OPEN_SSO_FIRST_NAME_ATTR);
+
+String openSsoLastNameAttr = openSSOConfiguration.lastNameAttr(); 
+//PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.OPEN_SSO_LAST_NAME_ATTR, PropsValues.OPEN_SSO_LAST_NAME_ATTR);
 %>
 
 <aui:fieldset>
@@ -34,6 +62,8 @@ String openSsoLastNameAttr = PrefsPropsUtil.getString(company.getCompanyId(), Pr
 	<aui:input helpMessage="import-open-sso-users-from-ldap-help" label="import-open-sso-users-from-ldap" name='<%= "settings--" + PropsKeys.OPEN_SSO_LDAP_IMPORT_ENABLED + "--" %>' type="checkbox" value="<%= openSsoLdapImportEnabled %>" />
 
 	<aui:input cssClass="lfr-input-text-container" helpMessage="login-url-for-opensso-help" label="login-url" name='<%= "settings--" + PropsKeys.OPEN_SSO_LOGIN_URL + "--" %>' type="text" value="<%= openSsoLoginURL %>" />
+
+	<aui:input helpMessage="opensso-logout-on-session-expiration-help" label="opensso-logout-on-session-expiration" name='<%= "settings--" + PropsKeys.OPEN_SSO_LOGOUT_ON_SESSION_EXPIRATION + "--" %>' type="checkbox" value="<%= openSsoLogoutOnSessionExpiration %>" />
 
 	<aui:input cssClass="lfr-input-text-container" helpMessage="logout-url-for-opensso-help" label="logout-url" name='<%= "settings--" + PropsKeys.OPEN_SSO_LOGOUT_URL + "--" %>' type="text" value="<%= openSsoLogoutURL %>" />
 

@@ -14,6 +14,7 @@
  */
 --%>
 
+<%@page import="com.liferay.portal.kernel.settings.ParameterMapSettingsLocator"%>
 <%@page import="com.liferay.portal.security.sso.openid.constants.OpenIdConstants"%>
 <%@page import="com.liferay.portal.kernel.settings.CompanyServiceSettingsLocator"%>
 <%@ page import="com.liferay.portal.kernel.module.configuration.ConfigurationFactoryUtil" %>
@@ -23,10 +24,18 @@
 
 <%
 OpenIdConfiguration openIdConfiguration = ConfigurationFactoryUtil.getConfiguration(OpenIdConfiguration.class, 
-			new CompanyServiceSettingsLocator(company.getCompanyId(), OpenIdConstants.SERVICE_NAME));
+		new ParameterMapSettingsLocator(request.getParameterMap(), new CompanyServiceSettingsLocator(company.getCompanyId(), "com.liferay.portal.security.sso.openid.module.configuration.OpenIdConfiguration"))); //OpenIdConstants.SERVICE_NAME)));
 
+
+//OpenIdConstants.SERVICE_NAME / "com.liferay.portal.security.sso.openid"
+//OR
+//"com.liferay.portal.security.sso.openid.module.configuration.OpenIdConfiguration"		 
+		 
 System.out.println("openIdConfiguration.enabled() ? " + openIdConfiguration.enabled());
-boolean openIdAuthEnabled = PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.OPEN_ID_AUTH_ENABLED, PropsValues.OPEN_ID_AUTH_ENABLED);
+//boolean openIdAuthEnabled = openIdConfiguration.enabled();
+
+boolean openIdAuthEnabled = openIdConfiguration.enabled(); 
+//PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.OPEN_ID_AUTH_ENABLED, PropsValues.OPEN_ID_AUTH_ENABLED);
 %>
 
 <aui:fieldset>

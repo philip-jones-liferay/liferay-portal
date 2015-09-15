@@ -3,6 +3,10 @@ dependencies {
 	compile group: "org.osgi", name: "org.osgi.core", version: "6.0.0"
 	compile project(":apps:application-list:application-list-api")
 	compile project(":portal-security:portal-security-sso-openid")
+	compile project(":portal:portal-authenticator-ldap")
+	compile project(":portal-security:portal-security-sso-cas")
+	compile project(":portal-security:portal-security-sso-ntlm")
+	compile project(":portal-security:portal-security-sso-opensso")
 }
 
 liferay {

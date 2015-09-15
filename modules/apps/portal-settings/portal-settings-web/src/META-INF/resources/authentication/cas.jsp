@@ -14,17 +14,43 @@
  */
 --%>
 
+<%@page import="com.liferay.portal.kernel.settings.ParameterMapSettingsLocator"%>
+<%@page import="com.liferay.portal.security.sso.cas.constants.CASConstants"%>
+<%@page import="com.liferay.portal.kernel.settings.CompanyServiceSettingsLocator"%>
+<%@ page import="com.liferay.portal.kernel.module.configuration.ConfigurationFactoryUtil" %>
+<%@ page import="com.liferay.portal.security.sso.cas.module.configuration.CASConfiguration" %>
+
 <%@ include file="/init.jsp" %>
 
 <%
-boolean casAuthEnabled = PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.CAS_AUTH_ENABLED, PropsValues.CAS_AUTH_ENABLED);
-boolean casImportFromLdap = PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.CAS_IMPORT_FROM_LDAP, PropsValues.CAS_IMPORT_FROM_LDAP);
-String casLoginURL = PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.CAS_LOGIN_URL, PropsValues.CAS_LOGIN_URL);
-String casLogoutURL = PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.CAS_LOGOUT_URL, PropsValues.CAS_LOGOUT_URL);
-String casServerName = PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.CAS_SERVER_NAME, PropsValues.CAS_SERVER_NAME);
-String casServerURL = PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.CAS_SERVER_URL, PropsValues.CAS_SERVER_URL);
-String casServiceURL = PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.CAS_SERVICE_URL, PropsValues.CAS_SERVICE_URL);
-String casNoSuchUserRedirectURL = PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.CAS_NO_SUCH_USER_REDIRECT_URL, PropsValues.CAS_NO_SUCH_USER_REDIRECT_URL);
+CASConfiguration casConfiguration = ConfigurationFactoryUtil.getConfiguration(CASConfiguration.class, 
+		new ParameterMapSettingsLocator(request.getParameterMap(), new CompanyServiceSettingsLocator(company.getCompanyId(), CASConstants.SERVICE_NAME)));
+
+boolean casAuthEnabled = casConfiguration.enabled(); 
+//PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.CAS_AUTH_ENABLED, PropsValues.CAS_AUTH_ENABLED);
+
+boolean casImportFromLdap = casConfiguration.importFromLDAP();
+//PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.CAS_IMPORT_FROM_LDAP, PropsValues.CAS_IMPORT_FROM_LDAP);
+
+String casLoginURL = casConfiguration.loginURL(); 
+//PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.CAS_LOGIN_URL, PropsValues.CAS_LOGIN_URL);
+
+boolean casLogoutOnSessionExpiration = casConfiguration.logoutOnSessionExpiration();
+
+String casLogoutURL = casConfiguration.logoutURL(); 
+//PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.CAS_LOGOUT_URL, PropsValues.CAS_LOGOUT_URL);
+
+String casServerName = casConfiguration.serverName(); 
+//PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.CAS_SERVER_NAME, PropsValues.CAS_SERVER_NAME);
+
+String casServerURL = casConfiguration.serverURL(); 
+//PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.CAS_SERVER_URL, PropsValues.CAS_SERVER_URL);
+
+String casServiceURL = casConfiguration.serviceURL(); 
+//PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.CAS_SERVICE_URL, PropsValues.CAS_SERVICE_URL);
+
+String casNoSuchUserRedirectURL = casConfiguration.noSuchUserRedirectURL(); 
+//PrefsPropsUtil.getString(company.getCompanyId(), PropsKeys.CAS_NO_SUCH_USER_REDIRECT_URL, PropsValues.CAS_NO_SUCH_USER_REDIRECT_URL);
 %>
 
 <aui:fieldset>
@@ -40,6 +66,8 @@ String casNoSuchUserRedirectURL = PrefsPropsUtil.getString(company.getCompanyId(
 	<aui:input helpMessage="import-cas-users-from-ldap-help" label="import-cas-users-from-ldap" name='<%= "settings--" + PropsKeys.CAS_IMPORT_FROM_LDAP + "--" %>' type="checkbox" value="<%= casImportFromLdap %>" />
 
 	<aui:input cssClass="lfr-input-text-container" helpMessage="cas-login-url-help" label="login-url" name='<%= "settings--" + PropsKeys.CAS_LOGIN_URL + "--" %>' type="text" value="<%= casLoginURL %>" />
+
+	<aui:input helpMessage="cas-logout-on-session-expiration-help" label="cas-logout-on-session-expiration" name='<%= "settings--" + PropsKeys.CAS_LOGOUT_ON_SESSION_EXPIRATION + "--" %>' type="checkbox" value="<%= casLogoutOnSessionExpiration %>" />
 
 	<aui:input cssClass="lfr-input-text-container" helpMessage="cas-logout-url-help" label="logout-url" name='<%= "settings--" + PropsKeys.CAS_LOGOUT_URL + "--" %>' type="text" value="<%= casLogoutURL %>" />
 
