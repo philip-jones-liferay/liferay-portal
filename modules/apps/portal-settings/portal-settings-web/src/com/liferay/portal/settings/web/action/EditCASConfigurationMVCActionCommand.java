@@ -117,5 +117,5 @@ public class EditCASConfigurationMVCActionCommand extends BaseMVCActionCommand i
 		return sb.toString();
 	}
 	
-	private static final String _parameterNamePrefix = "settings--cas.";
+	private static final String _parameterNamePrefix = "auth.settings--cas.";
 }
