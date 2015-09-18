@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.security.sso.cas.constants.CASConstants;
 import com.liferay.portal.settings.web.constants.PortalSettingsPortletKeys;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
 
 @Component(
 		property = {
@@ -55,7 +56,7 @@ public class EditCASConfigurationMVCActionCommand extends BaseMVCActionCommand i
 		ModifiableSettings modifiableSettings = settings.getModifiableSettings();
 		
 		SettingsDescriptor settingsDescriptor =
-				SettingsFactoryUtil.getSettingsDescriptor(CASConstants.SERVICE_NAME);
+				SettingsFactoryUtil.getSettingsDescriptor(_settingsId);
 
 		for (String name : settingsDescriptor.getAllKeys()) {
 			
@@ -79,7 +80,7 @@ public class EditCASConfigurationMVCActionCommand extends BaseMVCActionCommand i
 
 		return SettingsFactoryUtil.getSettings(
 			new CompanyServiceSettingsLocator(
-				themeDisplay.getCompanyId(), CASConstants.SERVICE_NAME));
+				themeDisplay.getCompanyId(), _settingsId));
 	}
 	
 	
@@ -118,4 +119,5 @@ public class EditCASConfigurationMVCActionCommand extends BaseMVCActionCommand i
 	}
 	
 	private static final String _parameterNamePrefix = "auth.settings--cas.";
+	private static final String _settingsId = "com.liferay.portal.security.sso.cas.module.configuration.CASConfiguration";
 }

@@ -24,7 +24,7 @@
 
 <%
 CASConfiguration casConfiguration = ConfigurationFactoryUtil.getConfiguration(CASConfiguration.class, 
-		new ParameterMapSettingsLocator(request.getParameterMap(), new CompanyServiceSettingsLocator(company.getCompanyId(), CASConstants.SERVICE_NAME)));
+		new ParameterMapSettingsLocator(request.getParameterMap(), new CompanyServiceSettingsLocator(company.getCompanyId(), "com.liferay.portal.security.sso.cas.module.configuration.CASConfiguration")));
 
 boolean casAuthEnabled = casConfiguration.enabled(); 
 //PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.CAS_AUTH_ENABLED, PropsValues.CAS_AUTH_ENABLED);
