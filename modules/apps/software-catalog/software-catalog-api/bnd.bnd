@@ -1,0 +1,7 @@
+Bundle-Name: Software Catalog API
+Bundle-SymbolicName: com.liferay.software.catalog
+Bundle-Version: 1.0.0
+Export-Package: \
+	com.liferay.software.catalog.*,\
+	!com.liferay.software.catalog.configuration.dependencies
+Include-Resource: classes
