@@ -12,38 +12,42 @@
  * details.
  */
 
-package com.liferay.portlet.softwarecatalog.action;
+package com.liferay.software.catalog.web.portlet.action;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
-import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.util.PortletKeys;
 
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Philip Jones
  */
-@OSGiBeanProperties(
+@Component(
 	property = {
 		"javax.portlet.name=" + PortletKeys.SOFTWARE_CATALOG,
-		"mvc.command.name=/software_catalog/edit_product_version"
+		"mvc.command.name=/software_catalog/edit_license"
 	}
 )
-public class EditProductVersionMVCRenderCommand implements MVCRenderCommand {
+public class EditLicenseMVCRenderCommand implements MVCRenderCommand {
 
 	@Override
 	public String render(
 		RenderRequest renderRequest, RenderResponse renderResponse) {
 
 		try {
-			ActionUtil.getProductEntry(renderRequest);
+			ActionUtil.getLicense(renderRequest);
 		}
 		catch (Exception e) {
+			SessionErrors.add(renderRequest, e.getClass());
+
 			return "/html/portlet/software_catalog/error.jsp";
 		}
 
-		return "/html/portlet/software_catalog/edit_product_version.jsp";
+		return "/html/portlet/software_catalog/edit_license.jsp";
 	}
 
 }

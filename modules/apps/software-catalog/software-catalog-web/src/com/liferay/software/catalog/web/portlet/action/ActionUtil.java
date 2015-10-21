@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portlet.softwarecatalog.action;
+package com.liferay.software.catalog.web.portlet.action;
 
 import com.liferay.portal.kernel.plugin.Version;
 import com.liferay.portal.kernel.util.ParamUtil;

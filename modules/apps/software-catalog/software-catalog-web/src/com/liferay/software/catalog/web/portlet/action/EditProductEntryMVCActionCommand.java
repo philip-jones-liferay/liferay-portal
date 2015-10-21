@@ -12,11 +12,10 @@
  * details.
  */
 
-package com.liferay.portlet.softwarecatalog.action;
+package com.liferay.software.catalog.web.portlet.action;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
-import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.Constants;
@@ -46,11 +45,14 @@ import java.util.List;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
+import org.osgi.service.component.annotations.Component;
+
+
 /**
  * @author Jorge Ferrer
  * @author Philip Jones
  */
-@OSGiBeanProperties(
+@Component(
 	property = {
 		"javax.portlet.name=" + PortletKeys.SOFTWARE_CATALOG,
 		"mvc.command.name=/software_catalog/edit_product_entry"

@@ -12,29 +12,26 @@
  * details.
  */
 
-package com.liferay.portlet.softwarecatalog.action;
+package com.liferay.software.catalog.web.portlet.action;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
-import com.liferay.portal.kernel.servlet.SessionErrors;
-import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
-import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.util.PortletKeys;
-import com.liferay.portlet.softwarecatalog.NoSuchProductEntryException;
-import com.liferay.portlet.softwarecatalog.model.SCProductEntry;
 
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Philip Jones
  */
-@OSGiBeanProperties(
+@Component(
 	property = {
 		"javax.portlet.name=" + PortletKeys.SOFTWARE_CATALOG,
-		"mvc.command.name=/software_catalog/view_product_entry"
+		"mvc.command.name=/software_catalog/edit_product_version"
 	}
 )
-public class ViewProductEntryMVCRenderCommand implements MVCRenderCommand {
+public class EditProductVersionMVCRenderCommand implements MVCRenderCommand {
 
 	@Override
 	public String render(
@@ -42,22 +39,12 @@ public class ViewProductEntryMVCRenderCommand implements MVCRenderCommand {
 
 		try {
 			ActionUtil.getProductEntry(renderRequest);
-
-			SCProductEntry productEntry =
-				(SCProductEntry)renderRequest.getAttribute(
-					WebKeys.SOFTWARE_CATALOG_PRODUCT_ENTRY);
-
-			if (productEntry == null) {
-				throw new NoSuchProductEntryException();
-			}
 		}
 		catch (Exception e) {
-			SessionErrors.add(renderRequest, e.getClass());
-
 			return "/html/portlet/software_catalog/error.jsp";
 		}
 
-		return "/html/portlet/software_catalog/view_product_entry.jsp";
+		return "/html/portlet/software_catalog/edit_product_version.jsp";
 	}
 
 }
