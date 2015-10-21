@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/software_catalog/init.jsp" %>
+<%@ include file="/init.jsp" %>
 
 <%
 String tabs1 = ParamUtil.getString(request, "tabs1", "products");
@@ -230,7 +230,7 @@ portletURL.setParameter("tabs1", tabs1);
 
 			// Action
 
-			row.addJSP("/html/portlet/software_catalog/product_entry_action.jsp", "entry-action");
+			row.addJSP("/product_entry_action.jsp", "entry-action");
 
 			// Add result row
 
@@ -436,7 +436,7 @@ portletURL.setParameter("tabs1", tabs1);
 
 			// Action
 
-			row.addJSP("/html/portlet/software_catalog/product_entry_action.jsp", "entry-action");
+			row.addJSP("/product_entry_action.jsp", "entry-action");
 
 			// Add result row
 
@@ -523,7 +523,7 @@ portletURL.setParameter("tabs1", tabs1);
 
 			// Action
 
-			row.addJSP("/html/portlet/software_catalog/framework_version_action.jsp", "entry-action");
+			row.addJSP("/framework_version_action.jsp", "entry-action");
 
 			// Add result row
 
@@ -648,7 +648,7 @@ portletURL.setParameter("tabs1", tabs1);
 
 			// Action
 
-			row.addJSP("/html/portlet/software_catalog/license_action.jsp", "entry-action");
+			row.addJSP("/license_action.jsp", "entry-action");
 
 			// Add result row
 

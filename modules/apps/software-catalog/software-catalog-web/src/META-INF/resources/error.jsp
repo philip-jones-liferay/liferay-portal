@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/software_catalog/init.jsp" %>
+<%@ include file="/init.jsp" %>
 
 <liferay-ui:error-header />
 

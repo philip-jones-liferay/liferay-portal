@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/software_catalog/init.jsp" %>
+<%@ include file="/init.jsp" %>
 
 <%
 String tabs2 = ParamUtil.getString(request, "tabs2", "version-history");
@@ -318,7 +318,7 @@ List productScreenshots = SCProductScreenshotLocalServiceUtil.getProductScreensh
 
 			// Action
 
-			row.addJSP("right", SearchEntry.DEFAULT_VALIGN, "/html/portlet/software_catalog/product_version_action.jsp");
+			row.addJSP("right", SearchEntry.DEFAULT_VALIGN, "/product_version_action.jsp");
 
 			// Add result row
 

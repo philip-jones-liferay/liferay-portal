@@ -14,10 +14,54 @@
  */
 --%>
 
-<%@ include file="/html/portlet/init.jsp" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<%@ page import="com.liferay.portal.kernel.search.DocumentComparator" %><%@
+<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+
+<%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %><%@
+taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet" %><%@
+taglib uri="http://liferay.com/tld/security" prefix="liferay-security" %><%@
+taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %><%@
+taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %><%@
+taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
+
+<%@ page import="com.liferay.portal.kernel.bean.BeanParamUtil" %><%@
+page import="com.liferay.portal.kernel.dao.search.SearchContainer" %><%@
+page import="com.liferay.portal.kernel.language.LanguageUtil" %><%@
+page import="com.liferay.portal.kernel.portlet.LiferayWindowState" %><%@
+page import="com.liferay.portal.kernel.search.Document" %><%@
+page import="com.liferay.portal.kernel.search.DocumentComparator" %><%@
+page import="com.liferay.portal.kernel.search.Field" %><%@
+page import="com.liferay.portal.kernel.search.Indexer" %><%@
+page import="com.liferay.portal.kernel.search.IndexerRegistryUtil" %><%@
+page import="com.liferay.portal.kernel.search.SearchContext" %><%@
+page import="com.liferay.portal.kernel.search.SearchContextFactory" %><%@
+page import="com.liferay.portal.kernel.util.Constants" %><%@
+page import="com.liferay.portal.kernel.util.FastDateFormatFactoryUtil" %><%@
+page import="com.liferay.portal.kernel.util.GetterUtil" %><%@
+page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
+page import="com.liferay.portal.kernel.util.ListUtil" %><%@
+page import="com.liferay.portal.kernel.util.OrderByComparator" %><%@
+page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
+page import="com.liferay.portal.kernel.util.StringBundler" %><%@
+page import="com.liferay.portal.kernel.util.StringPool" %><%@
+page import="com.liferay.portal.kernel.util.StringUtil" %><%@
+page import="com.liferay.portal.kernel.util.TextFormatter" %><%@
+page import="com.liferay.portal.kernel.util.Validator" %><%@
+page import="com.liferay.portal.model.*" %><%@
+page import="com.liferay.portal.model.impl.*" %><%@
 page import="com.liferay.portal.plugin.PluginPackageUtil" %><%@
+page import="com.liferay.portal.security.permission.ActionKeys" %><%@
+page import="com.liferay.portal.service.*" %><%@
+page import="com.liferay.portal.service.permission.PortalPermissionUtil" %><%@
+page import="com.liferay.portal.util.PortalUtil" %><%@
+page import="com.liferay.portal.util.PortletKeys" %><%@
+page import="com.liferay.portal.util.PropsValues" %><%@
+page import="com.liferay.portal.util.WebKeys" %><%@
+page import="com.liferay.portal.webserver.WebServerServletTokenUtil" %><%@
+page import="com.liferay.portlet.PortalPreferences" %><%@
+page import="com.liferay.portlet.PortletPreferencesFactoryUtil" %><%@
+page import="com.liferay.portlet.PortletURLUtil" %><%@
 page import="com.liferay.portlet.softwarecatalog.DuplicateProductEntryModuleIdException" %><%@
 page import="com.liferay.portlet.softwarecatalog.DuplicateProductVersionDirectDownloadURLException" %><%@
 page import="com.liferay.portlet.softwarecatalog.FrameworkVersionNameException" %><%@
@@ -54,12 +98,37 @@ page import="com.liferay.portlet.softwarecatalog.service.permission.SCFrameworkV
 page import="com.liferay.portlet.softwarecatalog.service.permission.SCLicensePermission" %><%@
 page import="com.liferay.portlet.softwarecatalog.service.permission.SCPermission" %><%@
 page import="com.liferay.portlet.softwarecatalog.service.permission.SCProductEntryPermission" %><%@
-page import="com.liferay.portlet.softwarecatalog.util.SCUtil" %>
+page import="com.liferay.portlet.softwarecatalog.util.SCUtil" %><%@
+page import="com.liferay.taglib.search.ResultRow" %><%@
+page import="com.liferay.taglib.search.SearchEntry" %><%@
+page import="com.liferay.taglib.search.TextSearchEntry" %>
+
+<%@ page import="java.text.Format" %>
+
+<%@ page import="java.util.ArrayList" %><%@
+page import="java.util.HashMap" %><%@
+page import="java.util.HashSet" %><%@
+page import="java.util.List" %><%@
+page import="java.util.Map" %><%@
+page import="java.util.Set" %>
+
+<%@ page import="javax.portlet.PortletURL" %><%@
+page import="javax.portlet.WindowState" %>
+
+<portlet:defineObjects />
+
+<liferay-theme:defineObjects />
 
 <%
+WindowState windowState = liferayPortletRequest.getWindowState();
+
+PortletURL currentURLObj = PortletURLUtil.getCurrent(liferayPortletRequest, liferayPortletResponse);
+
+String currentURL = currentURLObj.toString();
+
 PortalPreferences portalPreferences = PortletPreferencesFactoryUtil.getPortalPreferences(request);
 
 Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZone);
 %>
 
-<%@ include file="/html/portlet/software_catalog/init-ext.jsp" %>
+<%@ include file="/init-ext.jsp" %>
