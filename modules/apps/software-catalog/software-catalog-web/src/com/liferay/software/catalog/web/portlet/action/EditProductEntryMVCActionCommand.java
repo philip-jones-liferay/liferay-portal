@@ -47,7 +47,6 @@ import javax.portlet.ActionResponse;
 
 import org.osgi.service.component.annotations.Component;
 
-
 /**
  * @author Jorge Ferrer
  * @author Philip Jones
