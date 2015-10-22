@@ -19,11 +19,11 @@
 <%
 String redirect = ParamUtil.getString(request, "redirect");
 
-SCProductEntry productEntry = (SCProductEntry)request.getAttribute(WebKeys.SOFTWARE_CATALOG_PRODUCT_ENTRY);
+SCProductEntry productEntry = (SCProductEntry)request.getAttribute(SoftwareCatalogWebKeys.SOFTWARE_CATALOG_PRODUCT_ENTRY);
 
 productEntry = productEntry.toEscapedModel();
 
-SCProductVersion productVersion = (SCProductVersion)request.getAttribute(WebKeys.SOFTWARE_CATALOG_PRODUCT_VERSION);
+SCProductVersion productVersion = (SCProductVersion)request.getAttribute(SoftwareCatalogWebKeys.SOFTWARE_CATALOG_PRODUCT_VERSION);
 
 long productEntryId = productEntry.getProductEntryId();
 long productVersionId = BeanParamUtil.getLong(productVersion, request, "productVersionId");

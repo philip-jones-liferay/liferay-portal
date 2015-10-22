@@ -12,21 +12,23 @@
  * details.
  */
 
-package com.liferay.software.catalog.web.upgrade.v1_0_0;
-
-import com.liferay.portal.util.PortletKeys;
+package com.liferay.software.catalog.web.constants;
 
 /**
  * @author Philip Jones
  */
-public class UpgradePortletId
-	extends com.liferay.portal.upgrade.util.UpgradePortletId {
+public class SoftwareCatalogWebKeys {
 
-	@Override
-	protected String[][] getRenamePortletIdsArray() {
-		return new String[][] {
-			new String[] {"98", PortletKeys.SOFTWARE_CATALOG}
-		};
-	}
+	public static final String SOFTWARE_CATALOG_FRAMEWORK_VERSION =
+		"SOFTWARE_CATALOG_FRAMEWORK_VERSION";
+
+	public static final String SOFTWARE_CATALOG_LICENSE =
+		"SOFTWARE_CATALOG_LICENSE";
+
+	public static final String SOFTWARE_CATALOG_PRODUCT_ENTRY =
+		"SOFTWARE_CATALOG_PRODUCT_ENTRY";
+
+	public static final String SOFTWARE_CATALOG_PRODUCT_VERSION =
+		"SOFTWARE_CATALOG_PRODUCT_VERSION";
 
 }

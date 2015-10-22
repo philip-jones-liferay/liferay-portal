@@ -21,7 +21,7 @@ String tabs2 = ParamUtil.getString(request, "tabs2", "version-history");
 
 String redirect = ParamUtil.getString(request, "redirect");
 
-SCProductEntry productEntry = (SCProductEntry)request.getAttribute(WebKeys.SOFTWARE_CATALOG_PRODUCT_ENTRY);
+SCProductEntry productEntry = (SCProductEntry)request.getAttribute(SoftwareCatalogWebKeys.SOFTWARE_CATALOG_PRODUCT_ENTRY);
 
 productEntry = productEntry.toEscapedModel();
 

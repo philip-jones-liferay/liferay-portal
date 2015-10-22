@@ -99,6 +99,7 @@ page import="com.liferay.portlet.softwarecatalog.service.permission.SCLicensePer
 page import="com.liferay.portlet.softwarecatalog.service.permission.SCPermission" %><%@
 page import="com.liferay.portlet.softwarecatalog.service.permission.SCProductEntryPermission" %><%@
 page import="com.liferay.portlet.softwarecatalog.util.SCUtil" %><%@
+page import="com.liferay.software.catalog.web.constants.SoftwareCatalogWebKeys" %><%@
 page import="com.liferay.taglib.search.ResultRow" %><%@
 page import="com.liferay.taglib.search.SearchEntry" %><%@
 page import="com.liferay.taglib.search.TextSearchEntry" %>

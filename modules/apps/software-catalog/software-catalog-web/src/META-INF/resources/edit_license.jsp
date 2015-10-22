@@ -19,7 +19,7 @@
 <%
 String redirect = ParamUtil.getString(request, "redirect");
 
-SCLicense license = (SCLicense)request.getAttribute(WebKeys.SOFTWARE_CATALOG_LICENSE);
+SCLicense license = (SCLicense)request.getAttribute(SoftwareCatalogWebKeys.SOFTWARE_CATALOG_LICENSE);
 
 long licenseId = BeanParamUtil.getLong(license, request, "licenseId");
 %>

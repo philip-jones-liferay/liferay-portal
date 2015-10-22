@@ -19,7 +19,7 @@
 <%
 String redirect = ParamUtil.getString(request, "redirect");
 
-SCFrameworkVersion frameworkVersion = (SCFrameworkVersion)request.getAttribute(WebKeys.SOFTWARE_CATALOG_FRAMEWORK_VERSION);
+SCFrameworkVersion frameworkVersion = (SCFrameworkVersion)request.getAttribute(SoftwareCatalogWebKeys.SOFTWARE_CATALOG_FRAMEWORK_VERSION);
 
 long frameworkVersionId = BeanParamUtil.getLong(frameworkVersion, request, "frameworkVersionId");
 %>
