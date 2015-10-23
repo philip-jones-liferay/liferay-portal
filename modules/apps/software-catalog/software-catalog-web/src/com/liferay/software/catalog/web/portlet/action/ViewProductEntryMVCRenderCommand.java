@@ -17,9 +17,9 @@ package com.liferay.software.catalog.web.portlet.action;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.util.PortletKeys;
-import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.softwarecatalog.NoSuchProductEntryException;
 import com.liferay.portlet.softwarecatalog.model.SCProductEntry;
+import com.liferay.software.catalog.web.constants.SoftwareCatalogWebKeys;
 
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -46,7 +46,7 @@ public class ViewProductEntryMVCRenderCommand implements MVCRenderCommand {
 
 			SCProductEntry productEntry =
 				(SCProductEntry)renderRequest.getAttribute(
-					WebKeys.SOFTWARE_CATALOG_PRODUCT_ENTRY);
+					SoftwareCatalogWebKeys.SOFTWARE_CATALOG_PRODUCT_ENTRY);
 
 			if (productEntry == null) {
 				throw new NoSuchProductEntryException();

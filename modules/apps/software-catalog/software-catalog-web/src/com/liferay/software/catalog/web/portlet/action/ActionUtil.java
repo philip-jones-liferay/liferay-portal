@@ -27,6 +27,7 @@ import com.liferay.portlet.softwarecatalog.service.SCFrameworkVersionServiceUtil
 import com.liferay.portlet.softwarecatalog.service.SCLicenseServiceUtil;
 import com.liferay.portlet.softwarecatalog.service.SCProductEntryServiceUtil;
 import com.liferay.portlet.softwarecatalog.service.SCProductVersionServiceUtil;
+import com.liferay.software.catalog.web.constants.SoftwareCatalogWebKeys;
 
 import javax.portlet.PortletRequest;
 
@@ -34,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Jorge Ferrer
+ * @author Philip Jones
  */
 public class ActionUtil {
 
@@ -52,7 +54,8 @@ public class ActionUtil {
 		}
 
 		request.setAttribute(
-			WebKeys.SOFTWARE_CATALOG_FRAMEWORK_VERSION, frameworkVersion);
+			SoftwareCatalogWebKeys.SOFTWARE_CATALOG_FRAMEWORK_VERSION,
+			frameworkVersion);
 	}
 
 	public static void getFrameworkVersion(PortletRequest portletRequest)
@@ -73,7 +76,8 @@ public class ActionUtil {
 			license = SCLicenseServiceUtil.getLicense(licenseId);
 		}
 
-		request.setAttribute(WebKeys.SOFTWARE_CATALOG_LICENSE, license);
+		request.setAttribute(
+			SoftwareCatalogWebKeys.SOFTWARE_CATALOG_LICENSE, license);
 	}
 
 	public static void getLicense(PortletRequest portletRequest)
@@ -98,7 +102,8 @@ public class ActionUtil {
 		}
 
 		request.setAttribute(
-			WebKeys.SOFTWARE_CATALOG_PRODUCT_ENTRY, productEntry);
+			SoftwareCatalogWebKeys.SOFTWARE_CATALOG_PRODUCT_ENTRY,
+			productEntry);
 	}
 
 	public static void getProductEntry(PortletRequest portletRequest)
@@ -128,10 +133,12 @@ public class ActionUtil {
 				productVersion.getProductEntryId());
 
 			request.setAttribute(
-				WebKeys.SOFTWARE_CATALOG_PRODUCT_VERSION, productVersion);
+				SoftwareCatalogWebKeys.SOFTWARE_CATALOG_PRODUCT_VERSION,
+				productVersion);
 
 			request.setAttribute(
-				WebKeys.SOFTWARE_CATALOG_PRODUCT_ENTRY, productEntry);
+				SoftwareCatalogWebKeys.SOFTWARE_CATALOG_PRODUCT_ENTRY,
+				productEntry);
 		}
 		else if (copyProductVersionId > 0) {
 			productVersion = SCProductVersionServiceUtil.getProductVersion(
@@ -158,10 +165,12 @@ public class ActionUtil {
 			productVersion.setDirectDownloadURL(directDownloadURL);
 
 			request.setAttribute(
-				WebKeys.SOFTWARE_CATALOG_PRODUCT_VERSION, productVersion);
+				SoftwareCatalogWebKeys.SOFTWARE_CATALOG_PRODUCT_VERSION,
+				productVersion);
 
 			request.setAttribute(
-				WebKeys.SOFTWARE_CATALOG_PRODUCT_ENTRY, productEntry);
+				SoftwareCatalogWebKeys.SOFTWARE_CATALOG_PRODUCT_ENTRY,
+				productEntry);
 		}
 		else {
 			getProductEntry(request);
