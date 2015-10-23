@@ -56,7 +56,7 @@
 		<reference package-path="com.liferay.portal" entity="Group" />
 		<reference package-path="com.liferay.portal" entity="Resource" />
 		<reference package-path="com.liferay.portal" entity="User" />
-		<reference package-path="com.liferay.portlet.softwarecatalog" entity="SCProductVersion" />
+		<reference package-path="com.liferay.software.catalog" entity="SCProductVersion" />
 	</entity>
 	<entity name="SCLicense" local-service="true" remote-service="true">
 
@@ -98,7 +98,7 @@
 
 		<!-- References -->
 
-		<reference package-path="com.liferay.portlet.softwarecatalog" entity="SCProductEntry" />
+		<reference package-path="com.liferay.software.catalog" entity="SCProductEntry" />
 	</entity>
 	<entity name="SCProductEntry" local-service="true" remote-service="true">
 
@@ -167,9 +167,9 @@
 		<reference package-path="com.liferay.portal" entity="User" />
 		<reference package-path="com.liferay.portlet.messageboards" entity="MBMessage" />
 		<reference package-path="com.liferay.portlet.ratings" entity="RatingsStats" />
-		<reference package-path="com.liferay.portlet.softwarecatalog" entity="SCLicense" />
-		<reference package-path="com.liferay.portlet.softwarecatalog" entity="SCProductScreenshot" />
-		<reference package-path="com.liferay.portlet.softwarecatalog" entity="SCProductVersion" />
+		<reference package-path="com.liferay.software.catalog" entity="SCLicense" />
+		<reference package-path="com.liferay.software.catalog" entity="SCProductScreenshot" />
+		<reference package-path="com.liferay.software.catalog" entity="SCProductVersion" />
 	</entity>
 	<entity name="SCProductScreenshot" local-service="true" remote-service="false">
 
@@ -264,8 +264,8 @@
 		<!-- References -->
 
 		<reference package-path="com.liferay.portal" entity="User" />
-		<reference package-path="com.liferay.portlet.softwarecatalog" entity="SCFrameworkVersion" />
-		<reference package-path="com.liferay.portlet.softwarecatalog" entity="SCProductEntry" />
+		<reference package-path="com.liferay.software.catalog" entity="SCFrameworkVersion" />
+		<reference package-path="com.liferay.software.catalog" entity="SCProductEntry" />
 	</entity>
 	<exceptions>
 		<exception>DuplicateProductEntryModuleId</exception>
