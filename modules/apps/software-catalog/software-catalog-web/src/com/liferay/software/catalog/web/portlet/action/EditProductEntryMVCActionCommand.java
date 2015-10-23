@@ -30,11 +30,11 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
-import com.liferay.portlet.softwarecatalog.ProductEntryScreenshotsException;
-import com.liferay.portlet.softwarecatalog.model.SCProductEntry;
-import com.liferay.portlet.softwarecatalog.model.SCProductScreenshot;
-import com.liferay.portlet.softwarecatalog.service.SCProductEntryServiceUtil;
-import com.liferay.portlet.softwarecatalog.service.SCProductScreenshotLocalServiceUtil;
+import com.liferay.software.catalog.exception.ProductEntryScreenshotsException;
+import com.liferay.software.catalog.model.SCProductEntry;
+import com.liferay.software.catalog.model.SCProductScreenshot;
+import com.liferay.software.catalog.service.SCProductEntryServiceUtil;
+import com.liferay.software.catalog.service.SCProductScreenshotLocalServiceUtil;
 
 import java.io.InputStream;
 

@@ -17,8 +17,8 @@ package com.liferay.software.catalog.web.portlet.action;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.util.PortletKeys;
-import com.liferay.portlet.softwarecatalog.NoSuchProductEntryException;
-import com.liferay.portlet.softwarecatalog.model.SCProductEntry;
+import com.liferay.software.catalog.exception.NoSuchProductEntryException;
+import com.liferay.software.catalog.model.SCProductEntry;
 import com.liferay.software.catalog.web.constants.SoftwareCatalogWebKeys;
 
 import javax.portlet.RenderRequest;

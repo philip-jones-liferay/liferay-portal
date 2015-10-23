@@ -21,8 +21,8 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.util.PortletKeys;
-import com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion;
-import com.liferay.portlet.softwarecatalog.service.SCFrameworkVersionServiceUtil;
+import com.liferay.software.catalog.model.SCFrameworkVersion;
+import com.liferay.software.catalog.service.SCFrameworkVersionServiceUtil;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
