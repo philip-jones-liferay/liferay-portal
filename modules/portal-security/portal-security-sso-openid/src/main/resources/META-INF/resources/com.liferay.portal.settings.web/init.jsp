@@ -26,6 +26,8 @@ page import="com.liferay.portal.kernel.settings.ParameterMapSettingsLocator" %><
 page import="com.liferay.portal.security.sso.openid.constants.OpenIdConstants" %><%@
 page import="com.liferay.portal.security.sso.openid.module.configuration.OpenIdConfiguration" %>
 
+<%@ page import="javax.portlet.ActionRequest" %>
+
 <portlet:defineObjects />
 
 <liferay-theme:defineObjects />
