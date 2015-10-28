@@ -29,7 +29,8 @@ page import="com.liferay.portal.security.sso.ntlm.module.configuration.NtlmConfi
 page import="com.liferay.portal.util.Portal" %><%@
 page import="com.liferay.portlet.PortletURLUtil" %>
 
-<%@ page import="javax.portlet.PortletURL" %>
+<%@ page import="javax.portlet.ActionRequest" %><%@
+page import="javax.portlet.PortletURL" %>
 
 <portlet:defineObjects />
 
