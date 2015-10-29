@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.security.sso.cas.portal.settings.web.portlet.action;
+package com.liferay.portal.security.common.action;
 
 import java.io.IOException;
 
