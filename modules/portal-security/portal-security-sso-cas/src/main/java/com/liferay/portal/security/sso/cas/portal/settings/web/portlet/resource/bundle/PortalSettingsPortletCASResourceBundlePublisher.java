@@ -16,6 +16,9 @@ package com.liferay.portal.security.sso.cas.portal.settings.web.portlet.resource
 
 import org.osgi.service.component.annotations.Component;
 
+import com.liferay.portal.security.common.resource.bundle.PortalSettingsPortletResourceBundlePublisher;
+
+
 /**
  * @author Tomas Polesovsky
  */
