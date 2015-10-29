@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.security.sso.cas.portal.settings.web.portlet.resource.bundle;
+package com.liferay.portal.security.common.resource.bundle;
 
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.settings.web.constants.PortalSettingsPortletKeys;
