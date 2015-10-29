@@ -22,15 +22,15 @@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 
 <%@ page import="com.liferay.portal.kernel.module.configuration.ConfigurationFactoryUtil" %><%@
 page import="com.liferay.portal.kernel.settings.CompanyServiceSettingsLocator" %><%@
-page import="com.liferay.portal.kernel.settings.ParameterMapSettingsLocator" %>
-
+page import="com.liferay.portal.kernel.settings.ParameterMapSettingsLocator" %><%@
+page import="com.liferay.portal.kernel.util.Validator" %><%@
 page import="com.liferay.portal.security.sso.ntlm.constants.NtlmConstants" %><%@
-page import="com.liferay.portal.security.sso.ntlm.module.configuration.NtlmConfiguration" %>
+page import="com.liferay.portal.security.sso.ntlm.module.configuration.NtlmConfiguration" %><%@
+page import="com.liferay.portal.util.Portal" %><%@
 page import="com.liferay.portlet.PortletURLUtil" %>
 
 <%@ page import="javax.portlet.ActionRequest" %><%@
-page import="javax.portlet.PortletURL" %><%@
-page import="javax.portlet.WindowState" %>
+page import="javax.portlet.PortletURL" %>
 
 <portlet:defineObjects />
 
