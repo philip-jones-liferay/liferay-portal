@@ -39,9 +39,9 @@ import org.osgi.service.component.annotations.Modified;
 
 /**
  * @author Tomas Polesovsky
+ * @author Philip Jones
  */
-@Component(immediate = true)
-public class PortalSettingsPortletResourceBundlePublisher {
+public abstract class PortalSettingsPortletResourceBundlePublisher {
 
 	@Activate
 	protected void activated(BundleContext bundleContext) throws IOException {
