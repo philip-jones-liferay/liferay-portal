@@ -14,6 +14,8 @@
 
 package com.liferay.portal.security.sso.cas.portal.settings.web.portlet.action;
 
+import java.io.IOException;
+
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseFormMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
@@ -21,6 +23,7 @@ import com.liferay.portal.kernel.settings.CompanyServiceSettingsLocator;
 import com.liferay.portal.kernel.settings.ModifiableSettings;
 import com.liferay.portal.kernel.settings.Settings;
 import com.liferay.portal.kernel.settings.SettingsDescriptor;
+import com.liferay.portal.kernel.settings.SettingsException;
 import com.liferay.portal.kernel.settings.SettingsFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -34,6 +37,7 @@ import com.liferay.portal.util.WebKeys;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.ValidatorException;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -49,49 +53,7 @@ import org.osgi.service.component.annotations.Component;
 	service = MVCActionCommand.class
 )
 public class PortalSettingsCASAuthenticationFormMVCActionCommand
-	extends BaseFormMVCActionCommand {
-
-	@Override
-	protected void doProcessAction(
-			ActionRequest actionRequest, ActionResponse actionResponse)
-		throws Exception {
-
-		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
-		PermissionChecker permissionChecker =
-			PermissionThreadLocal.getPermissionChecker();
-
-		if (!permissionChecker.isCompanyAdmin(themeDisplay.getCompanyId())) {
-			SessionErrors.add(actionRequest, PrincipalException.class);
-
-			actionResponse.setRenderParameter("mvcPath", "/error.jsp");
-
-			return;
-		}
-
-		Settings settings = SettingsFactoryUtil.getSettings(
-			new CompanyServiceSettingsLocator(
-				themeDisplay.getCompanyId(), CASConstants.SERVICE_NAME));
-
-		ModifiableSettings modifiableSettings =
-			settings.getModifiableSettings();
-
-		SettingsDescriptor settingsDescriptor =
-			SettingsFactoryUtil.getSettingsDescriptor(
-				CASConstants.SERVICE_NAME);
-
-		for (String name : settingsDescriptor.getAllKeys()) {
-			String value = ParamUtil.getString(actionRequest, "cas--" + name);
-			String oldValue = settings.getValue(name, null);
-
-			if (!value.equals(oldValue)) {
-				modifiableSettings.setValue(name, value);
-			}
-		}
-
-		modifiableSettings.store();
-	}
+	extends PortalSettingsBaseAuthenticationFormMVCActionCommand {
 
 	@Override
 	protected void doValidateForm(
@@ -144,6 +106,11 @@ public class PortalSettingsCASAuthenticationFormMVCActionCommand
 
 			SessionErrors.add(actionRequest, "casNoSuchUserURLInvalid");
 		}
+	}
+	
+	@Override
+	protected String getServiceName() {
+		return CASConstants.SERVICE_NAME;
 	}
 
 }
