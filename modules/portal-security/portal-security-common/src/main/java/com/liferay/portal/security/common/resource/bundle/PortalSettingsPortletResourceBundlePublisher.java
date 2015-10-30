@@ -92,7 +92,7 @@ public abstract class PortalSettingsPortletResourceBundlePublisher {
 		}
 
 		properties.put(
-			"javax.portlet.name", PortalSettingsPortletKeys.PORTAL_SETTINGS);
+			"javax.portlet.name", getPortletName());
 
 		properties.put("language.id", languageId);
 
@@ -102,6 +102,8 @@ public abstract class PortalSettingsPortletResourceBundlePublisher {
 
 		_serviceRegistrations.add(serviceRegistration);
 	}
+	
+	public abstract String getPortletName();
 
 	private final List<ServiceRegistration<ResourceBundle>>
 		_serviceRegistrations = new ArrayList<>();
