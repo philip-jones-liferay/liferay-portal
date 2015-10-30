@@ -14,12 +14,6 @@
 
 package com.liferay.portal.security.common.action;
 
-import java.io.IOException;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.ValidatorException;
-
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseFormMVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.settings.CompanyServiceSettingsLocator;
@@ -34,6 +28,12 @@ import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.WebKeys;
+
+import java.io.IOException;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+import javax.portlet.ValidatorException;
 
 /**
  * @author Philip Jones
@@ -56,13 +56,17 @@ public abstract class PortalSettingsBaseAuthenticationFormMVCActionCommand
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		if(!hasPermissions(actionRequest, actionResponse, themeDisplay)) {
+		if (!hasPermissions(actionRequest, actionResponse, themeDisplay)) {
 			return;
 		}
 
 		storeSettings(
 			actionRequest, themeDisplay, getServiceName(), getShortNamespace());
 	}
+
+	protected abstract String getServiceName();
+
+	protected abstract String getShortNamespace();
 
 	protected boolean hasPermissions(ActionRequest actionRequest,
 			ActionResponse actionResponse, ThemeDisplay themeDisplay) {
@@ -83,7 +87,7 @@ public abstract class PortalSettingsBaseAuthenticationFormMVCActionCommand
 
 	protected void storeSettings(ActionRequest actionRequest,
 		ThemeDisplay themeDisplay, String serviceName, String shortNamespace)
-		throws SettingsException, IOException, ValidatorException {
+		throws IOException, SettingsException, ValidatorException {
 
 		Settings settings = SettingsFactoryUtil.getSettings(
 			new CompanyServiceSettingsLocator(
@@ -96,7 +100,8 @@ public abstract class PortalSettingsBaseAuthenticationFormMVCActionCommand
 			SettingsFactoryUtil.getSettingsDescriptor(serviceName);
 
 		for (String name : settingsDescriptor.getAllKeys()) {
-			String value = ParamUtil.getString(actionRequest, shortNamespace + name);
+			String value = ParamUtil.getString(
+				actionRequest, shortNamespace + name);
 			String oldValue = settings.getValue(name, null);
 
 			if (!value.equals(oldValue)) {
@@ -106,9 +111,5 @@ public abstract class PortalSettingsBaseAuthenticationFormMVCActionCommand
 
 		modifiableSettings.store();
 	}
-
-	protected abstract String getServiceName();
-
-	protected abstract String getShortNamespace();
 
 }
