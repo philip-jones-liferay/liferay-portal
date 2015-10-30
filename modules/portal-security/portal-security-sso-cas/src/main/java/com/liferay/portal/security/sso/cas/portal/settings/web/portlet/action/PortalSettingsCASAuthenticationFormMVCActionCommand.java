@@ -108,10 +108,15 @@ public class PortalSettingsCASAuthenticationFormMVCActionCommand
 			SessionErrors.add(actionRequest, "casNoSuchUserURLInvalid");
 		}
 	}
-	
+
 	@Override
 	protected String getServiceName() {
 		return CASConstants.SERVICE_NAME;
+	}
+
+	@Override
+	protected String getShortNamespace() {
+		return "cas";
 	}
 
 }
