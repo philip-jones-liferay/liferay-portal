@@ -15,7 +15,6 @@
 package com.liferay.portal.security.common.resource.bundle;
 
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.settings.web.constants.PortalSettingsPortletKeys;
 
 import java.io.IOException;
 
@@ -41,6 +40,8 @@ import org.osgi.service.component.annotations.Modified;
  * @author Philip Jones
  */
 public abstract class PortalSettingsPortletResourceBundlePublisher {
+
+	public abstract String getPortletName();
 
 	@Activate
 	protected void activated(BundleContext bundleContext) throws IOException {
@@ -91,8 +92,7 @@ public abstract class PortalSettingsPortletResourceBundlePublisher {
 			languageId = name.substring(x, y);
 		}
 
-		properties.put(
-			"javax.portlet.name", getPortletName());
+		properties.put("javax.portlet.name", getPortletName());
 
 		properties.put("language.id", languageId);
 
@@ -102,8 +102,6 @@ public abstract class PortalSettingsPortletResourceBundlePublisher {
 
 		_serviceRegistrations.add(serviceRegistration);
 	}
-	
-	public abstract String getPortletName();
 
 	private final List<ServiceRegistration<ResourceBundle>>
 		_serviceRegistrations = new ArrayList<>();
