@@ -52,7 +52,7 @@ public abstract class PortalSettingsBaseAuthenticationFormMVCActionCommand
 	protected void doProcessAuthenticationAction(ActionRequest actionRequest,
 			ActionResponse actionResponse) throws SettingsException,
 			IOException, ValidatorException {
-		
+
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
@@ -60,7 +60,8 @@ public abstract class PortalSettingsBaseAuthenticationFormMVCActionCommand
 			return;
 		}
 
-		storeSettings(actionRequest, themeDisplay, getServiceName());
+		storeSettings(
+			actionRequest, themeDisplay, getServiceName(), getShortNamespace());
 	}
 
 	protected boolean hasPermissions(ActionRequest actionRequest,
@@ -76,13 +77,13 @@ public abstract class PortalSettingsBaseAuthenticationFormMVCActionCommand
 
 			return false;
 		}
-		
+
 		return true;
 	}
 
 	protected void storeSettings(ActionRequest actionRequest,
-		ThemeDisplay themeDisplay, String serviceName) throws SettingsException,
-			IOException, ValidatorException {
+		ThemeDisplay themeDisplay, String serviceName, String shortNamespace)
+		throws SettingsException, IOException, ValidatorException {
 
 		Settings settings = SettingsFactoryUtil.getSettings(
 			new CompanyServiceSettingsLocator(
@@ -95,7 +96,7 @@ public abstract class PortalSettingsBaseAuthenticationFormMVCActionCommand
 			SettingsFactoryUtil.getSettingsDescriptor(serviceName);
 
 		for (String name : settingsDescriptor.getAllKeys()) {
-			String value = ParamUtil.getString(actionRequest, "cas--" + name);
+			String value = ParamUtil.getString(actionRequest, shortNamespace + name);
 			String oldValue = settings.getValue(name, null);
 
 			if (!value.equals(oldValue)) {
@@ -107,5 +108,7 @@ public abstract class PortalSettingsBaseAuthenticationFormMVCActionCommand
 	}
 
 	protected abstract String getServiceName();
+
+	protected abstract String getShortNamespace();
 
 }
