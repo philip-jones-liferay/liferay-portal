@@ -101,7 +101,7 @@ public class PortalSettingsCASAuthenticationFormMVCActionCommand
 
 	@Override
 	protected String getShortNamespace() {
-		return "cas";
+		return "cas--";
 	}
 
 }
