@@ -14,15 +14,14 @@
 
 package com.liferay.portal.security.sso.cas.portal.settings.web.portlet.resource.bundle;
 
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.portal.security.common.resource.bundle.PortalSettingsPortletResourceBundlePublisher;
 
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Tomas Polesovsky
  */
 @Component(immediate = true)
-public class PortalSettingsPortletCASResourceBundlePublisher extends 
-	PortalSettingsPortletResourceBundlePublisher {
+public class PortalSettingsPortletCASResourceBundlePublisher
+	extends PortalSettingsPortletResourceBundlePublisher {
 }
