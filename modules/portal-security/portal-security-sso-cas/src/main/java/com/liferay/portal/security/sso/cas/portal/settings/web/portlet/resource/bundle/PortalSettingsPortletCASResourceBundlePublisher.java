@@ -15,6 +15,7 @@
 package com.liferay.portal.security.sso.cas.portal.settings.web.portlet.resource.bundle;
 
 import com.liferay.portal.security.common.resource.bundle.PortalSettingsPortletResourceBundlePublisher;
+import com.liferay.portal.settings.web.constants.PortalSettingsPortletKeys;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -24,4 +25,8 @@ import org.osgi.service.component.annotations.Component;
 @Component(immediate = true)
 public class PortalSettingsPortletCASResourceBundlePublisher
 	extends PortalSettingsPortletResourceBundlePublisher {
+	
+	public String getPortletName() {
+		return PortalSettingsPortletKeys.PORTAL_SETTINGS;
+	}
 }
