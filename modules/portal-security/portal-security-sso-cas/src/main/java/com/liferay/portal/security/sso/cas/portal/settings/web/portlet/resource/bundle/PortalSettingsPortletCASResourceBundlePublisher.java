@@ -25,8 +25,9 @@ import org.osgi.service.component.annotations.Component;
 @Component(immediate = true)
 public class PortalSettingsPortletCASResourceBundlePublisher
 	extends PortalSettingsPortletResourceBundlePublisher {
-	
+
 	public String getPortletName() {
 		return PortalSettingsPortletKeys.PORTAL_SETTINGS;
 	}
+
 }
