@@ -49,9 +49,9 @@ public abstract class PortalSettingsBaseAuthenticationFormMVCActionCommand
 		doProcessAuthenticationAction(actionRequest, actionResponse);
 	}
 
-	protected void doProcessAuthenticationAction(ActionRequest actionRequest,
-			ActionResponse actionResponse) throws SettingsException,
-			IOException, ValidatorException {
+	protected void doProcessAuthenticationAction(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws IOException, SettingsException, ValidatorException {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
@@ -68,8 +68,9 @@ public abstract class PortalSettingsBaseAuthenticationFormMVCActionCommand
 
 	protected abstract String getShortNamespace();
 
-	protected boolean hasPermissions(ActionRequest actionRequest,
-			ActionResponse actionResponse, ThemeDisplay themeDisplay) {
+	protected boolean hasPermissions(
+		ActionRequest actionRequest, ActionResponse actionResponse,
+		ThemeDisplay themeDisplay) {
 
 		PermissionChecker permissionChecker =
 			PermissionThreadLocal.getPermissionChecker();
@@ -85,8 +86,9 @@ public abstract class PortalSettingsBaseAuthenticationFormMVCActionCommand
 		return true;
 	}
 
-	protected void storeSettings(ActionRequest actionRequest,
-		ThemeDisplay themeDisplay, String serviceName, String shortNamespace)
+	protected void storeSettings(
+			ActionRequest actionRequest, ThemeDisplay themeDisplay,
+			String serviceName, String shortNamespace)
 		throws IOException, SettingsException, ValidatorException {
 
 		Settings settings = SettingsFactoryUtil.getSettings(
