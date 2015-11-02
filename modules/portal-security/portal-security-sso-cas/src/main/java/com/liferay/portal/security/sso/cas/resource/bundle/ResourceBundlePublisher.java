@@ -12,9 +12,10 @@
  * details.
  */
 
-package com.liferay.portal.security.common.resource.bundle;
+package com.liferay.portal.security.sso.cas.resource.bundle;
 
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.settings.web.constants.PortalSettingsPortletKeys;
 
 import java.io.IOException;
 
@@ -32,16 +33,15 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
 
 /**
  * @author Tomas Polesovsky
- * @author Philip Jones
  */
-public abstract class PortalSettingsPortletResourceBundlePublisher {
-
-	public abstract String getPortletName();
+@Component(immediate = true)
+public class ResourceBundlePublisher {
 
 	@Activate
 	protected void activated(BundleContext bundleContext) throws IOException {
@@ -92,7 +92,8 @@ public abstract class PortalSettingsPortletResourceBundlePublisher {
 			languageId = name.substring(x, y);
 		}
 
-		properties.put("javax.portlet.name", getPortletName());
+		properties.put(
+			"javax.portlet.name", PortalSettingsPortletKeys.PORTAL_SETTINGS);
 
 		properties.put("language.id", languageId);
 
