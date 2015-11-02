@@ -27,7 +27,7 @@ import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portal.util.WebKeys;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.IOException;
 
@@ -36,6 +36,7 @@ import javax.portlet.ActionResponse;
 import javax.portlet.ValidatorException;
 
 /**
+ * @author Tomas Polesovsky
  * @author Philip Jones
  */
 public abstract class PortalSettingsBaseAuthenticationFormMVCActionCommand
@@ -45,13 +46,6 @@ public abstract class PortalSettingsBaseAuthenticationFormMVCActionCommand
 	protected void doProcessAction(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
-
-		doProcessAuthenticationAction(actionRequest, actionResponse);
-	}
-
-	protected void doProcessAuthenticationAction(
-			ActionRequest actionRequest, ActionResponse actionResponse)
-		throws IOException, SettingsException, ValidatorException {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
