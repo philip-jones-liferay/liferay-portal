@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.security.sso.ntlm.portal.settings.web.portlet.resource.bundle;
+package com.liferay.portal.security.sso.ntlm.resource.bundle;
 
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.settings.web.constants.PortalSettingsPortletKeys;
@@ -41,7 +41,7 @@ import org.osgi.service.component.annotations.Modified;
  * @author Tomas Polesovsky
  */
 @Component(immediate = true)
-public class PortalSettingsPortletResourceBundlePublisher {
+public class ResourceBundlePublisher {
 
 	@Activate
 	protected void activated(BundleContext bundleContext) throws IOException {
