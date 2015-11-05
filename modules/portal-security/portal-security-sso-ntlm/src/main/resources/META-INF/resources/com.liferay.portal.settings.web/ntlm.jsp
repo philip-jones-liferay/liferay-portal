@@ -18,11 +18,13 @@
 
 <%
 NtlmConfiguration ntlmConfiguration = ConfigurationFactoryUtil.getConfiguration(NtlmConfiguration.class, new ParameterMapSettingsLocator(request.getParameterMap(), "ntlm--", new CompanyServiceSettingsLocator(company.getCompanyId(), NtlmConstants.SERVICE_NAME)));
+
 boolean enabled = ntlmConfiguration.enabled();
 String domainController = ntlmConfiguration.domainController();
 String domainControllerName = ntlmConfiguration.domainControllerName();
 String domain = ntlmConfiguration.domain();
 String serviceAccount = ntlmConfiguration.serviceAccount();
+
 String servicePassword = ntlmConfiguration.servicePassword();
 
 if (Validator.isNotNull(servicePassword)) {
@@ -31,7 +33,6 @@ if (Validator.isNotNull(servicePassword)) {
 %>
 
 <aui:fieldset>
-
 	<aui:input name="<%= ActionRequest.ACTION_NAME %>" type="hidden" value="/portal_settings/edit_company_ntlm_configuration" />
 
 	<aui:input label="enabled" name='<%= "ntlm--enabled" %>' type="checkbox" value="<%= enabled %>" />
