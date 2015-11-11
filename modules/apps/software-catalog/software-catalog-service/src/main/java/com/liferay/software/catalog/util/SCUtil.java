@@ -12,14 +12,14 @@
  * details.
  */
 
-package com.liferay.software.catalog.web.util;
+package com.liferay.software.catalog.util;
 
 import com.liferay.portal.kernel.util.OrderByComparator;
-import com.liferay.portlet.softwarecatalog.model.SCProductEntry;
-import com.liferay.portlet.softwarecatalog.util.comparator.ProductEntryCreateDateComparator;
-import com.liferay.portlet.softwarecatalog.util.comparator.ProductEntryModifiedDateComparator;
-import com.liferay.portlet.softwarecatalog.util.comparator.ProductEntryNameComparator;
-import com.liferay.portlet.softwarecatalog.util.comparator.ProductEntryTypeComparator;
+import com.liferay.software.catalog.model.SCProductEntry;
+import com.liferay.software.catalog.util.comparator.ProductEntryCreateDateComparator;
+import com.liferay.software.catalog.util.comparator.ProductEntryModifiedDateComparator;
+import com.liferay.software.catalog.util.comparator.ProductEntryNameComparator;
+import com.liferay.software.catalog.util.comparator.ProductEntryTypeComparator;
 
 /**
  * @author Brian Wing Shun Chan

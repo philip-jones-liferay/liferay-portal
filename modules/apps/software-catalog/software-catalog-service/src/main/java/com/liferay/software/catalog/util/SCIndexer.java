@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.software.catalog.web.util;
+package com.liferay.software.catalog.util;
 
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -33,9 +33,9 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portlet.softwarecatalog.model.SCProductEntry;
-import com.liferay.portlet.softwarecatalog.model.SCProductVersion;
-import com.liferay.portlet.softwarecatalog.service.SCProductEntryLocalServiceUtil;
+import com.liferay.software.catalog.model.SCProductEntry;
+import com.liferay.software.catalog.model.SCProductVersion;
+import com.liferay.software.catalog.service.SCProductEntryLocalServiceUtil;
 
 import java.util.Locale;
 
@@ -201,10 +201,12 @@ public class SCIndexer extends BaseIndexer<SCProductEntry> {
 
 		actionableDynamicQuery.setCompanyId(companyId);
 		actionableDynamicQuery.setPerformActionMethod(
-			new ActionableDynamicQuery.PerformActionMethod<SCProductEntry>() {
+			new ActionableDynamicQuery.PerformActionMethod() {
 
 				@Override
-				public void performAction(SCProductEntry productEntry) {
+				public void performAction(Object object) {
+					SCProductEntry productEntry = (SCProductEntry)object;
+
 					try {
 						Document document = getDocument(productEntry);
 
