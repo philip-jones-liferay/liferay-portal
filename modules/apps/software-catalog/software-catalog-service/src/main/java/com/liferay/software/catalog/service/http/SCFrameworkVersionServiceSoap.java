@@ -65,16 +65,15 @@ import java.rmi.RemoteException;
  */
 @ProviderType
 public class SCFrameworkVersionServiceSoap {
-	public static com.liferay.software.catalog.model.SCFrameworkVersion addFrameworkVersion(
+	public static com.liferay.software.catalog.model.SCFrameworkVersionSoap addFrameworkVersion(
 		java.lang.String name, java.lang.String url, boolean active,
 		int priority, com.liferay.portal.service.ServiceContext serviceContext)
 		throws RemoteException {
 		try {
-			com.liferay.software.catalog.model.SCFrameworkVersion returnValue =
-				SCFrameworkVersionServiceUtil.addFrameworkVersion(name, url,
-					active, priority, serviceContext);
+			com.liferay.software.catalog.model.SCFrameworkVersion returnValue = SCFrameworkVersionServiceUtil.addFrameworkVersion(name,
+					url, active, priority, serviceContext);
 
-			return returnValue;
+			return com.liferay.software.catalog.model.SCFrameworkVersionSoap.toSoapModel(returnValue);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -95,13 +94,12 @@ public class SCFrameworkVersionServiceSoap {
 		}
 	}
 
-	public static com.liferay.software.catalog.model.SCFrameworkVersion getFrameworkVersion(
+	public static com.liferay.software.catalog.model.SCFrameworkVersionSoap getFrameworkVersion(
 		long frameworkVersionId) throws RemoteException {
 		try {
-			com.liferay.software.catalog.model.SCFrameworkVersion returnValue =
-				SCFrameworkVersionServiceUtil.getFrameworkVersion(frameworkVersionId);
+			com.liferay.software.catalog.model.SCFrameworkVersion returnValue = SCFrameworkVersionServiceUtil.getFrameworkVersion(frameworkVersionId);
 
-			return returnValue;
+			return com.liferay.software.catalog.model.SCFrameworkVersionSoap.toSoapModel(returnValue);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -143,15 +141,14 @@ public class SCFrameworkVersionServiceSoap {
 		}
 	}
 
-	public static com.liferay.software.catalog.model.SCFrameworkVersion updateFrameworkVersion(
+	public static com.liferay.software.catalog.model.SCFrameworkVersionSoap updateFrameworkVersion(
 		long frameworkVersionId, java.lang.String name, java.lang.String url,
 		boolean active, int priority) throws RemoteException {
 		try {
-			com.liferay.software.catalog.model.SCFrameworkVersion returnValue =
-				SCFrameworkVersionServiceUtil.updateFrameworkVersion(frameworkVersionId,
+			com.liferay.software.catalog.model.SCFrameworkVersion returnValue = SCFrameworkVersionServiceUtil.updateFrameworkVersion(frameworkVersionId,
 					name, url, active, priority);
 
-			return returnValue;
+			return com.liferay.software.catalog.model.SCFrameworkVersionSoap.toSoapModel(returnValue);
 		}
 		catch (Exception e) {
 			_log.error(e, e);

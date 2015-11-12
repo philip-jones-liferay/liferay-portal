@@ -65,14 +65,14 @@ import java.rmi.RemoteException;
  */
 @ProviderType
 public class SCLicenseServiceSoap {
-	public static com.liferay.software.catalog.model.SCLicense addLicense(
+	public static com.liferay.software.catalog.model.SCLicenseSoap addLicense(
 		java.lang.String name, java.lang.String url, boolean openSource,
 		boolean active, boolean recommended) throws RemoteException {
 		try {
 			com.liferay.software.catalog.model.SCLicense returnValue = SCLicenseServiceUtil.addLicense(name,
 					url, openSource, active, recommended);
 
-			return returnValue;
+			return com.liferay.software.catalog.model.SCLicenseSoap.toSoapModel(returnValue);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -92,12 +92,12 @@ public class SCLicenseServiceSoap {
 		}
 	}
 
-	public static com.liferay.software.catalog.model.SCLicense getLicense(
+	public static com.liferay.software.catalog.model.SCLicenseSoap getLicense(
 		long licenseId) throws RemoteException {
 		try {
 			com.liferay.software.catalog.model.SCLicense returnValue = SCLicenseServiceUtil.getLicense(licenseId);
 
-			return returnValue;
+			return com.liferay.software.catalog.model.SCLicenseSoap.toSoapModel(returnValue);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -106,7 +106,7 @@ public class SCLicenseServiceSoap {
 		}
 	}
 
-	public static com.liferay.software.catalog.model.SCLicense updateLicense(
+	public static com.liferay.software.catalog.model.SCLicenseSoap updateLicense(
 		long licenseId, java.lang.String name, java.lang.String url,
 		boolean openSource, boolean active, boolean recommended)
 		throws RemoteException {
@@ -114,7 +114,7 @@ public class SCLicenseServiceSoap {
 			com.liferay.software.catalog.model.SCLicense returnValue = SCLicenseServiceUtil.updateLicense(licenseId,
 					name, url, openSource, active, recommended);
 
-			return returnValue;
+			return com.liferay.software.catalog.model.SCLicenseSoap.toSoapModel(returnValue);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
