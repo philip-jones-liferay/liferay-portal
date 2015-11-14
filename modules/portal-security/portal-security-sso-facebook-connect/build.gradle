@@ -9,6 +9,7 @@ dependencies {
 	compile project(":apps:configuration-admin:configuration-admin-api")
 	compile project(":apps:portal-settings:portal-settings-web")
 	compile project(":portal:portal-language-util")
+	compile project(":portal-security:portal-security-common")
 }
 
 liferay {
