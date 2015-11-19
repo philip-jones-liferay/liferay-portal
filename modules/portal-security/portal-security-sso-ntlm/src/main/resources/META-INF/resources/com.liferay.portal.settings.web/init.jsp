@@ -27,6 +27,8 @@ page import="com.liferay.portal.security.sso.ntlm.constants.NtlmConstants" %><%@
 page import="com.liferay.portal.security.sso.ntlm.module.configuration.NtlmConfiguration" %><%@
 page import="com.liferay.portal.util.Portal" %>
 
+<%@ page import="javax.portlet.ActionRequest" %>
+
 <portlet:defineObjects />
 
 <liferay-theme:defineObjects />
