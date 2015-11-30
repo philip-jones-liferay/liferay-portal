@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.software.catalog.exception;
+package com.liferay.software.catalog.service.exception;
 
 import com.liferay.portal.kernel.exception.PortalException;
 

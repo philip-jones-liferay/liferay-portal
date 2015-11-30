@@ -4,6 +4,7 @@ Bundle-Version: 1.0.0
 Export-Package:\
 	com.liferay.software.catalog.model.impl,\
 	com.liferay.software.catalog.service.base,\
+	com.liferay.software.catalog.service.exception,\
 	com.liferay.software.catalog.service.http,\
 	com.liferay.software.catalog.service.impl,\
 	com.liferay.software.catalog.service.permission,\
@@ -12,11 +13,7 @@ Export-Package:\
 	com.liferay.software.catalog.util,\
 	com.liferay.software.catalog.util.comparator
 Include-Resource:\
-	classes,\
-	custom-sql/default.xml=classes/META-INF/custom-sql/default.xml,\
-	@${app.server.lib.portal.dir}/util-java.jar!/com/liferay/util/dao/orm/CustomSQL.class,\
-	@${app.server.lib.portal.dir}/util-java.jar!/com/liferay/util/dao/orm/CustomSQLUtil.class,\
-	@${app.server.lib.portal.dir}/util-java.jar!/com/liferay/util/xml/DocUtil.class
+	classes
 Liferay-Service: true
 Require-Capability:\
 	liferay.extender;\

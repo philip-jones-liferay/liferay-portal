@@ -17,9 +17,9 @@ package com.liferay.software.catalog.service.impl;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.software.catalog.exception.LicenseNameException;
-import com.liferay.software.catalog.exception.RequiredLicenseException;
 import com.liferay.software.catalog.model.SCLicense;
 import com.liferay.software.catalog.service.base.SCLicenseLocalServiceBaseImpl;
+import com.liferay.software.catalog.service.exception.RequiredLicenseException;
 
 import java.util.List;
 

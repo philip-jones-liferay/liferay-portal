@@ -1,7 +1,7 @@
 buildService {
-	apiDirName = "../software-catalog-api/src/main/java"
+	apiDir = "../software-catalog-api/src/main/java"
 	autoNamespaceTables = false
-	testDirName = "../software-catalog-test/src/testIntegration"
+	testDir = "../software-catalog-test/src/testIntegration"
 }
 
 dependencies {
