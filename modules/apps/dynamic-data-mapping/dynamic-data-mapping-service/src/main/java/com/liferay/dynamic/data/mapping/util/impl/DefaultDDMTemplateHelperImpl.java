@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.template.TemplateHandler;
 import com.liferay.portal.kernel.template.TemplateHandlerRegistryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -72,14 +73,22 @@ public class DefaultDDMTemplateHelperImpl implements DefaultDDMTemplateHelper {
 				String name = templateElement.elementText("name");
 				String description = templateElement.elementText("description");
 				String language = templateElement.elementText("language");
+				
+				Class<?> clazz = templateHandler.getClass();
+
+				ClassLoader classLoader = clazz.getClassLoader();
+				
 				String scriptFileName = templateElement.elementText(
 					"script-file");
+				
+				String script = StringUtil.read(classLoader, scriptFileName);
+				
 				boolean cacheable = GetterUtil.getBoolean(
 					templateElement.elementText("cacheable"));
 
 				addDDMTemplate(
 					userId, groupId, classNameId, templateKey, name,
-					description, language, scriptFileName, cacheable,
+					description, language, script, cacheable,
 					serviceContext);
 			}
 		}
@@ -89,8 +98,7 @@ public class DefaultDDMTemplateHelperImpl implements DefaultDDMTemplateHelper {
 	protected void addDDMTemplate(
 			long userId, long groupId, long classNameId, String templateKey,
 			String name, String description, String language,
-			String scriptFileName, boolean cacheable,
-			ServiceContext serviceContext)
+			String script, boolean cacheable, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		DDMTemplate ddmTemplate = DDMTemplateLocalServiceUtil.fetchTemplate(
@@ -109,8 +117,6 @@ public class DefaultDDMTemplateHelperImpl implements DefaultDDMTemplateHelper {
 		Map<Locale, String> descriptionMap = new HashMap<Locale, String>();
 
 		descriptionMap.put(locale, LanguageUtil.get(locale, description));
-
-		String script = ContentUtil.get(scriptFileName);
 
 		long classPK = 0; // 0 is correct value
 		long resourceClassNameId = 0; // not sure what it should be
