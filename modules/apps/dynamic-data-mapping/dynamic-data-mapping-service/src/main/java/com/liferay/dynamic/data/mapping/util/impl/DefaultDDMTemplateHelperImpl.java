@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.template.TemplateHandler;
 import com.liferay.portal.kernel.template.TemplateHandlerRegistryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.service.ServiceContext;
@@ -46,7 +47,8 @@ public class DefaultDDMTemplateHelperImpl implements DefaultDDMTemplateHelper {
 
 	@Override
 	public void addDDMTemplates(
-			long userId, long groupId, ServiceContext serviceContext) throws Exception {
+			long userId, long groupId, ServiceContext serviceContext)
+		throws Exception {
 
 		List<TemplateHandler> templateHandlers =
 			TemplateHandlerRegistryUtil.getTemplateHandlers();
@@ -88,8 +90,7 @@ public class DefaultDDMTemplateHelperImpl implements DefaultDDMTemplateHelper {
 
 				addDDMTemplate(
 					userId, groupId, classNameId, templateKey, name,
-					description, language, script, cacheable,
-					serviceContext);
+					description, language, script, cacheable, serviceContext);
 			}
 		}
 
@@ -118,18 +119,26 @@ public class DefaultDDMTemplateHelperImpl implements DefaultDDMTemplateHelper {
 
 		descriptionMap.put(locale, LanguageUtil.get(locale, description));
 
-		long classPK = 0; // 0 is correct value
-		long resourceClassNameId = 0; // not sure what it should be
-		String mode = null; // null is correct
+		long classPK = 0; // in 6.2 this was hardcoded to 0
+		
+		// resourceClassNameId is new for 7.0. This is correct based on DefaultDDMStructureHelperImpl
+		long resourceClassNameId = 
+			PortalUtil.getClassNameId(_PORTLET_DISPLAY_TEMPLATE_CLASS_NAME);
+		
 		boolean smallImage = false; // false is correct value
-		String smallImageURL = null; // null is correct value
+		String smallImageURL = StringPool.BLANK; // null is correct value
 		java.io.File smallImageFile = null; // null is correct value
 
 		DDMTemplateLocalServiceUtil.addTemplate(
 			userId, groupId, classNameId, classPK, resourceClassNameId,
-			templateKey, nameMap,
-			descriptionMap, DDMTemplateConstants.TEMPLATE_TYPE_DISPLAY, mode,
+			templateKey, nameMap, descriptionMap,
+			DDMTemplateConstants.TEMPLATE_TYPE_DISPLAY,
+			DDMTemplateConstants.TEMPLATE_MODE_CREATE,
 			language, script, cacheable, smallImage, smallImageURL,
 			smallImageFile, serviceContext);
 	}
+	
+	private static final String _PORTLET_DISPLAY_TEMPLATE_CLASS_NAME =
+			"com.liferay.portlet.display.template.PortletDisplayTemplate";
+
 }
