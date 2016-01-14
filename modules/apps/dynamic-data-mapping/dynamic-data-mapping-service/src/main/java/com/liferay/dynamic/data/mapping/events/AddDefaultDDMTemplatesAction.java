@@ -18,8 +18,6 @@ import com.liferay.dynamic.data.mapping.util.DefaultDDMTemplateHelper;
 import com.liferay.portal.events.AppStartupAction;
 import com.liferay.portal.kernel.events.ActionException;
 import com.liferay.portal.kernel.events.LifecycleAction;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
@@ -30,7 +28,7 @@ import com.liferay.portal.security.auth.CompanyThreadLocal;
 import com.liferay.portal.service.CompanyLocalService;
 import com.liferay.portal.service.GroupLocalService;
 import com.liferay.portal.service.ServiceContext;
-import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.service.UserLocalService;
 
 import java.util.List;
 
@@ -43,27 +41,21 @@ import org.osgi.service.component.annotations.Reference;
  */
 
 @Component(
-		immediate = true,
-		property = {
-			"key=application.startup.events"
-		},
+		immediate = true, property = {"key=application.startup.events"},
 		service = LifecycleAction.class
 	)
 public class AddDefaultDDMTemplatesAction extends AppStartupAction {
 
 	@Override
 	public void run(String[] ids) {
-
 		try {
 			doRun(GetterUtil.getLong(ids[0]));
 		}
 		catch (Exception e) {
-// AppStartupAction.run() methods do not throw anything.  what do we do here?
-//			throw new ActionException(e);
+			_log.error(e);
 		}
 	}
 
-// DO I EVEN NEED THIS METHOD
 	@Activate
 	protected void activate() throws ActionException {
 		Long companyId = CompanyThreadLocal.getCompanyId();
@@ -89,7 +81,7 @@ public class AddDefaultDDMTemplatesAction extends AppStartupAction {
 
 		serviceContext.setScopeGroupId(group.getGroupId());
 
-		long defaultUserId = UserLocalServiceUtil.getDefaultUserId(companyId);
+		long defaultUserId = _userLocalService.getDefaultUserId(companyId);
 
 		serviceContext.setUserId(defaultUserId);
 
@@ -105,15 +97,15 @@ public class AddDefaultDDMTemplatesAction extends AppStartupAction {
 	}
 
 	@Reference(unbind = "-")
-	protected void setGroupLocalService(GroupLocalService groupLocalService) {
-		_groupLocalService = groupLocalService;
-	}
-
-	@Reference(unbind = "-")
 	protected void setDefaultDDMTemplateHelper(
 		DefaultDDMTemplateHelper defaultDDMTemplateHelper) {
 
 		_defaultDDMTemplateHelper = defaultDDMTemplateHelper;
+	}
+
+	@Reference(unbind = "-")
+	protected void setGroupLocalService(GroupLocalService groupLocalService) {
+		_groupLocalService = groupLocalService;
 	}
 
 	@Reference(target = ModuleServiceLifecycle.PORTAL_INITIALIZED, unbind = "-")
@@ -121,10 +113,17 @@ public class AddDefaultDDMTemplatesAction extends AppStartupAction {
 		ModuleServiceLifecycle moduleServiceLifecycle) {
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
-			AddDefaultDDMTemplatesAction.class);
+	@Reference(unbind = "-")
+	protected void setUserLocalService(UserLocalService userLocalService) {
+		_userLocalService = userLocalService;
+	}
 
-	private volatile CompanyLocalService _companyLocalService;
-	private volatile GroupLocalService _groupLocalService;
-	private volatile DefaultDDMTemplateHelper _defaultDDMTemplateHelper;
+	private static final Log _log = LogFactoryUtil.getLog(
+		AddDefaultDDMTemplatesAction.class);
+
+	private CompanyLocalService _companyLocalService;
+	private DefaultDDMTemplateHelper _defaultDDMTemplateHelper;
+	private GroupLocalService _groupLocalService;
+	private UserLocalService _userLocalService;
+
 }
