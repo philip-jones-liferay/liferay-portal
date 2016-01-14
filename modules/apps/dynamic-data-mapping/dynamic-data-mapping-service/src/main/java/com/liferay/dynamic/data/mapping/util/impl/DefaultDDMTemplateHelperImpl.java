@@ -19,7 +19,6 @@ import com.liferay.dynamic.data.mapping.model.DDMTemplateConstants;
 import com.liferay.dynamic.data.mapping.service.DDMTemplateLocalServiceUtil;
 import com.liferay.dynamic.data.mapping.util.DefaultDDMTemplateHelper;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.template.TemplateHandler;
 import com.liferay.portal.kernel.template.TemplateHandlerRegistryUtil;
@@ -29,7 +28,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.util.ContentUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +35,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Philip Jones
@@ -75,16 +72,16 @@ public class DefaultDDMTemplateHelperImpl implements DefaultDDMTemplateHelper {
 				String name = templateElement.elementText("name");
 				String description = templateElement.elementText("description");
 				String language = templateElement.elementText("language");
-				
+
 				Class<?> clazz = templateHandler.getClass();
 
 				ClassLoader classLoader = clazz.getClassLoader();
-				
+
 				String scriptFileName = templateElement.elementText(
 					"script-file");
-				
+
 				String script = StringUtil.read(classLoader, scriptFileName);
-				
+
 				boolean cacheable = GetterUtil.getBoolean(
 					templateElement.elementText("cacheable"));
 
@@ -93,14 +90,13 @@ public class DefaultDDMTemplateHelperImpl implements DefaultDDMTemplateHelper {
 					description, language, script, cacheable, serviceContext);
 			}
 		}
-
 	}
 
 	protected void addDDMTemplate(
 			long userId, long groupId, long classNameId, String templateKey,
-			String name, String description, String language,
-			String script, boolean cacheable, ServiceContext serviceContext)
-		throws PortalException, SystemException {
+			String name, String description, String language, String script,
+			boolean cacheable, ServiceContext serviceContext)
+		throws PortalException {
 
 		DDMTemplate ddmTemplate = DDMTemplateLocalServiceUtil.fetchTemplate(
 			groupId, classNameId, templateKey);
@@ -109,22 +105,21 @@ public class DefaultDDMTemplateHelperImpl implements DefaultDDMTemplateHelper {
 			return;
 		}
 
-		Map<Locale, String> nameMap = new HashMap<Locale, String>();
+		Map<Locale, String> nameMap = new HashMap<>();
 
 		Locale locale = PortalUtil.getSiteDefaultLocale(groupId);
 
 		nameMap.put(locale, LanguageUtil.get(locale, name));
 
-		Map<Locale, String> descriptionMap = new HashMap<Locale, String>();
+		Map<Locale, String> descriptionMap = new HashMap<>();
 
 		descriptionMap.put(locale, LanguageUtil.get(locale, description));
 
-		long classPK = 0; // in 6.2 this was hardcoded to 0
-		
-		// resourceClassNameId is new for 7.0. This is correct based on DefaultDDMStructureHelperImpl
-		long resourceClassNameId = 
-			PortalUtil.getClassNameId(_PORTLET_DISPLAY_TEMPLATE_CLASS_NAME);
-		
+		long classPK = 0;
+
+		long resourceClassNameId = PortalUtil.getClassNameId(
+			_PORTLET_DISPLAY_TEMPLATE_CLASS_NAME);
+
 		boolean smallImage = false; // false is correct value
 		String smallImageURL = StringPool.BLANK; // null is correct value
 		java.io.File smallImageFile = null; // null is correct value
@@ -133,12 +128,12 @@ public class DefaultDDMTemplateHelperImpl implements DefaultDDMTemplateHelper {
 			userId, groupId, classNameId, classPK, resourceClassNameId,
 			templateKey, nameMap, descriptionMap,
 			DDMTemplateConstants.TEMPLATE_TYPE_DISPLAY,
-			DDMTemplateConstants.TEMPLATE_MODE_CREATE,
-			language, script, cacheable, smallImage, smallImageURL,
-			smallImageFile, serviceContext);
+			DDMTemplateConstants.TEMPLATE_MODE_CREATE, language, script,
+			cacheable, smallImage, smallImageURL, smallImageFile,
+			serviceContext);
 	}
-	
+
 	private static final String _PORTLET_DISPLAY_TEMPLATE_CLASS_NAME =
-			"com.liferay.portlet.display.template.PortletDisplayTemplate";
+		"com.liferay.portlet.display.template.PortletDisplayTemplate";
 
 }

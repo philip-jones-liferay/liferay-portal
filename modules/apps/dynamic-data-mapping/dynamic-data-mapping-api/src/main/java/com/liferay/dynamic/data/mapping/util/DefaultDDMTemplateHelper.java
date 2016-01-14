@@ -14,11 +14,7 @@
 
 package com.liferay.dynamic.data.mapping.util;
 
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.service.ServiceContext;
-
-import java.util.Locale;
 
 /**
  * @author Philip Jones
@@ -28,4 +24,5 @@ public interface DefaultDDMTemplateHelper {
 	public void addDDMTemplates(
 			long userId, long groupId, ServiceContext serviceContext)
 		throws Exception;
+
 }
